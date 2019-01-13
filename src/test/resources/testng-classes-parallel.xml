@@ -1,0 +1,10 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="BookingTestsSuit" verbose="1" parallel="tests" thread-count="10">
+    <!--Running full packages-->
+    <test name="TestAccomodations">
+        <classes>
+            <class name="by.booking.pkt.MainSearchTests"/>
+        </classes>
+    </test>
+
+</suite>
