@@ -1,7 +1,9 @@
-package com.example.tests;
+package by.booking.pkt.record.katalon;
 
 import java.util.regex.Pattern;
 import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.*;
 import static org.testng.Assert.*;
 import org.openqa.selenium.*;
@@ -16,14 +18,13 @@ public class FilterByStars {
 
   @BeforeClass(alwaysRun = true)
   public void setUp() throws Exception {
-    driver = new FirefoxDriver();
-    baseUrl = "https://www.katalon.com/";
+    driver = new ChromeDriver();
     driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+    driver.get("https://www.booking.com/searchresults.ru.html");
   }
 
   @Test
   public void testFilterByStars() throws Exception {
-    driver.get("https://www.booking.com/searchresults.ru.html");
     driver.findElement(By.id("ss")).clear();
     driver.findElement(By.id("ss")).sendKeys("Минск");
     driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Место/название объекта:'])[1]/following::span[1]")).click();

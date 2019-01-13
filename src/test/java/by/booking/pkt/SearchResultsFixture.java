@@ -10,7 +10,6 @@ public class SearchResultsFixture extends TestBase {
   @BeforeClass
   public void startATF() {
     driver.get("https://www.booking.com/searchresults.ru.html");
-    System.out.println("startATF");
   }
 
   @AfterClass

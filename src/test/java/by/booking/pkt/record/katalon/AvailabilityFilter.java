@@ -1,12 +1,11 @@
-package com.example.tests;
+package by.booking.pkt.record.katalon;
 
-import java.util.regex.Pattern;
-import java.util.concurrent.TimeUnit;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.*;
-import static org.testng.Assert.*;
 import org.openqa.selenium.*;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
+
+import java.util.concurrent.TimeUnit;
 
 public class AvailabilityFilter {
   private WebDriver driver;
@@ -16,39 +15,52 @@ public class AvailabilityFilter {
 
   @BeforeClass(alwaysRun = true)
   public void setUp() throws Exception {
-    driver = new FirefoxDriver();
-    baseUrl = "https://www.katalon.com/";
+    driver = new ChromeDriver();
     driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+    driver.get("https://www.booking.com/searchresults.ru.html");
   }
 
   @Test
   public void testAvailabilityFilter() throws Exception {
-    driver.get("https://www.booking.com/searchresults.ru.html");
-    driver.findElement(By.id("ss")).click();
-    driver.findElement(By.id("ss")).clear();
-    driver.findElement(By.id("ss")).sendKeys("Минск");
-    driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Место/название объекта:'])[1]/following::b[1]")).click();
-    driver.findElement(By.id("group_adults")).click();
-    new Select(driver.findElement(By.id("group_adults"))).selectByVisibleText("3 взрослых");
-    driver.findElement(By.id("group_adults")).click();
+    fillTextForm("Минск");
+    driver.findElement(By.cssSelector("label[for=ss")).click();
+    selectAdultsCount();
+    selectChildrenCount();
+    selectRomsCount("3 номера");
+  }
+
+  private void selectRomsCount(String adults) {
+    driver.findElement(By.id("no_rooms")).click();
+    new Select(driver.findElement(By.id("no_rooms"))).selectByVisibleText(adults);
+    driver.findElement(By.id("no_rooms")).click();
+  }
+
+  private void selectChildrenCount() {
     driver.findElement(By.id("group_children")).click();
     new Select(driver.findElement(By.id("group_children"))).selectByVisibleText("3 детей");
     driver.findElement(By.id("group_children")).click();
-    driver.findElement(By.id("no_rooms")).click();
-    new Select(driver.findElement(By.id("no_rooms"))).selectByVisibleText("3 номера");
-    driver.findElement(By.id("no_rooms")).click();
-    driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='вс, 27 янв. 2019'])[2]/following::span[2]")).click();
-    driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Гидромассажная ванна/джакузи'])[1]/following::div[5]")).click();
-    driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Свернуть'])[1]/following::h1[1]")).click();
+  }
+
+  private void selectAdultsCount() {
+    driver.findElement(By.id("group_adults")).click();
+    driver.findElement(By.cssSelector("select[name=group_adults]("+1+")")).click();
+    //new Select(driver.findElement(By.id("group_adults"))).selectByVisibleText("2 взрослых");
+    driver.findElement(By.id("group_adults")).click();
+  }
+
+  private void fillTextForm(String text) {
+    driver.findElement(By.id("ss")).click();
+    driver.findElement(By.id("ss")).clear();
+    driver.findElement(By.id("ss")).sendKeys(text);
   }
 
   @AfterClass(alwaysRun = true)
   public void tearDown() throws Exception {
-    driver.quit();
+    /*driver.quit();
     String verificationErrorString = verificationErrors.toString();
     if (!"".equals(verificationErrorString)) {
       fail(verificationErrorString);
-    }
+    }*/
   }
 
   private boolean isElementPresent(By by) {
