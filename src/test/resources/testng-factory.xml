@@ -6,7 +6,7 @@
     <!--Running full packages-->
     <test name="Accomodations" group-by-instances="true">
         <classes>
-            <class name="by.booking.pkt.MainSearchTests"/>
+            <class name="by.booking.pkt.tests.MainSearchTests"/>
         </classes>
 
     </test>

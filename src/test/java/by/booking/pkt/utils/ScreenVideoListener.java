@@ -15,7 +15,7 @@ public class ScreenVideoListener implements IInvokedMethodListener {
 
 
   public void beforeInvocation(IInvokedMethod method, ITestResult testResult) {
-    videoPath = testResult.getTestContext().getOutputDirectory() + "\\logs\\" + method.getTestMethod().getMethodName() + "\\";
+    videoPath = "target\\"+testResult.getTestContext().getOutputDirectory() + "\\logs\\" + method.getTestMethod().getMethodName() + "\\";
     fileName = videoPath + method.getTestMethod().getMethodName() + new Date().getTime() + ".mp4";
     if (method.isTestMethod()) {
       new File(videoPath).mkdirs();

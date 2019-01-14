@@ -3,7 +3,7 @@
     <!--Running full packages-->
     <test name="TestAccomodations">
         <classes>
-            <class name="by.booking.pkt.MainSearchTests"/>
+            <class name="by.booking.pkt.tests.MainSearchTests"/>
         </classes>
     </test>
 
