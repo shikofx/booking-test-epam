@@ -19,7 +19,7 @@ public class MainSearchFixture extends TestBase {
 
   @BeforeMethod(inheritGroups = true, groups = "mainSearch")
   public void startATM() {
-    app.driver.get("https://www.booking.com");
+    //app.driver.get("https://www.booking.com");
     System.out.println("startATM");
   }
 

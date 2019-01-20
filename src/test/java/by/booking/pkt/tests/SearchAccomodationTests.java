@@ -2,21 +2,12 @@ package by.booking.pkt.tests;
 
 import by.booking.pkt.data.DataSourceFileAnnotation;
 import by.booking.pkt.data.FileDataProvider;
-import by.booking.pkt.tests.fixtures.SearchResultsFixture;
+import by.booking.pkt.tests.fixtures.MainSearchFixture;
 import org.testng.annotations.Test;
 import org.testng.asserts.Assertion;
 import org.testng.asserts.SoftAssert;
 
-public class SearchResultsTests extends SearchResultsFixture {
-
-  @Test(enabled = true, groups = {"positive", "smoke", "filter"},
-          dataProviderClass = FileDataProvider.class, dataProvider = "dataFromCSV")
-  @DataSourceFileAnnotation("src\\test\\resources\\search-positive.data")
-  public void testPropertiesFound(String city, String crooms, String cadults, String cchildren) {
-    Assertion assertion = new Assertion();
-    System.out.println("АТ71: Количество найденных записей");
-    assertion.assertEquals("10 найдено", "12 найдено", "Количество найденных записей не равно количеству отображаемых");
-  }
+public class SearchAccomodationTests extends MainSearchFixture {
 
   @Test(enabled = true, groups = {"positive", "smoke", "filter"},
           dataProviderClass = FileDataProvider.class, dataProvider = "dataFromCSV")
