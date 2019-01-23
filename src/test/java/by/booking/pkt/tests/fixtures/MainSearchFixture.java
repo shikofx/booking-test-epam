@@ -8,7 +8,7 @@ public class MainSearchFixture extends TestBase {
 
 //  @BeforeClass
 //  public void startATF() {
-//    driver.get("https://www.booking.com");
+//    webDriver.get("https://www.booking.com");
 //    System.out.println("startATF");
 //  }
 
@@ -19,7 +19,7 @@ public class MainSearchFixture extends TestBase {
 
   @BeforeMethod(inheritGroups = true, groups = "mainSearch")
   public void startATM() {
-    //app.driver.get("https://www.booking.com");
+    //app.webDriver.get("https://www.booking.com");
     System.out.println("startATM");
   }
 
