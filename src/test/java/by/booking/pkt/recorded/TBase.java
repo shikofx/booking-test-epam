@@ -8,8 +8,9 @@ import org.testng.annotations.BeforeClass;
 import org.testng.asserts.Assertion;
 
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
-import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
+import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
 public class TBase {
   protected WebDriver webDriver;
@@ -23,7 +24,7 @@ public class TBase {
   public void setUp() throws Exception {
     webDriver = new ChromeDriver();
     webDriver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-    wait  = new WebDriverWait(webDriver, 5);
+    wait = new WebDriverWait(webDriver, 5);
   }
 
   @AfterClass(alwaysRun = true)
@@ -38,63 +39,66 @@ public class TBase {
   protected void goToMainSearchPage() {
     webDriver.get("https://www.booking.com");
   }
-  public void logIn() {
-    WebElement signInForm = null;
-    By usernameBy;
-    By passwordBy = By.name("password");
 
-    //проверка заголовка для logIn (старый - с кнопками, или новый
-    //с появляющиейся формой при наведении или клике
+  public void logIn(){
+    WebElement signInForm = null;
+    boolean single_form = false;
+    boolean double_form = false;
+    By usernameLocator = By.name("username");
+    By passwordLocator = By.name("password");
     if (isElementPresent(By.cssSelector("div#user_form li#current_account_create"))) {
-      //вариант 1. Старая форма. Стабильно открывается в firefox. Периодически открывается в Chrome
+      //coice 1: button and double or single signin form
+      if (webDriver.findElement(By.cssSelector("li#current_account a")).getAttribute("data-command-params").contains("redirect_uri")) {
+        single_form = true;
+      } else {
+        double_form = true;
+      }
       webDriver.findElement(By.id("current_account")).click();
     } else if (isElementPresent(By.cssSelector("li#current_account a[role=button]"))) {
-      //вариант 2. Новая форма. Основная форма в Chrome
-      while (!isElementPresent(By.cssSelector("[data_command=show_auth_lightbox]"))) {
-        //достаточно навести курсор
+      //choice 2: light_box + double signin form
+      for (int i = 0; i < 3; i++) {
         webDriver.findElement(By.id("current_account")).click();
+        if(isElementPresent(By.cssSelector("[data_command=show_auth_lightbox]"))){
+          double_form = true;
+          webDriver.findElement(By.cssSelector("[data_command=show_auth_lightbox]")).click();
+          break;
+        }
       }
-      webDriver.findElement(By.cssSelector("[data_command=show_auth_lightbox]")).click();
     }
-    System.out.println("ПРИВЕТ");
-    //wait.until();
-    //проверка вида формы для логина - есть с последовательным вводом логин-> пароль
-    //есть форма для одновременнго ввода логина и пароля
-
-    if (webDriver.findElement(By.tagName("body")).getAttribute("dir").contains("ltr")){
-      System.out.println("SINGLE FORM");
-      usernameBy = By.name("username");
-      wait.until(visibilityOfElementLocated(usernameBy));
-      webDriver.findElement(usernameBy).click();
-      webDriver.findElement(usernameBy).clear();
-      webDriver.findElement(usernameBy).sendKeys("parhkatechno@gmail.com");
-      webDriver.findElement(By.cssSelector("[type=submit]")).click();
-      wait.until(visibilityOfElementLocated(passwordBy));
-      webDriver.findElement(passwordBy).click();
-      webDriver.findElement(passwordBy).clear();
-      webDriver.findElement(passwordBy).sendKeys("rfr3t2fRFR");
-      webDriver.findElement(By.cssSelector("[type=submit]")).click();
-    } else if (isElementPresent(By.cssSelector("form[target=log_tar]"))) {
-      System.out.println("DOUBLE FORM");
+    if (single_form) {
+      wait.until(presenceOfElementLocated(By.cssSelector("body[dir*=ltr]")));
+      wait.until(visibilityOfElementLocated(usernameLocator));
+      signInForm = webDriver.findElement(By.cssSelector("form.nw-signin"));
+      signInForm.findElement(usernameLocator).click();
+      signInForm.findElement(usernameLocator).clear();
+      signInForm.findElement(usernameLocator).sendKeys("parhkatechno@gmail.com");
+      signInForm.findElement(By.cssSelector("[type=submit]")).click();
+      wait.until(visibilityOfElementLocated(passwordLocator));
+      signInForm = webDriver.findElement(By.cssSelector("form.nw-signin"));
+      signInForm.findElement(passwordLocator).click();
+      signInForm.findElement(passwordLocator).clear();
+      signInForm.findElement(passwordLocator).sendKeys("rfr3t2fRFR");
+      signInForm.findElement(By.cssSelector("[type=submit]")).click();
+    } else if (double_form) {
+      wait.until(visibilityOfElementLocated(usernameLocator));
       signInForm = webDriver.findElement(By.cssSelector("form[target=log_tar]"));
-      usernameBy = By.name("username");
-      wait.until(visibilityOfElementLocated(usernameBy));
-      signInForm.findElement(usernameBy).click();
-      signInForm.findElement(usernameBy).clear();
-      signInForm.findElement(usernameBy).sendKeys("parhkatechno@gmail.com");
-      signInForm.findElement(passwordBy).click();
-      signInForm.findElement(passwordBy).clear();
-      signInForm.findElement(passwordBy).sendKeys("rfr3t2fRFR");
+      wait.until(visibilityOfElementLocated(usernameLocator));
+      signInForm.findElement(usernameLocator).click();
+      signInForm.findElement(usernameLocator).clear();
+      signInForm.findElement(usernameLocator).sendKeys("parhkatechno@gmail.com");
+      signInForm.findElement(passwordLocator).click();
+      signInForm.findElement(passwordLocator).clear();
+      signInForm.findElement(passwordLocator).sendKeys("rfr3t2fRFR");
       signInForm.findElement(By.cssSelector("[type=submit]")).click();
     }
   }
 
-  public void logOut(){
+  public void logOut() {
     callAccountMenu();
     webDriver.findElement(By.cssSelector("input[name=logout]+input")).click();
   }
 
-  public void goToWishlists(){
+  public void goToWishlists() {
     callAccountMenu();
     webDriver.findElement(By.cssSelector("div[class*=wishlists")).click();
   }
@@ -105,8 +109,7 @@ public class TBase {
   }
 
 
-
-  private boolean isElementPresent(By locator) {
+  public boolean isElementPresent(By locator) {
     return webDriver.findElements(locator).size() > 0;
   }
 
@@ -132,6 +135,17 @@ public class TBase {
     } finally {
       acceptNextAlert = true;
     }
+  }
+
+  public void createNewWishlist(){
+    wait.until(visibilityOfElementLocated(By.cssSelector("button[class*=js-listview-create-list] span")));
+    System.out.println("СОЗДАТЬ СПИСОК");
+    webDriver.findElement(By.cssSelector("button[class*=js-listview-create-list] span")).click();
+    Alert alertCreateList = wait.until(alertIsPresent());
+    alertCreateList.sendKeys("Go to British");
+    alertCreateList.accept();
+    //!!!Список должен увеличиться на 1. Должна быть выбрана созданная группа
+    wait.until(textMatches(By.cssSelector("div[class*=bui-dropdown] span"), Pattern.compile("Go to British")));
   }
 
 //  protected void selectDateRange() {

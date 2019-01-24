@@ -10,24 +10,24 @@ public class TestListSendLink extends TBase {
   @Test
   public void testListSendLink() throws Exception {
     goToMainSearchPage();
-    logIn();
+    logIn( );
     goToWishlists();
     String urlForList = getUrlForList();
-
-//    logOut();
+    logOut();
     webDriver.get(urlForList);
-
-//    String s = webDriver.findElement(By.cssSelector("h1[class*=[shared]")).getText();
-//    assertion.assertEquals(s, "Go to British", "Ссылка на список не работает");
+    String actual = webDriver.findElement(By.xpath("//h1[text()='Go to British']")).getAttribute("innerText");
+    System.out.println(actual);
+    assertion.assertTrue(isElementPresent(By.xpath("//h1[text()='Go to British']")));
     //
   }
 
   private String getUrlForList() {
+    System.out.println("GET URL button");
     wait.until(visibilityOfElementLocated(By.cssSelector("div[class=bui-dropdown]+button span")));
     webDriver.findElement(By.cssSelector("div[class=bui-dropdown]+button span")).click();
-    System.out.println("ссылка");
-    //wait.until(visibilityOfElementLocated(By.cssSelector("input[class*=listview-share__url]")));
-    String s = webDriver.findElement(By.cssSelector("input[defaultValue^=https]")).getText();
+    System.out.println("GET URL text");
+    wait.until(visibilityOfElementLocated(By.cssSelector("p[class*=content]")));
+    String s=webDriver.findElement(By.cssSelector("p[class*=content] input")).getAttribute("defaultValue");
     System.out.println(s);
     return s;
   }
