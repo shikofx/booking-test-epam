@@ -12,21 +12,24 @@ public class TestListSendLink extends TBase {
     goToMainSearchPage();
     logIn();
     goToWishlists();
+    String urlForList = getUrlForList();
 
-    logOut();
-    webDriver.get(getUrlForList());
-    String s = webDriver.findElement(By.cssSelector("h1[class*=[shared]")).getText();
-    assertion.assertEquals(s, "Go to British", "Ссылка на список не работает");
+//    logOut();
+    webDriver.get(urlForList);
+
+//    String s = webDriver.findElement(By.cssSelector("h1[class*=[shared]")).getText();
+//    assertion.assertEquals(s, "Go to British", "Ссылка на список не работает");
     //
   }
 
   private String getUrlForList() {
     wait.until(visibilityOfElementLocated(By.cssSelector("div[class=bui-dropdown]+button span")));
     webDriver.findElement(By.cssSelector("div[class=bui-dropdown]+button span")).click();
-
-/*
-    wait.until(textMatches(By.cssSelector("span[class^=bui-button]"), Pattern.compile("Go to British")));*/
-    return "strung";
+    System.out.println("ссылка");
+    //wait.until(visibilityOfElementLocated(By.cssSelector("input[class*=listview-share__url]")));
+    String s = webDriver.findElement(By.cssSelector("input[defaultValue^=https]")).getText();
+    System.out.println(s);
+    return s;
   }
 
 }
