@@ -71,13 +71,13 @@ public class TBase {
       signInForm = webDriver.findElement(By.cssSelector("form.nw-signin"));
       signInForm.findElement(usernameLocator).click();
       signInForm.findElement(usernameLocator).clear();
-      signInForm.findElement(usernameLocator).sendKeys("parhkatechno@gmail.com");
+      signInForm.findElement(usernameLocator).sendKeys("pkt.autotests@gmail.com");
       signInForm.findElement(By.cssSelector("[type=submit]")).click();
       wait.until(visibilityOfElementLocated(passwordLocator));
       signInForm = webDriver.findElement(By.cssSelector("form.nw-signin"));
       signInForm.findElement(passwordLocator).click();
       signInForm.findElement(passwordLocator).clear();
-      signInForm.findElement(passwordLocator).sendKeys("rfr3t2fRFR");
+      signInForm.findElement(passwordLocator).sendKeys("123456789");
       signInForm.findElement(By.cssSelector("[type=submit]")).click();
     } else if (double_form) {
       wait.until(visibilityOfElementLocated(usernameLocator));
@@ -85,12 +85,13 @@ public class TBase {
       wait.until(visibilityOfElementLocated(usernameLocator));
       signInForm.findElement(usernameLocator).click();
       signInForm.findElement(usernameLocator).clear();
-      signInForm.findElement(usernameLocator).sendKeys("parhkatechno@gmail.com");
+      signInForm.findElement(usernameLocator).sendKeys("pkt.autotests@gmail.com");
       signInForm.findElement(passwordLocator).click();
       signInForm.findElement(passwordLocator).clear();
-      signInForm.findElement(passwordLocator).sendKeys("rfr3t2fRFR");
+      signInForm.findElement(passwordLocator).sendKeys("123456789");
       signInForm.findElement(By.cssSelector("[type=submit]")).click();
     }
+    wait.until(visibilityOfElementLocated(By.cssSelector("span.user_name_block")));
   }
 
   public void logOut() {
