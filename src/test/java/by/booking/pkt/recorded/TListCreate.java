@@ -11,8 +11,8 @@ public class TListCreate extends TBase {
     logIn();
     goToWishlists();
     createNewWishlist();
-    String s=webDriver.findElement(By.cssSelector("span[class^=bui-button]")).getText();
-    assertion.assertEquals(s, "Go to British", "Новая группа не создана");
+    String actual=webDriver.findElement(By.cssSelector("span.wl-bui-header")).getText();
+    assertion.assertEquals(actual, "Go to British", "Новая группа не создана");
     logOut();
   }
 }

@@ -15,8 +15,6 @@ public class TestListSendLink extends TBase {
     String urlForList = getUrlForList();
     logOut();
     webDriver.get(urlForList);
-    String actual = webDriver.findElement(By.xpath("//h1[text()='Go to British']")).getAttribute("innerText");
-    System.out.println(actual);
     assertion.assertTrue(isElementPresent(By.xpath("//h1[text()='Go to British']")));
     //
   }
