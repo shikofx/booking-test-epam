@@ -24,7 +24,7 @@ public class TBase {
   public void setUp() throws Exception {
     webDriver = new ChromeDriver();
     webDriver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-    wait = new WebDriverWait(webDriver, 5);
+    wait = new WebDriverWait(webDriver, 15);
   }
 
   @AfterClass(alwaysRun = true)

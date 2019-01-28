@@ -1,12 +1,14 @@
 package by.booking.pkt.recorded;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
+import java.util.List;
 import java.util.Set;
 
-import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
+import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
 public class TItemAddToNewList extends TBase{
 
@@ -32,14 +34,21 @@ public class TItemAddToNewList extends TBase{
     newWindowsSet.removeAll(oldWindowsSet);
     String newWindow = newWindowsSet.iterator().next();
     webDriver.switchTo().window(newWindow);
-
+    //нажать иконку, чтобы выпало меню списков
+    wait.until(visibilityOfElementLocated(By.cssSelector("#wrap-hotelpage-top .js-wl-dropdown-handle")));
     webDriver.findElement(By.cssSelector("#wrap-hotelpage-top .js-wl-dropdown-handle")).click();
 
+    //Добавить новый список
     WebElement selectWishlistForm = webDriver.findElement(By.cssSelector("#hotel-wishlists"));
-    //unselect ALL
+    unselectAllWishlists(selectWishlistForm);
+
     selectWishlistForm.findElement(By.cssSelector("input[type=text]")).click();
     selectWishlistForm.findElement(By.cssSelector("input[type=text]")).clear();
-    selectWishlistForm.findElement(By.cssSelector("input[type=text]")).sendKeys("Поездка в Черногорию");
+    selectWishlistForm.findElement(By.cssSelector("input[type=text]")).sendKeys("фывапр");
+    selectWishlistForm.findElement(By.cssSelector("input[type=text]")).sendKeys(Keys.ENTER);
+    wait.until(elementToBeSelected(By.cssSelector("#hotel_wishlists .wl-dropdown-item_new span")));
+    wait.until(visibilityOf(selectWishlistForm.findElement(By.cssSelector("[checked=checked]~span a"))));
+    System.out.println(selectWishlistForm.findElement(By.cssSelector("[checked=checked]~span a")).getAttribute("href"));
     //goToWishlist
     //проверить есть тот ли текущий список и добавлена ли в него запись
 //    webDriver.close();
@@ -47,7 +56,12 @@ public class TItemAddToNewList extends TBase{
 
   }
 
-  private void unselectAll() {
+  private void unselectAllWishlists(WebElement form) {
+    List<WebElement> selectedElements = form.findElements(By.cssSelector("input:checked+span.bui-checkbox__label"));
+    for(WebElement e:selectedElements){
+      System.out.println(e.getText());
+      e.click();
+    }
   }
 
   private void selectCurrentWindow() {
@@ -106,15 +120,15 @@ public class TItemAddToNewList extends TBase{
   }
 
   private void selectDates(String checkInDate, String checkOutDate) {
-
-    webDriver.findElement(By.cssSelector("div.xp__dates.xp__group")).click();
-    String currentFirstMonth = webDriver.findElement(By.cssSelector("div.bui-calendar td[data-date^='20']")).getAttribute("data-date");
     String[] firstMonthArray = checkInDate.split("-");
     firstMonthArray[2]="01";
     String firstMonth = firstMonthArray[0]+"-"+firstMonthArray[1]+"-"+firstMonthArray[2];
-    while (!firstMonth.equals(currentFirstMonth)) {
+    webDriver.findElement(By.cssSelector("div.xp__dates.xp__group")).click();
+   // String currentFirstMonth = ;
+
+    while (!firstMonth.equals(webDriver.findElement(By.cssSelector("div.bui-calendar td[data-date^='20']")).getAttribute("data-date"))) {
       webDriver.findElement(By.cssSelector("div[data-bui-ref=calendar-next]")).click();
-      currentFirstMonth = webDriver.findElement(By.cssSelector("div.bui-calendar td[data-date^='20']")).getAttribute("data-date");
+    //  currentFirstMonth = webDriver.findElement(By.cssSelector("div.bui-calendar td[data-date^='20']")).getAttribute("data-date");
     }
     webDriver.findElement(By.cssSelector("div.bui-calendar td[data-date='"+checkInDate+"']")).click();
     webDriver.findElement(By.cssSelector("div.bui-calendar td[data-date='"+checkOutDate+"']")).click();
