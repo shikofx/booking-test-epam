@@ -1,5 +1,6 @@
 package by.booking.pkt.recorded;
 
+import by.booking.pkt.utils.ItemUrlParser;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -8,8 +9,6 @@ import org.testng.asserts.SoftAssert;
 
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
@@ -46,14 +45,14 @@ public class TItemAddToNewList extends TBase{
     //нажать иконку, чтобы выпало меню списков
     wait.until(visibilityOfElementLocated(By.cssSelector("#wrap-hotelpage-top .js-wl-dropdown-handle")));
     webDriver.findElement(By.cssSelector("#wrap-hotelpage-top .js-wl-dropdown-handle")).click();
-
-    String itemUrl = webDriver.getCurrentUrl().split("html?")[1];
+    String itemURLString = webDriver.getCurrentUrl();
+    ItemUrlParser itemUrl = new ItemUrlParser(itemURLString);
     //Добавить новый список
     WebElement selectWishlistForm = webDriver.findElement(By.cssSelector("#hotel-wishlists"));
     List<WebElement> oldWishlists = selectWishlistForm.findElements(By.cssSelector("label.js-wl-dropdown-item"));
     selectWishlistForm.findElement(By.cssSelector("input[type=text]")).click();
     selectWishlistForm.findElement(By.cssSelector("input[type=text]")).clear();
-    selectWishlistForm.findElement(By.cssSelector("input[type=text]")).sendKeys("Go to France");
+    selectWishlistForm.findElement(By.cssSelector("input[type=text]")).sendKeys("Go to France1");
     selectWishlistForm.findElement(By.cssSelector("input[type=text]")).sendKeys(Keys.ENTER);
     wait.until(numberOfElementsToBe(By.cssSelector("label.js-wl-dropdown-item"), oldWishlists.size()+1));
     List<WebElement> newWishlists = selectWishlistForm.findElements(By.cssSelector("label.js-wl-dropdown-item"));
@@ -81,11 +80,11 @@ public class TItemAddToNewList extends TBase{
     wait.until(presenceOfElementLocated(By.cssSelector("div.wl-bui-header")));
     String actual=webDriver.findElement(By.cssSelector("div.wl-bui-header h1")).getText();
     softAssert.assertEquals(actual, "Go to France", "New list didn't opened as current!");
-    //aid label sid aid.+?;
-
-    String itemUrlInList = webDriver.findElement(By.cssSelector("header[class*=header] a")).getAttribute("href").split("html?")[1];
-
-    softAssert.assertEquals(itemUrlInList, itemUrl, "New item didn't add!");
+    wait.until(presenceOfElementLocated(By.cssSelector("header[class*=header]")));
+    String itemURLInListString = webDriver.findElement(By.cssSelector("header[class*=header] a")).getAttribute("href");
+    ItemUrlParser itemUrlInList = new ItemUrlParser(itemURLInListString);
+    softAssert.assertEquals(itemUrlInList.getHeader(), itemUrl.getHeader(), "New item didn't add!");
+    System.out.println(itemUrlInList.getHeader()+"\n"+itemURLInListString+"\nitemURL = "+itemUrl.getHeader()+"\nSTRING = "+itemURLString);
     softAssert.assertAll();
 
 
