@@ -40,5 +40,11 @@ public class TFilterByBudget extends TBase{
     filterElement.click();
     Assertion assertion = new Assertion();
     assertion.assertTrue(Integer.parseInt(filterElement.getAttribute("data-count"))>=3, "Count of items less than 3");
+
+    List<WebElement> accomodationItems = webDriver.findElements(By.cssSelector("#hotellist_inner>div.sr_item"));
+    System.out.println("Количество записей на странице: " + accomodationItems.size());
+    for(WebElement item:accomodationItems){
+      System.out.println(item.findElement(By.cssSelector("div.totalPrice")).getText());
+    }
   }
 }

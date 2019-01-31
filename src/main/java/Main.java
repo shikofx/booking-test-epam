@@ -9,7 +9,7 @@ public class Main {
       System.out.println(stringParser.getHeader());
       String totalPrice = "Цена за 2 взрослых и 4 детей\n" +
               "  на 10 ночей:\n" +
-              "  US$1 765";
+              "  US$126  6545675";
       StringParser parser = new StringParser(totalPrice);
       System.out.println(parser.getTotalPrice());
     }

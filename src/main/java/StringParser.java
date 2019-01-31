@@ -31,8 +31,8 @@ public class StringParser {
   }
 
   public String getTotalPrice(){
-    pattern = Pattern.compile(".+\\d");
-    return getStringByPattern(pattern, inString);
+    pattern = Pattern.compile("\\d*\\s*\\d+");
+    return getStringByPattern(pattern, inString).replaceAll("\\s", "");
   }
 
   @Nullable
