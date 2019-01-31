@@ -3,32 +3,38 @@ import org.jetbrains.annotations.Nullable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class AccomodationItemURL {
-  private String url;
+public class StringParser {
+  private String inString;
 
   private Pattern pattern;
   Matcher matcher;
 
 
   
-  AccomodationItemURL(String url){
-    this.url = url;
+  StringParser(String url){
+    this.inString = url;
   }
 
   public String getParameter(String parameter) {
     pattern = Pattern.compile("(?<=("+parameter+"=))+[A-Za-z0-9-_]*");
-    return getStringByPattern(pattern, url);
+    return getStringByPattern(pattern, inString);
   }
 
   public String getHeader(){
     pattern = Pattern.compile(".+/[A-Za-z0-9_-]*");
-    return getStringByPattern(pattern, url);
+    return getStringByPattern(pattern, inString);
   }
 
   public String getHeaderWithLocation(){
     pattern = Pattern.compile(".+(?=(\\.html|\\.\\w+\\.html))");
-    return getStringByPattern(pattern, url);
+    return getStringByPattern(pattern, inString);
   }
+
+  public String getTotalPrice(){
+    pattern = Pattern.compile(".+\\d");
+    return getStringByPattern(pattern, inString);
+  }
+
   @Nullable
   public static String getStringByPattern(Pattern pattern, String string) {
     Matcher matcher = pattern.matcher(string);

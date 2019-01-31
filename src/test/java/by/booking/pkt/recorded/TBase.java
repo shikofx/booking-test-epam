@@ -7,8 +7,9 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.asserts.Assertion;
 
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
@@ -23,6 +24,7 @@ public class TBase {
   @BeforeClass(alwaysRun = true)
   public void setUp() throws Exception {
     webDriver = new ChromeDriver();
+    //webDriver.manage().window().maximize();
     webDriver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
     wait = new WebDriverWait(webDriver, 15);
   }
@@ -40,31 +42,37 @@ public class TBase {
     webDriver.get("https://www.booking.com");
   }
 
-  public void logIn(){
-    WebElement signInForm = null;
-    boolean single_form = false;
-    boolean double_form = false;
-    By usernameLocator = By.name("username");
-    By passwordLocator = By.name("password");
-    if (isElementPresent(By.cssSelector("div#user_form li#current_account_create"))) {
-      //coice 1: button and double or single signin form
-      if (webDriver.findElement(By.cssSelector("li#current_account a")).getAttribute("data-command-params").contains("redirect_uri")) {
-        single_form = true;
-      } else {
-        double_form = true;
-      }
-      webDriver.findElement(By.id("current_account")).click();
-    } else if (isElementPresent(By.cssSelector("li#current_account a[role=button]"))) {
-      //choice 2: light_box + double signin form
-      for (int i = 0; i < 3; i++) {
-        webDriver.findElement(By.id("current_account")).click();
-        if(isElementPresent(By.cssSelector("[data_command=show_auth_lightbox]"))){
-          double_form = true;
-          webDriver.findElement(By.cssSelector("[data_command=show_auth_lightbox]")).click();
-          break;
-        }
-      }
+  public void logIn() throws NullPointerException{
+
+    wait.until(presenceOfElementLocated(By.cssSelector("#current_account")));
+
+    boolean isDropedMenu = false;
+    try{
+      isDropedMenu = webDriver.findElement(By.cssSelector("#current_account a")).getAttribute("role").contains("button");
+    } catch (NullPointerException e) {
+      isDropedMenu = false;
     }
+
+    By logInButton;
+
+    if(isDropedMenu) {
+      activateDropdownMenu(By.cssSelector("#current_account a"), By.cssSelector("div.profile-menu"));
+      logInButton = By.cssSelector("div.profile-menu-auth-item a.js-header-login-link");
+    } else {
+      logInButton = By.cssSelector("#current_account a");
+    }
+
+    boolean single_form = false;
+    try{
+      single_form = webDriver.findElement(By.cssSelector("li#current_account a")).getAttribute("data-command-params").contains("redirect_uri");
+    } catch (NullPointerException e) {
+      single_form = false;
+    }
+    System.out.println("single_form = " + single_form);
+    webDriver.findElement(logInButton).click();
+    WebElement signInForm = null;
+    By usernameLocator = By.cssSelector("[name=username]");
+    By passwordLocator = By.cssSelector("[name=password]");
     if (single_form) {
       wait.until(presenceOfElementLocated(By.cssSelector("body[dir*=ltr]")));
       wait.until(visibilityOfElementLocated(usernameLocator));
@@ -79,7 +87,7 @@ public class TBase {
       signInForm.findElement(passwordLocator).clear();
       signInForm.findElement(passwordLocator).sendKeys("123456789");
       signInForm.findElement(By.cssSelector("[type=submit]")).click();
-    } else if (double_form) {
+    } else {
       wait.until(visibilityOfElementLocated(usernameLocator));
       signInForm = webDriver.findElement(By.cssSelector("form[target=log_tar]"));
       wait.until(visibilityOfElementLocated(usernameLocator));
@@ -95,18 +103,13 @@ public class TBase {
   }
 
   public void logOut() {
-    callAccountMenu();
+    activateDropdownMenu(By.cssSelector("#current_account span[class=user_name_block]"), By.cssSelector(".profile-menu"));
     webDriver.findElement(By.cssSelector("input[name=logout]+input")).click();
   }
 
   public void goToWishlists() {
-    callAccountMenu();
+    activateDropdownMenu(By.cssSelector("#current_account span[class=user_name_block]"), By.cssSelector(".profile-menu"));
     webDriver.findElement(By.cssSelector("div[class*=wishlists")).click();
-  }
-
-
-  private void callAccountMenu() {
-    webDriver.findElement(By.cssSelector("#current_account span[class=user_name_block]")).click();
   }
 
 
@@ -138,15 +141,164 @@ public class TBase {
     }
   }
 
-  public void createNewWishlist(){
+  public void createNewWishlist() {
+
     wait.until(visibilityOfElementLocated(By.cssSelector("button[class*=js-listview-create-list] span")));
-    System.out.println("СОЗДАТЬ СПИСОК");
     webDriver.findElement(By.cssSelector("button[class*=js-listview-create-list] span")).click();
+
+
     Alert alertCreateList = wait.until(alertIsPresent());
     alertCreateList.sendKeys("Go to British");
     alertCreateList.accept();
     //!!!Список должен увеличиться на 1. Должна быть выбрана созданная группа
-    wait.until(textMatches(By.cssSelector("div[class*=bui-dropdown] span"), Pattern.compile("Go to British")));
+  }
+
+  protected int listsCount() {
+    System.out.println("Считаем количество списков");
+    wait.until(presenceOfElementLocated(By.cssSelector(".js-listview-header-dropdown")));
+    webDriver.findElement(By.cssSelector(".js-listview-header-dropdown")).click();
+    wait.until(presenceOfElementLocated(By.cssSelector(".listview__lists")));
+    int listsCount = webDriver.findElements(By.cssSelector(".listview__lists div")).size();
+    webDriver.findElement(By.cssSelector(".js-listview-header-dropdown")).click();
+    return listsCount;
+  }
+
+  protected String getAttributeWithWait() {
+    wait.until(presenceOfElementLocated(By.cssSelector("header[class*=header]")));
+    return webDriver.findElement(By.cssSelector("header[class*=header] a")).getAttribute("href");
+  }
+
+  protected String getTextWithWait() {
+    wait.until(presenceOfElementLocated(By.cssSelector("div.wl-bui-header h1")));
+    return webDriver.findElement(By.cssSelector("div.wl-bui-header h1")).getText();
+  }
+
+  protected void goToWishCreatesListFromItem(WebElement newWishlist) {
+    if (newWishlist.findElement(By.cssSelector("input")).isSelected()) {
+      newWishlist.findElement(By.cssSelector("input~span a")).click();
+
+    }
+  }
+
+  protected WebElement addNewWishlistInItemPage() {
+    List<WebElement> oldWishlists = webDriver.findElements(By.cssSelector("#hotel-wishlists label.js-wl-dropdown-item"));
+    webDriver.findElement(By.cssSelector("#hotel-wishlists input[type=text]")).click();
+    webDriver.findElement(By.cssSelector("#hotel-wishlists input[type=text]")).clear();
+    webDriver.findElement(By.cssSelector("#hotel-wishlists input[type=text]")).sendKeys("Go to France");
+    webDriver.findElement(By.cssSelector("#hotel-wishlists input[type=text]")).sendKeys(Keys.ENTER);
+    wait.until(numberOfElementsToBe(By.cssSelector("#hotel-wishlists label.js-wl-dropdown-item"), oldWishlists.size() + 1));
+    List<WebElement> newWishlists = webDriver.findElements(By.cssSelector("#hotel-wishlists label.js-wl-dropdown-item"));
+    unselectAllElementsInList(oldWishlists);
+    newWishlists.removeAll(oldWishlists);
+    return newWishlists.iterator().next();
+  }
+
+  protected void activateDropdownMenu(By whatClick, By dropDownMenu) {
+    wait.until(presenceOfElementLocated(whatClick));
+    webDriver.findElement(whatClick).click();
+    WebElement dropDownMenuElement = wait.until(presenceOfElementLocated(dropDownMenu));
+    for (int i = 0; i < 3 && !dropDownMenuElement.isDisplayed(); i++) {
+      webDriver.findElement(whatClick).click();
+    }
+  }
+
+  protected void goToItemFromSearchResults(int itemNumber) {
+    WebElement item = webDriver.findElement(By.cssSelector("#hotellist_inner>.sr_item:nth-of-type(" + itemNumber + ")"));
+    item.findElement(By.cssSelector(".sr-cta-button-row")).click();
+  }
+
+  protected String switchToNewWindow(Set<String> oldWindowSet, Set<String> newWindowSet) {
+    String newWindow = null;
+    if (newWindowSet.removeAll(oldWindowSet) && newWindowSet.size() == 1) {
+      newWindow = newWindowSet.iterator().next();
+      webDriver.switchTo().window(newWindow);
+    }
+    return newWindow;
+  }
+
+  private void unselectAllElementsInList(List<WebElement> list) {
+    for (WebElement e : list) {
+      if (e.findElement(By.cssSelector("input")).isSelected())
+        e.findElement(By.cssSelector("input~span.bui-checkbox__label")).click();
+    }
+  }
+
+  protected void submitMainSearch() {
+    webDriver.findElement(By.cssSelector("button[data-sb-id=main][type=submit]")).click();
+  }
+
+  protected void selectChildrenCount(int childrenCount) {
+    if (webDriver.findElement(By.cssSelector("label#xp__guests__toggle+div")).getAttribute("className").contains("hidden")) {
+      webDriver.findElement(By.cssSelector("label#xp__guests__toggle")).click();
+    }
+    int actualChildrenCount = -1;
+    while (childrenCount != actualChildrenCount) {
+      actualChildrenCount = Integer.parseInt(webDriver.findElement(By.cssSelector("#group_children")).getAttribute("defaultValue"));
+      if (actualChildrenCount > childrenCount && actualChildrenCount > 0) {
+        webDriver.findElement(By.cssSelector("#group_children~button[class*=subtract-button]")).click();
+      } else if (actualChildrenCount < childrenCount) {
+        webDriver.findElement(By.cssSelector("#group_children~button[class*=add-button]")).click();
+      }
+    }
+  }
+
+  protected void selectAdultsCount(int adultsCount) {
+    if (webDriver.findElement(By.cssSelector("label#xp__guests__toggle+div")).getAttribute("className").contains("hidden")) {
+      webDriver.findElement(By.cssSelector("label#xp__guests__toggle")).click();
+    }
+    int actualAdultsCount = -1;
+    while (adultsCount != actualAdultsCount) {
+      actualAdultsCount = Integer.parseInt(webDriver.findElement(By.cssSelector("#group_adults")).getAttribute("defaultValue"));
+      if (actualAdultsCount > adultsCount && actualAdultsCount > 0) {
+        webDriver.findElement(By.cssSelector("#group_adults~button[class*=subtract-button]")).click();
+      } else if (actualAdultsCount < adultsCount) {
+        webDriver.findElement(By.cssSelector("#group_adults~button[class*=add-button]")).click();
+      }
+    }
+  }
+
+  protected void selectRoomsCount(int roomsCount) {
+    if (webDriver.findElement(By.cssSelector("label#xp__guests__toggle+div")).getAttribute("className").contains("hidden")) {
+      webDriver.findElement(By.cssSelector("label#xp__guests__toggle")).click();
+    }
+    int actualRooms = Integer.parseInt(webDriver.findElement(By.cssSelector("#no_rooms")).getAttribute("defaultValue"));
+    int actualRoomsCount = -1;
+    while (roomsCount != actualRoomsCount) {
+      actualRoomsCount = Integer.parseInt(webDriver.findElement(By.cssSelector("#no_rooms")).getAttribute("defaultValue"));
+      if (actualRoomsCount > roomsCount && actualRoomsCount > 0) {
+        webDriver.findElement(By.cssSelector("#no_rooms~button[class*=subtract-button]")).click();
+      } else if (actualRoomsCount < roomsCount) {
+        webDriver.findElement(By.cssSelector("#no_rooms~button[class*=add-button]")).click();
+      }
+    }
+  }
+
+  protected void selectDates(String checkInDate, String checkOutDate) {
+    String[] firstMonthArray = checkInDate.split("-");
+    firstMonthArray[2] = "01";
+    String firstMonth = firstMonthArray[0] + "-" + firstMonthArray[1] + "-" + firstMonthArray[2];
+    webDriver.findElement(By.cssSelector("div.xp__dates.xp__group")).click();
+    // String currentFirstMonth = ;
+
+    while (!firstMonth.equals(webDriver.findElement(By.cssSelector("div.bui-calendar td[data-date^='20']")).getAttribute("data-date"))) {
+      webDriver.findElement(By.cssSelector("div[data-bui-ref=calendar-next]")).click();
+      //  currentFirstMonth = webDriver.findElement(By.cssSelector("div.bui-calendar td[data-date^='20']")).getAttribute("data-date");
+    }
+    webDriver.findElement(By.cssSelector("div.bui-calendar td[data-date='" + checkInDate + "']")).click();
+    webDriver.findElement(By.cssSelector("div.bui-calendar td[data-date='" + checkOutDate + "']")).click();
+    webDriver.findElement(By.cssSelector("div.xp__dates.xp__group")).click();
+  }
+
+  protected void enterAccomodaition(String place) {
+    webDriver.findElement(By.cssSelector("#ss")).click();
+    webDriver.findElement(By.cssSelector("#ss")).clear();
+    webDriver.findElement(By.cssSelector("#ss")).sendKeys(place);
+  }
+
+  protected void selectCurrency() {
+    activateDropdownMenu(By.cssSelector("[data-id=currency_selector]"), By.cssSelector("#current_currency"));
+    wait.until(visibilityOfElementLocated(By.cssSelector("#current_currency_foldout")));
+    webDriver.findElement(By.cssSelector("a[data-currency=RUB")).click();
   }
 
 //  protected void selectDateRange() {

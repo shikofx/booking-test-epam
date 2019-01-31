@@ -16,18 +16,13 @@ public class TestListSendLink extends TBase {
     logOut();
     webDriver.get(urlForList);
     assertion.assertTrue(isElementPresent(By.xpath("//h1[text()='Go to British']")));
-    //
   }
 
   private String getUrlForList() {
-    System.out.println("GET URL button");
-    wait.until(visibilityOfElementLocated(By.cssSelector("div[class=bui-dropdown]+button span")));
-    webDriver.findElement(By.cssSelector("div[class=bui-dropdown]+button span")).click();
-    System.out.println("GET URL text");
-    wait.until(visibilityOfElementLocated(By.cssSelector("p[class*=content]")));
-    String s=webDriver.findElement(By.cssSelector("p[class*=content] input")).getAttribute("defaultValue");
-    System.out.println(s);
-    return s;
+    activateDropdownMenu(By.cssSelector("div[class=bui-dropdown]+button span"), By.cssSelector("div.listview-share"));
+    wait.until(visibilityOfElementLocated(By.cssSelector("p[class*=content] input")));
+    String url = webDriver.findElement(By.cssSelector("p[class*=content] input")).getAttribute("defaultValue");
+    return url;
   }
 
 }

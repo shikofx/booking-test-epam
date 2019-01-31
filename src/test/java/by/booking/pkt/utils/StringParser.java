@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ItemUrlParser {
+public class StringParser {
   private String url;
 
   private Pattern pattern;
@@ -13,7 +13,7 @@ public class ItemUrlParser {
 
 
   
-  public ItemUrlParser(String url){
+  public StringParser(String url){
     this.url = url;
   }
 
