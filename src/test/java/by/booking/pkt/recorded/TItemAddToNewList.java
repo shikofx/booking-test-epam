@@ -7,8 +7,6 @@ import org.testng.asserts.SoftAssert;
 
 import java.util.Set;
 
-import static by.booking.pkt.utils.StringParser.getHeaderOfURL;
-
 public class TItemAddToNewList extends TBase {
 
   @Test
@@ -34,7 +32,7 @@ public class TItemAddToNewList extends TBase {
     String secondWindow = switchToNewWindow(oldWindowSet, newWindowSet);
     softAssert.assertNotEquals(secondWindow, null,"Item info didn't open in new window!");
 
-    String itemUrlHeader = getHeaderOfURL(webDriver.getCurrentUrl());
+    String itemUrlHeader = textByPattern(webDriver.getCurrentUrl(), ".+/[A-Za-z0-9_-]*");
 
     activateDropdownMenu(By.cssSelector("#wrap-hotelpage-top .js-wl-dropdown-handle"), By.cssSelector("#hotel-wishlists"));
 
@@ -57,7 +55,7 @@ public class TItemAddToNewList extends TBase {
 
     softAssert.assertEquals(actual, "Go to France", "New list didn't opened as current!");
 
-    String  itemUrlInListHeader = getHeaderOfURL(getAttributeWithWait(By.cssSelector("header[class*=header]"), "href"));
+    String  itemUrlInListHeader = textByPattern(getAttributeWithWait(By.cssSelector("header[class*=header]"), "href"), ".+/[A-Za-z0-9_-]*");
 
     softAssert.assertEquals(itemUrlInListHeader, itemUrlHeader, "New item didn't add!");
     softAssert.assertAll();

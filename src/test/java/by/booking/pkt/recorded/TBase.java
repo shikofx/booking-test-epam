@@ -1,5 +1,6 @@
 package by.booking.pkt.recorded;
 
+import org.jetbrains.annotations.Nullable;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -10,6 +11,8 @@ import org.testng.asserts.Assertion;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
@@ -36,6 +39,22 @@ public class TBase {
     if (!"".equals(verificationErrorString)) {
       fail(verificationErrorString);
     }*/
+  }
+
+  public String textByPatternNoSpace(String inString, String regex){
+    return textByPattern(regex, inString).replaceAll("\\s", "");
+  }
+
+  @Nullable
+  public String textByPattern(String regex, String string) {
+
+    Pattern pattern = Pattern.compile(regex);
+    Matcher matcher = pattern.matcher(string);
+    String result= null;
+    while(matcher.find()) {
+      result = string.substring(matcher.start(), matcher.end());
+    }
+    return result;
   }
 
   protected void goToMainSearchPage() {

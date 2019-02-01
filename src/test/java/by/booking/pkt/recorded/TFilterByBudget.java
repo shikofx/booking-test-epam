@@ -9,9 +9,8 @@ import org.testng.asserts.SoftAssert;
 import java.util.ArrayList;
 import java.util.List;
 
-import static by.booking.pkt.utils.StringParser.getNightsCount;
-import static by.booking.pkt.utils.StringParser.getTotalPrice;
 import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
+import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfNestedElementLocatedBy;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
 
 public class TFilterByBudget extends TBase{
@@ -45,24 +44,27 @@ public class TFilterByBudget extends TBase{
     Assertion assertion = new Assertion();
     assertion.assertTrue(Integer.parseInt(filterElement.getAttribute("data-count"))>=3, "Count of items less than 3");
     wait.until(visibilityOfElementLocated(By.cssSelector("#bodyconstraint-inner")));
+    List<WebElement> searchResultItems;
     //Найти все отели до записи: есть еще отели вне определенной локации
-    List<WebElement> searchResultItems = new ArrayList<>();
     if(isElementPresent(By.cssSelector("div.sr_separator"))) {
       searchResultItems = webDriver.findElements(By.xpath("//*/div[contains(@class,'sr_separator')]/preceding-sibling::div[contains(@class,'sr_item')]"));
     } else {
       searchResultItems = webDriver.findElements(By.cssSelector("div.sr_item"));
     }
     System.out.println(searchResultItems.size());
-    int nigtsCount = Integer.parseInt(getNightsCount(webDriver.findElement(By.cssSelector("div.sb-dates__los")).getText()));
+    int nigtsCount = Integer.parseInt(textByPatternNoSpace(webDriver.findElement(By.cssSelector("div.sb-dates__los")).getText(), "\\d+"));
     for(WebElement item:searchResultItems){
       wait.until(presenceOfElementLocated(By.cssSelector("div.totalPrice")));
       System.out.println(item.findElement(By.cssSelector("span.sr-hotel__name")).getText());
-      System.out.println(Integer.parseInt(getTotalPrice(item.findElement(By.cssSelector("div.totalPrice")).getText())));
-      if(isElementPresent(By.cssSelector("svg[className*=stars]"))) {
-        System.out.println("Количество звезд: "+item.findElement(By.cssSelector("svg[className*=stars]")).getAttribute("className"));
+      System.out.println(Integer.parseInt(textByPatternNoSpace(item.findElement(By.cssSelector("div.totalPrice")).getText(), "(?<=:).+\\d")));
+      WebElement i = presenceOfNestedElementLocatedBy(item, By.cssSelector("svg[class*=stars]")){
+      if(
+        wait.until(visibilityOfElementLocated(By.cssSelector("svg[class*=stars]")));
+
+        System.out.println("Количество звезд: "+item.findElement(By.cssSelector("svg[class*=stars]")).getAttribute("className"));
       }else {
         System.out.println("Количество звезд: "+0);
-      }
+      }}
     }
   }
 }
