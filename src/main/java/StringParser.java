@@ -31,7 +31,7 @@ public class StringParser {
   }
 
   public String getTotalPrice(){
-    pattern = Pattern.compile("\\d*\\s*\\d+");
+    pattern = Pattern.compile("(?<=:).+\\d");
     return getStringByPattern(pattern, inString).replaceAll("\\s", "");
   }
 

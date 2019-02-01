@@ -1,12 +1,13 @@
 package by.booking.pkt.recorded;
 
-import by.booking.pkt.utils.StringParser;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import java.util.Set;
+
+import static by.booking.pkt.utils.StringParser.getHeaderOfURL;
 
 public class TItemAddToNewList extends TBase {
 
@@ -33,8 +34,7 @@ public class TItemAddToNewList extends TBase {
     String secondWindow = switchToNewWindow(oldWindowSet, newWindowSet);
     softAssert.assertNotEquals(secondWindow, null,"Item info didn't open in new window!");
 
-    String itemURLString = webDriver.getCurrentUrl();
-    String itemUrlHeader = new StringParser(itemURLString).getHeader();
+    String itemUrlHeader = getHeaderOfURL(webDriver.getCurrentUrl());
 
     activateDropdownMenu(By.cssSelector("#wrap-hotelpage-top .js-wl-dropdown-handle"), By.cssSelector("#hotel-wishlists"));
 
@@ -44,7 +44,7 @@ public class TItemAddToNewList extends TBase {
 
     softAssert.assertNotEquals(newWishlist, null, "New wish list didn't creat");
 
-    goToWishCreatesListFromItem(newWishlist);
+    goToWishListFromItem(newWishlist);
 
     newWindowSet = webDriver.getWindowHandles();
     String thirdWindow = switchToNewWindow(oldWindowSet, newWindowSet);
@@ -53,12 +53,11 @@ public class TItemAddToNewList extends TBase {
 
     //Провертить появление соответствующего списка на странице списков:
     //1. Количество списков соответствует новому увеличенному на 1
-    String actual = getTextWithWait();
+    String actual = getTextWithWait(By.cssSelector("div.wl-bui-header h1"));
 
     softAssert.assertEquals(actual, "Go to France", "New list didn't opened as current!");
 
-    String itemURLInListString = getAttributeWithWait();
-    String  itemUrlInListHeader = new StringParser(itemURLInListString).getHeader();
+    String  itemUrlInListHeader = getHeaderOfURL(getAttributeWithWait(By.cssSelector("header[class*=header]"), "href"));
 
     softAssert.assertEquals(itemUrlInListHeader, itemUrlHeader, "New item didn't add!");
     softAssert.assertAll();

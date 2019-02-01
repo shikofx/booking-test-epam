@@ -163,20 +163,21 @@ public class TBase {
     return listsCount;
   }
 
-  protected String getAttributeWithWait() {
-    wait.until(presenceOfElementLocated(By.cssSelector("header[class*=header]")));
-    return webDriver.findElement(By.cssSelector("header[class*=header] a")).getAttribute("href");
+  protected String getAttributeWithWait(By locatorForWait, String attributeName) {
+    wait.until(presenceOfElementLocated(locatorForWait));
+    return webDriver.findElement(locatorForWait).getAttribute(attributeName);
   }
 
-  protected String getTextWithWait() {
-    wait.until(presenceOfElementLocated(By.cssSelector("div.wl-bui-header h1")));
-    return webDriver.findElement(By.cssSelector("div.wl-bui-header h1")).getText();
+  protected String getTextWithWait(By locator) {
+    wait.until(presenceOfElementLocated(locator));
+    return webDriver.findElement(locator).getText();
   }
 
-  protected void goToWishCreatesListFromItem(WebElement newWishlist) {
+  protected void goToWishListFromItem(WebElement newWishlist) {
     if (newWishlist.findElement(By.cssSelector("input")).isSelected()) {
       newWishlist.findElement(By.cssSelector("input~span a")).click();
-
+    } else{
+      throw new NoSuchElementException("Element isn't selected!");
     }
   }
 

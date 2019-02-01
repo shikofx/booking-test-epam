@@ -17,20 +17,30 @@ public class StringParser {
     this.inString = url;
   }
 
-  public String getParameter(String parameter) {
-    pattern = Pattern.compile("(?<=("+parameter+"=))+[A-Za-z0-9-_]*");
+  public String getParameterOfURL(String parameter) {
+    Pattern pattern = Pattern.compile("(?<=("+parameter+"=))+[A-Za-z0-9-_]*");
     return getStringByPattern(pattern, inString);
   }
 
-  public String getHeader(){
-    pattern = Pattern.compile((".+/[A-Za-z0-9_-]*"));
+  public static String getHeaderOfURL(String inString){
+    Pattern pattern = Pattern.compile((".+/[A-Za-z0-9_-]*"));
     return getStringByPattern(pattern, inString);
   }
 
-  public double getTotalPrice(){
-    pattern = Pattern.compile("\\d*\\s*\\d+");
-    return Double.parseDouble(getStringByPattern(pattern, inString).replaceAll("\\s", ""));
+  public static String getTotalPrice(String inString){
+    Pattern pattern = Pattern.compile("(?<=:).+\\d");
+    return getStringByPattern(pattern, inString).replaceAll("\\s", "");
   }
+  public static String getNightsCount(String inString){
+    Pattern pattern = Pattern.compile("\\d+");
+    return getStringByPattern(pattern, inString).replaceAll("\\s", "");
+  }
+
+  public static String getStarsCount(String inString){
+    Pattern pattern = Pattern.compile("\\d");
+    return getStringByPattern(pattern, inString).replaceAll("\\s", "");
+  }
+
   @Nullable
   public static String getStringByPattern(Pattern pattern, String string) {
     Matcher matcher = pattern.matcher(string);
