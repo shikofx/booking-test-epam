@@ -40,14 +40,13 @@ public class TBase {
       fail(verificationErrorString);
     }*/
   }
-
-  public String textByPatternNoSpace(String inString, String regex){
-    return textByPattern(regex, inString).replaceAll("\\s", "");
+  @Nullable
+  public String getTextByPatternNoSpace(String regex, String inString){
+    return getTextByPattern(regex, inString).replaceAll("\\s", "");
   }
 
   @Nullable
-  public String textByPattern(String regex, String string) {
-
+  public String getTextByPattern(String regex, String string) {
     Pattern pattern = Pattern.compile(regex);
     Matcher matcher = pattern.matcher(string);
     String result= null;
@@ -126,16 +125,31 @@ public class TBase {
     webDriver.findElement(By.cssSelector("input[name=logout]+input")).click();
   }
 
-  public void goToWishlists() {
+  public void goToWishlistsPage() {
     activateDropdownMenu(By.cssSelector("#current_account span[class=user_name_block]"), By.cssSelector(".profile-menu"));
     webDriver.findElement(By.cssSelector("div[class*=wishlists")).click();
   }
 
 
-  public boolean isElementPresent(By locator) {
-    return webDriver.findElements(locator).size() > 0;
+  public boolean isElementPresent(WebDriver driver, By locator) {
+    return driver.findElements(locator).size() > 0;
   }
+  public boolean isElementPresent(WebElement webElement, By locator) {
+    return webElement.findElements(locator).size() > 0;
+  }
+  public boolean isElementPresentNoWait(By locator, int oldWait) {
+    webDriver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+    boolean isElementPresent = webDriver.findElements(locator).size() > 0;
+    webDriver.manage().timeouts().implicitlyWait(oldWait, TimeUnit.SECONDS);
+    return isElementPresent;
 
+  }
+  public boolean isElementPresentNoWait(WebElement webElement, By locator, int oldWait) {
+    webDriver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+    boolean isElementPresent = webElement.findElements(locator).size() > 0;
+    webDriver.manage().timeouts().implicitlyWait(oldWait, TimeUnit.SECONDS);
+    return isElementPresent;
+  }
   private boolean isAlertPresent() {
     try {
       webDriver.switchTo().alert();
@@ -220,6 +234,7 @@ public class TBase {
     for (int i = 0; i < 3 && !dropDownMenuElement.isDisplayed(); i++) {
       webDriver.findElement(whatClick).click();
     }
+    wait.until(visibilityOfElementLocated(dropDownMenu));
   }
 
   protected void goToItemFromSearchResults(int itemNumber) {
@@ -319,6 +334,73 @@ public class TBase {
     activateDropdownMenu(By.cssSelector("[data-id=currency_selector]"), By.cssSelector("#current_currency"));
     wait.until(visibilityOfElementLocated(By.cssSelector("#current_currency_foldout")));
     webDriver.findElement(By.cssSelector("a[data-currency=RUB")).click();
+  }
+
+  protected String getHotelName(WebElement item) {
+    wait.until(presenceOfNestedElementLocatedBy(item, By.cssSelector("span.sr-hotel__name")));
+    return (item.findElement(By.cssSelector("span.sr-hotel__name")).getText());
+  }
+
+  protected int getTotalPriceForHotel(WebElement item) {
+    wait.until(presenceOfNestedElementLocatedBy(item, By.cssSelector("div.totalPrice")));
+    return Integer.parseInt(getTextByPatternNoSpace("(?<=:).+\\d", item.findElement(By.cssSelector("div.totalPrice")).getText()));
+  }
+
+  protected List<WebElement> getItemsOfFilterByBudget() {
+    return webDriver.findElements(By.cssSelector("a[data-id^=pri]"));
+  }
+
+  protected void onlyAvailableSelect() {
+    webDriver.findElement(By.cssSelector("[data-name=oos] div")).click();
+    webDriver.navigate().refresh();
+  }
+
+  protected int getNigtsCount() {
+    return Integer.parseInt(getTextByPatternNoSpace("\\d+", webDriver.findElement(By.cssSelector("div.sb-dates__los")).getText()));
+  }
+
+  protected List<WebElement> getSearchResults() {
+    List<WebElement> searchResultItems;
+    //Найти все отели до записи: есть еще отели вне определенной локации
+    if(isElementPresent(webDriver, By.cssSelector("div.sr_separator"))) {
+      searchResultItems = webDriver.findElements(By.xpath("//*/div[contains(@class,'sr_separator')]/preceding-sibling::div[contains(@class,'sr_item')]"));
+    } else {
+      searchResultItems = webDriver.findElements(By.cssSelector("div.sr_item"));
+    }
+    return searchResultItems;
+  }
+
+  protected WebElement getFilterByStarsItem(int stars) {
+    return webDriver.findElement(By.cssSelector("a[data-id^=class][data-value='"+stars+"']"));
+  }
+
+  @Nullable
+  protected int selectBudget(int budget) {
+    List<WebElement> filterItems = getItemsOfFilterByBudget();
+    WebElement filterElement = null;
+    for(int i = 0; i<filterItems.size(); i++){
+      filterElement = filterItems.get(i);
+      if (budget < Integer.parseInt(filterElement.getAttribute("data-value"))) {
+        break;
+      }
+    }
+    filterElement.click();
+    int totalBudget = getNigtsCount()*Integer.parseInt(filterElement.getAttribute("data-value"));
+    if(budget*getNigtsCount()>totalBudget)
+      totalBudget = Integer.MAX_VALUE;
+    return totalBudget;
+  }
+
+  protected String getUrlToSend() {
+    activateDropdownMenu(By.cssSelector("div[class=bui-dropdown]+button span"), By.cssSelector("div.listview-share"));
+    wait.until(visibilityOfElementLocated(By.cssSelector("p[class*=content] input")));
+    String url = webDriver.findElement(By.cssSelector("p[class*=content] input")).getAttribute("defaultValue");
+    return url;
+  }
+
+  protected void sortByPriceSelect() {
+    wait.until(visibilityOfElementLocated(By.cssSelector("li.sort_price")));
+    webDriver.findElement(By.cssSelector("li.sort_price")).click();
   }
 
 //  protected void selectDateRange() {

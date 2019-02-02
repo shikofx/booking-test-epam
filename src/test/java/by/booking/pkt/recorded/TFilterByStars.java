@@ -5,10 +5,6 @@ import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
-import java.util.List;
-
-import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
-
 public class TFilterByStars extends TBase{
   @Test
   public void testFilterByStars() {
@@ -23,16 +19,18 @@ public class TFilterByStars extends TBase{
     selectAdultsCount(2);
     selectChildrenCount(4);
     submitMainSearch();
-    webDriver.findElement(By.cssSelector("[data-name=oos] div")).click();
-    wait.until(visibilityOfElementLocated(By.cssSelector("#bodyconstraint-inner")));
+    onlyAvailableSelect();
+    WebElement filterByStars = getFilterByStarsItem(stars);
+    filterByStars.click();
 
-    webDriver.findElement(By.cssSelector("a[data-id^=class][data-value='"+stars+"']")).click();
-
-    List<WebElement> itemsOnPage = webDriver.findElements(By.cssSelector("#hotellist_inner>div.sr_item"));
-    System.out.println("Количество записей на странице: " + itemsOnPage.size());
-    //Выделить в записях название отелей и стоимость
-    //проверить возрастают ли они попорядку
-    //стоимость первого элемента должна быть ниже остальных
-
+    int actualStars = 0;
+    for(WebElement item: getSearchResults()){
+      if(isElementPresentNoWait(item,By.cssSelector("svg[class*=stars]"),30)){
+        actualStars = Integer.parseInt(getTextByPatternNoSpace("\\d", item.findElement(By.cssSelector("svg[class*=stars]")).getAttribute("class")));
+      }else {
+        actualStars = 0;
+      }
+      softAssert.assertEquals(actualStars, stars, "For hotel "+ getHotelName(item) +" stars count is not valid!");
+    }
   }
 }
