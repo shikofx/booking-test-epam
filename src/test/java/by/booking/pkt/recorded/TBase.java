@@ -137,14 +137,16 @@ public class TBase {
   public boolean isElementPresent(WebElement webElement, By locator) {
     return webElement.findElements(locator).size() > 0;
   }
-  public boolean isElementPresentNoWait(By locator, int oldWait) {
+
+  public boolean isElementInPresentNoWait(By locator, int oldWait) {
     webDriver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
     boolean isElementPresent = webDriver.findElements(locator).size() > 0;
     webDriver.manage().timeouts().implicitlyWait(oldWait, TimeUnit.SECONDS);
     return isElementPresent;
 
   }
-  public boolean isElementPresentNoWait(WebElement webElement, By locator, int oldWait) {
+
+  public boolean isElementInPresentNoWait(WebElement webElement, By locator, int oldWait) {
     webDriver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
     boolean isElementPresent = webElement.findElements(locator).size() > 0;
     webDriver.manage().timeouts().implicitlyWait(oldWait, TimeUnit.SECONDS);
@@ -401,6 +403,16 @@ public class TBase {
   protected void sortByPriceSelect() {
     wait.until(visibilityOfElementLocated(By.cssSelector("li.sort_price")));
     webDriver.findElement(By.cssSelector("li.sort_price")).click();
+  }
+
+  protected int getDistance(WebElement item) {
+    int distance = 0;
+    distance = Integer.parseInt(getTextByPatternNoSpace("[\\,\\d]+", item.findElement(By.cssSelector("span.distfromdest")).getText().replace(',', '.')));
+    String meterField = getTextByPatternNoSpace("\\s.*?\\s", item.findElement(By.cssSelector("span.distfromdest")).getText());
+    if (meterField.length() > 1) {
+      distance = 1000 * distance;
+    }
+    return distance;
   }
 
 //  protected void selectDateRange() {

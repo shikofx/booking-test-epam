@@ -25,7 +25,7 @@ public class TFilterByStars extends TBase{
 
     int actualStars = 0;
     for(WebElement item: getSearchResults()){
-      if(isElementPresentNoWait(item,By.cssSelector("svg[class*=stars]"),30)){
+      if (isElementInPresentNoWait(item, By.cssSelector("svg[class*=stars]"), 30)) {
         actualStars = Integer.parseInt(getTextByPatternNoSpace("\\d", item.findElement(By.cssSelector("svg[class*=stars]")).getAttribute("class")));
       }else {
         actualStars = 0;

@@ -6,21 +6,18 @@ public class Main {
   public static void main(String[] args) {
     String parameter = "label";
     System.out.println(getStringByPattern("\\d", "bk-icon -sprite-ratings_stars_3"));
-    System.out.println(getStringByPattern("\\d+", "900 rм от центра"));
-    String s = (getStringByPatternNoSpace("\\s.*?\\s", "900 м от центра"));
-    int k = 1;
-    if(s.length()>1){
-      k = 1000;
-    }
-    System.out.println(k);
+    System.out.println(getStringByPattern("[\\,\\d]+", "1,900 rм от центра"));
+    String s = "9 963 руб.";
+    System.out.println(getStringByPattern("[\\s\\d]+\\d", s));
+
   }
 
-  public static String getStringByPatternNoSpace(String regex, String inString) {
+  private static String getStringByPatternNoSpace(String regex, String inString) {
     return getStringByPattern(regex, inString).replaceAll("\\s", "");
   }
 
 
-  public static String getStringByPattern(String regex, String inString) {
+  private static String getStringByPattern(String regex, String inString) {
     Pattern pattern = Pattern.compile(regex);
     Matcher matcher = pattern.matcher(inString);
     String result = null;
