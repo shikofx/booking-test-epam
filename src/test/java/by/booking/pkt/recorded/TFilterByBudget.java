@@ -7,28 +7,17 @@ import org.testng.asserts.SoftAssert;
 public class TFilterByBudget extends TBase{
   @Test
   public void testFilterByBudget() {
-
     int budget = 13000;
+    hdr_selectCurrency("RUB");
+    ms_fillFields("Минск", "2019-03-24", "2019-04-03", 5, 2, 4);
+    ms_initSearch();
+    fb_setOnlyAvailableON();
+    int maxBudget = fb_setBudget(budget);
     SoftAssert softAssert = new SoftAssert();
-    goToMainSearchPage();
- //   logIn();
-    selectCurrency();
-    enterAccomodaition("Минск");
-    selectDates("2019-03-24", "2019-04-03");
-    selectRoomsCount(5);
-    selectAdultsCount(2);
-    selectChildrenCount(4);
-    submitMainSearch();
-    onlyAvailableSelect();
-
-    int maxBudget = selectBudget(budget);
-    for(WebElement item: getSearchResults()){
-      int totalPrice = getTotalPriceForHotel(item);
-      softAssert.assertTrue(totalPrice<=maxBudget, "Budget "+maxBudget+" less than total price "+totalPrice+" for "+getHotelName(item));
-      System.out.println("Budget "+maxBudget+" less than total price "+totalPrice+" for "+getHotelName(item));
+    for(WebElement item: sr_getAll()){
+      int totalPrice = sr_totalPrice(item);
+      softAssert.assertTrue(totalPrice<=maxBudget, "Budget "+maxBudget+" less than total price "+totalPrice+" for "+ hotel_getHotelName(item));
     }
-
     softAssert.assertAll();
   }
-
 }

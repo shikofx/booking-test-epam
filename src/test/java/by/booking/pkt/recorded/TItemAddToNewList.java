@@ -12,59 +12,39 @@ public class TItemAddToNewList extends TBase {
   @Test
   public void testItemAddToNewList() {
     SoftAssert softAssert = new SoftAssert();
-    goToMainSearchPage();
-    logIn();
-    selectCurrency();
-    enterAccomodaition("Черногория");
-    selectDates("2019-03-24", "2019-04-03");
-    selectRoomsCount(5);
-    selectAdultsCount(2);
-    selectChildrenCount(4);
-    submitMainSearch();
+    hdr_login("pkt.autotests@gmail.com", "123456789");
+    hdr_selectCurrency("RUB");
+    ms_fillFields("Минск", "2019-03-24", "2019-04-03", 5, 2, 4);
+    ms_initSearch();
+    //Save handler for current window
+    String searchResultsWindow = webDriver.getWindowHandle();
+    Set<String> searchResultsWindowSet = webDriver.getWindowHandles();
+    sr_goToSearchResult(1);
+    String hotelWindow = app_switchToNewWindow(searchResultsWindowSet);
+    softAssert.assertNotEquals(hotelWindow, null,"Item info didn't open in new window!");
 
-    String firstWindow = webDriver.getWindowHandle();
-    Set<String> oldWindowSet = webDriver.getWindowHandles();
-
-    goToItemFromSearchResults(1);
-
-    Set<String> newWindowSet = webDriver.getWindowHandles();
-
-    String secondWindow = switchToNewWindow(oldWindowSet, newWindowSet);
-    softAssert.assertNotEquals(secondWindow, null,"Item info didn't open in new window!");
-
-    String itemUrlHeader = getTextByPattern(webDriver.getCurrentUrl(), ".+/[A-Za-z0-9_-]*");
-
-    activateDropdownMenu(By.cssSelector("#wrap-hotelpage-top .js-wl-dropdown-handle"), By.cssSelector("#hotel-wishlists"));
-
-    oldWindowSet = webDriver.getWindowHandles();
-    //Добавить новый список
-    WebElement newWishlist = addNewWishlistInItemPage();
-
+    String itemUrlHeader = app_getUrlHead();
+    app_activateDropdownMenu(By.cssSelector("#wrap-hotelpage-top .js-wl-dropdown-handle"), By.cssSelector("#hotel-wishlists"));
+    Set<String> hotelWindowSet = webDriver.getWindowHandles();
+    WebElement newWishlist = hotel_addWishlistFromSearchResultPage("Go to France");
     softAssert.assertNotEquals(newWishlist, null, "New wish list didn't creat");
 
-    goToWishListFromItem(newWishlist);
+    hotel_goToCreatedWishlist(newWishlist);
+    String wishlistWindow = app_switchToNewWindow(hotelWindowSet);
+    softAssert.assertNotEquals(wishlistWindow, null, "New list didn't open in new window!");
 
-    newWindowSet = webDriver.getWindowHandles();
-    String thirdWindow = switchToNewWindow(oldWindowSet, newWindowSet);
-
-    softAssert.assertNotEquals(secondWindow, null, "New list didn't open in new window!");
-
-    //Провертить появление соответствующего списка на странице списков:
-    //1. Количество списков соответствует новому увеличенному на 1
-    String actual = getTextWithWait(By.cssSelector("div.wl-bui-header h1"));
-
+    String actual = wl_getHeader();
     softAssert.assertEquals(actual, "Go to France", "New list didn't opened as current!");
 
-    String  itemUrlInListHeader = getTextByPattern(getAttributeWithWait(By.cssSelector("header[class*=header]"), "href"), ".+/[A-Za-z0-9_-]*");
-
+    String  itemUrlInListHeader = app_getTextByPattern(app_getAttributeWithWait(By.cssSelector("header[class*=header]"), "href"), ".+/[A-Za-z0-9_-]*");
     softAssert.assertEquals(itemUrlInListHeader, itemUrlHeader, "New item didn't add!");
+
     softAssert.assertAll();
-    webDriver.close();
-    webDriver.switchTo().window(secondWindow);
-    webDriver.close();
-    webDriver.switchTo().window(firstWindow);
-    logOut();
 
+    webDriver.close();
+    webDriver.switchTo().window(hotelWindow);
+    webDriver.close();
+    webDriver.switchTo().window(searchResultsWindow);
+    hdr_logOut();
   }
-
 }
