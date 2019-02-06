@@ -1,6 +1,7 @@
 package by.booking.pkt.tests.fixtures;
 
 import by.booking.pkt.application.ApplicationManager;
+import org.testng.ITestResult;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 
@@ -15,8 +16,9 @@ public class TestBase {
   }
 
   @AfterClass(alwaysRun = true)
-  public void stopBrowser() {
+  public void stopBrowser(ITestResult result) {
     app.stop();
+
   }
 
 }
