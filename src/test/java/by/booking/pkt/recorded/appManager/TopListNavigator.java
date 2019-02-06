@@ -9,39 +9,41 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.List;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.numberOfElementsToBe;
-import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfNestedElementLocatedBy;
 
 public class TopListNavigator extends HelperBase {
   public TopListNavigator(WebDriver webDriver, WebDriverWait wait) {
     super(webDriver, wait);
   }
 
-  public boolean hotel_goToCreatedWishlist(WebElement newWishlist) {
+  public WebElement createWishlistInTop(String listName) {
+    showDropdown(By.cssSelector("#wrap-hotelpage-top .js-wl-dropdown-handle"), By.cssSelector("#hotel-wishlists"));
+    List<WebElement> oldWishlists = getElements(By.cssSelector("#hotel-wishlists label.js-wl-dropdown-item"));
+    typeText(By.cssSelector("#hotel-wishlists input[type=text]"), listName);
+    submitWishlistCreating();
+    wait.until(numberOfElementsToBe(By.cssSelector("#hotel-wishlists label.js-wl-dropdown-item"), oldWishlists.size() + 1));
+    List<WebElement> newWishlists = getElements(By.cssSelector("#hotel-wishlists label.js-wl-dropdown-item"));
+    unselectAllElementsInList(oldWishlists);
+    newWishlists.removeAll(oldWishlists);
+    return newWishlists.iterator().next();
+  }
+
+  private void submitWishlistCreating() {
+    getElement(By.cssSelector("#hotel-wishlists input[type=text]")).sendKeys(Keys.ENTER);
+  }
+
+  public boolean goToCreatedWishlist(WebElement newWishlist) {
     if (newWishlist.findElement(By.cssSelector("input")).isSelected()) {
-      newWishlist.findElement(By.cssSelector("input~span a")).click();
+      clickOn(newWishlist, By.cssSelector("input~span a"));
       return true;
     } else {
       return false;
     }
   }
 
-  public WebElement hotel_addWishlistFromSearchResultPage(String listName) {
-    List<WebElement> oldWishlists = webDriver.findElements(By.cssSelector("#hotel-wishlists label.js-wl-dropdown-item"));
-    webDriver.findElement(By.cssSelector("#hotel-wishlists input[type=text]")).click();
-    webDriver.findElement(By.cssSelector("#hotel-wishlists input[type=text]")).clear();
-    webDriver.findElement(By.cssSelector("#hotel-wishlists input[type=text]")).sendKeys(listName);
-    webDriver.findElement(By.cssSelector("#hotel-wishlists input[type=text]")).sendKeys(Keys.ENTER);
-    wait.until(numberOfElementsToBe(By.cssSelector("#hotel-wishlists label.js-wl-dropdown-item"), oldWishlists.size() + 1));
-    List<WebElement> newWishlists = webDriver.findElements(By.cssSelector("#hotel-wishlists label.js-wl-dropdown-item"));
-    hotel_unselectAllElementsInList(oldWishlists);
-    newWishlists.removeAll(oldWishlists);
-    return newWishlists.iterator().next();
-  }
-
-  private void hotel_unselectAllElementsInList(List<WebElement> list) {
+  private void unselectAllElementsInList(List<WebElement> list) {
     for (WebElement e : list) {
       if (e.findElement(By.cssSelector("input")).isSelected())
-        e.findElement(By.cssSelector("input~span.bui-checkbox__label")).click();
+        clickOn(e, By.cssSelector("input~span.bui-checkbox__label"));
     }
   }
 }

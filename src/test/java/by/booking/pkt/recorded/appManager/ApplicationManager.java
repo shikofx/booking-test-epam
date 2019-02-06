@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 public class ApplicationManager{
   WebDriver webDriver;
   WebDriverWait wait;
-  private AccountNavigator navigationHelper;
+  private HeaderHelper navigationHelper;
 
   private FilterBoxHelper filterBoxHelper;
   private WindowNavigator windowNavigator;
@@ -17,17 +17,17 @@ public class ApplicationManager{
   private SearchResultsHelper searchResultsHelper;
   private TopListNavigator topListNavigator;
   private WishlistHelper wishlistHelper;
-  private AccountNavigator accountNavigator;
+  private HeaderHelper headerHelper;
 
   public void init() {
     wishlistHelper = new WishlistHelper(webDriver, wait);
     windowNavigator = new WindowNavigator(webDriver, wait);
-    accountNavigator = new AccountNavigator(webDriver, wait);
+    headerHelper = new HeaderHelper(webDriver, wait);
     webDriver = new ChromeDriver();
     webDriver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
     wait = new WebDriverWait(webDriver, 15);
     windowNavigator.maximazeWindow();
-    webDriver.get("https://www.booking.com");
+    windowNavigator.goToUrl("https://www.booking.com");
 
   }
 
@@ -36,8 +36,8 @@ public class ApplicationManager{
 
   }
 
-  public AccountNavigator getAccountNavigator() {
-    return accountNavigator;
+  public HeaderHelper getHeaderHelper() {
+    return headerHelper;
   }
 
   public FilterBoxHelper getFilterBoxHelper() {

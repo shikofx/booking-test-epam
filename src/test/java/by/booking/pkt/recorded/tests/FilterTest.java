@@ -8,15 +8,15 @@ public class FilterTest extends TBase{
   @Test
   public void testFilterByBudget() {
     int budget = 13000;
-    app.getSearchHelper().hdr_selectCurrency("RUB");
-    app.getSearchHelper().ms_fillFields("Минск", "2019-03-24", "2019-04-03", 5, 2, 4);
-    app.getSearchHelper().ms_initSearch();
-    app.getFilterBoxHelper().fb_selectOnlyAvailableON();
-    int maxBudget = app.getFilterBoxHelper().fb_selectBudget(budget);
+    app.getHeaderHelper().selectCurrency("RUB");
+    app.getSearchHelper().fillSearchForm("Минск", "2019-03-24", "2019-04-03", 5, 2, 4);
+    app.getSearchHelper().initSearch();
+    app.getFilterBoxHelper().selectOnlyAvailable();
+    int maxBudget = app.getFilterBoxHelper().selectBudgetAndGetMax(budget);
     SoftAssert softAssert = new SoftAssert();
-    for(WebElement item: app.getSearchResultsHelper().sr_getAll()){
-      int totalPrice = app.getSearchResultsHelper().sr_totalPrice(item);
-      String hotelName = app.getSearchResultsHelper().hotel_getHotelName(item);
+    for (WebElement item : app.getSearchResultsHelper().getAllResults()) {
+      int totalPrice = app.getSearchResultsHelper().totalPrice(item);
+      String hotelName = app.getSearchResultsHelper().getHotelName(item);
       softAssert.assertTrue(totalPrice<=maxBudget, "Budget "+maxBudget+" less than total price "+totalPrice+" for "+ hotelName);
     }
     softAssert.assertAll();
@@ -26,14 +26,14 @@ public class FilterTest extends TBase{
   public void testFilterByStars() {
     int stars = 3;
     SoftAssert softAssert = new SoftAssert();
-    app.getSearchHelper().hdr_selectCurrency("RUB");
-    app.getSearchHelper().ms_fillFields("Минск", "2019-03-24", "2019-04-03", 5, 2, 4);
-    app.getSearchHelper().ms_initSearch();
-    app.getFilterBoxHelper().fb_selectOnlyAvailableON();
-    app.getFilterBoxHelper().fb_setStarsCount(stars);
-    for (WebElement item : app.getSearchResultsHelper().sr_getAll()){
-      int starsCount = app.getSearchResultsHelper().hotel_getStarsCount(item);
-      String hotelName = app.getSearchResultsHelper().hotel_getHotelName(item);
+    app.getHeaderHelper().selectCurrency("RUB");
+    app.getSearchHelper().fillSearchForm("Минск", "2019-03-24", "2019-04-03", 5, 2, 4);
+    app.getSearchHelper().initSearch();
+    app.getFilterBoxHelper().selectOnlyAvailable();
+    app.getFilterBoxHelper().setStarsCount(stars);
+    for (WebElement item : app.getSearchResultsHelper().getAllResults()) {
+      int starsCount = app.getSearchResultsHelper().getStarsCount(item);
+      String hotelName = app.getSearchResultsHelper().getHotelName(item);
       softAssert.assertEquals(starsCount, stars, "For hotel " + hotelName + " stars count is not valid!");
     }
 

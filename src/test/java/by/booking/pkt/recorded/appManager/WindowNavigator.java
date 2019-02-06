@@ -12,6 +12,10 @@ public class WindowNavigator extends HelperBase {
     super(webDriver, wait);
   }
 
+  public void goToUrl(String url) {
+    webDriver.get(url);
+  }
+
   public String app_switchToNewWindow(Set<String> oldWindowSet) {
     Set<String> newWindowSet = webDriver.getWindowHandles();
     String newWindow = null;
@@ -26,19 +30,25 @@ public class WindowNavigator extends HelperBase {
     webDriver.manage().window().maximize();
   }
 
-  private void switchToWindow(String hotelWindow) {
+  public void switchToWindow(String hotelWindow) {
     webDriver.switchTo().window(hotelWindow);
   }
 
-  private void closeCurrentWindows() {
+  public void closeCurrentWindows() {
     webDriver.close();
   }
 
-  private Set<String> windowHandles() {
+  public Set<String> windowHandles() {
     return webDriver.getWindowHandles();
   }
 
-  private String currentWindowHadle() {
+  public String currentWindowHadle() {
     return webDriver.getWindowHandle();
   }
+
+  public String getCurrentUrlHead() {
+    return getTextByPattern(webDriver.getCurrentUrl(), ".+/[A-Za-z0-9_-]*");
+  }
+
+
 }

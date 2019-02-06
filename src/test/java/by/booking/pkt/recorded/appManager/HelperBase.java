@@ -4,7 +4,7 @@ import org.jetbrains.annotations.Nullable;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.Set;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,23 +29,23 @@ public class HelperBase {
     return wait;
   }
 
-  public void app_activateDropdownMenu(By whatClick, By dropDownMenu) {
+  public void showDropdown(By whatClick, By whatWait) {
     wait.until(presenceOfElementLocated(whatClick));
-    webDriver.findElement(whatClick).click();
-    WebElement dropDownMenuElement = wait.until(presenceOfElementLocated(dropDownMenu));
-    for (int i = 0; i < 3 && !dropDownMenuElement.isDisplayed(); i++) {
-      webDriver.findElement(whatClick).click();
+    clickOn(whatClick);
+    WebElement dropDownMenu = wait.until(presenceOfElementLocated(whatWait));
+    for (int i = 0; i < 3 && !dropDownMenu.isDisplayed(); i++) {
+      clickOn(whatClick);
     }
-    wait.until(visibilityOfElementLocated(dropDownMenu));
+    wait.until(visibilityOfElementLocated(whatWait));
   }
 
   @Nullable
-  public String app_getTextByPatternNoSpace(String regex, String inString){
-    return app_getTextByPattern(regex, inString).replaceAll("\\s", "");
+  public String textByPatternNoSpace(String regex, String inString) {
+    return getTextByPattern(regex, inString).replaceAll("\\s", "");
   }
 
   @Nullable
-  public String app_getTextByPattern(String regex, String string) {
+  public String getTextByPattern(String regex, String string) {
     Pattern pattern = Pattern.compile(regex);
     Matcher matcher = pattern.matcher(string);
     String result= null;
@@ -55,30 +55,30 @@ public class HelperBase {
     return result;
   }
 
-  public boolean app_isElementPresent(By locator) {
-    return webDriver.findElements(locator).size() > 0;
+  public boolean isElementPresent(By locator) {
+    return getElements(locator).size() > 0;
   }
 
-  public boolean app_isElementPresent(WebElement webElement, By locator) {
-    return webElement.findElements(locator).size() > 0;
+  public boolean isElementPresent(WebElement inElement, By locator) {
+    return getElements(inElement, locator).size() > 0;
   }
 
-  public boolean app_isElementInPresentNoWait(By locator, int oldWait) {
+  public boolean isElementPresentNoWait(By locator, int oldWait) {
     webDriver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
-    boolean isElementPresent = webDriver.findElements(locator).size() > 0;
+    boolean isElementPresent = getElements(locator).size() > 0;
     webDriver.manage().timeouts().implicitlyWait(oldWait, TimeUnit.SECONDS);
     return isElementPresent;
 
   }
 
-  public boolean app_isElementInPresentNoWait(WebElement webElement, By locator, int oldWait) {
+  public boolean isElementPresentNoWait(WebElement inElement, By locator, int oldWait) {
     webDriver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
-    boolean isElementPresent = webElement.findElements(locator).size() > 0;
+    boolean isElementPresent = getElements(inElement, locator).size() > 0;
     webDriver.manage().timeouts().implicitlyWait(oldWait, TimeUnit.SECONDS);
     return isElementPresent;
   }
 
-  private boolean app_isAlertPresent() {
+  private boolean isAlertPresent() {
     try {
       webDriver.switchTo().alert();
       return true;
@@ -102,13 +102,52 @@ public class HelperBase {
     }
   }
 
-  public String app_getAttributeWithWait(By locatorForWait, String attributeName) {
-    wait.until(presenceOfElementLocated(locatorForWait));
-    return webDriver.findElement(locatorForWait).getAttribute(attributeName);
+  protected void clickOn(By locator) {
+    webDriver.findElement(locator).click();
   }
 
-  public String app_getTextWithWait(By locator) {
+  protected void clickOn(WebElement inElement, By locator) {
+    inElement.findElement(locator).click();
+  }
+
+  protected WebElement getElement(By locator) {
+    return webDriver.findElement(locator);
+  }
+
+  protected List<WebElement> getElements(By locator) {
+    return webDriver.findElements(locator);
+  }
+
+  protected List<WebElement> getElements(WebElement inElement, By locator) {
+    return inElement.findElements(locator);
+  }
+
+  protected void refreshDriver() {
+    webDriver.navigate().refresh();
+  }
+
+  protected String getAttribute(WebElement inElement, String attributeName) {
+    return inElement.getAttribute(attributeName);
+  }
+
+  public String getAttribute(By where, String attributeName) {
+    return webDriver.findElement(where).getAttribute(attributeName);
+  }
+
+  public String getText(By locator) {
     wait.until(presenceOfElementLocated(locator));
     return webDriver.findElement(locator).getText();
+  }
+
+  protected void typeText(WebElement inElement, By locator, String text) {
+    clickOn(inElement, locator);
+    inElement.findElement(locator).clear();
+    inElement.findElement(locator).sendKeys(text);
+  }
+
+  protected void typeText(By where, String text) {
+    clickOn(where);
+    getElement(where).clear();
+    getElement(where).sendKeys(text);
   }
 }

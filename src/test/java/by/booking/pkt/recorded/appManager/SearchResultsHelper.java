@@ -15,72 +15,65 @@ public class SearchResultsHelper extends HelperBase {
     super(webDriver, wait);
   }
 
-  public void sr_goToSearchResult(int itemNumber) {
-    WebElement item = webDriver.findElement(By.cssSelector("#hotellist_inner>.sr_item:nth-of-type(" + itemNumber + ")"));
-    item.findElement(By.cssSelector(".sr-cta-button-row")).click();
+  public void goToHotelPage(int itemNumber) {
+    WebElement item = getElement(By.cssSelector("#hotellist_inner>.sr_item:nth-of-type(" + itemNumber + ")"));
+    clickOn(item, By.cssSelector(".sr-cta-button-row"));
   }
 
-  public int sr_totalPrice(WebElement item) {
-    wait.until(presenceOfNestedElementLocatedBy(item, By.cssSelector("div.totalPrice")));
-    return Integer.parseInt(app_getTextByPatternNoSpace("(?<=:).+\\d", item.findElement(By.cssSelector("div.totalPrice")).getText()));
-  }
-
-  public List<WebElement> sr_getAll() {
+  public List<WebElement> getAllResults() {
     List<WebElement> searchResultItems;
     //Найти все отели до записи: есть еще отели вне определенной локации
-    if (app_isElementPresent(By.cssSelector("div.sr_separator"))) {
-      searchResultItems = webDriver.findElements(By.xpath("//*/div[contains(@class,'sr_separator')]/preceding-sibling::div[contains(@class,'sr_item')]"));
+    if (isElementPresent(By.cssSelector("div.sr_separator"))) {
+      searchResultItems = getElements(By.xpath("//*/div[contains(@class,'sr_separator')]/preceding-sibling::div[contains(@class,'sr_item')]"));
     } else {
-      searchResultItems = webDriver.findElements(By.cssSelector("div.sr_item"));
+      searchResultItems = getElements(By.cssSelector("div.sr_item"));
     }
     return searchResultItems;
   }
 
-  public void sr_initSortByPrice() {
+  public void initSortByPrice() {
     wait.until(visibilityOfElementLocated(By.cssSelector("li.sort_price")));
-    webDriver.findElement(By.cssSelector("li.sort_price")).click();
+    clickOn(By.cssSelector("li.sort_price"));
   }
 
-  public int hotel_distanceToDest(WebElement item) {
+  public int distanceToDest(WebElement item) {
     int distance = 0;
-    distance = Integer.parseInt(app_getTextByPatternNoSpace("[\\,\\d]+", item.findElement(By.cssSelector("span.distfromdest")).getText().replace(',', '.')));
-    String meterField = app_getTextByPatternNoSpace("\\s.*?\\s", item.findElement(By.cssSelector("span.distfromdest")).getText());
+    distance = Integer.parseInt(textByPatternNoSpace("[\\,\\d]+", item.findElement(By.cssSelector("span.distfromdest")).getText().replace(',', '.')));
+    String meterField = textByPatternNoSpace("\\s.*?\\s", item.findElement(By.cssSelector("span.distfromdest")).getText());
     if (meterField.length() > 1) {
       distance = 1000 * distance;
     }
     return distance;
   }
 
-  public int hotel_getStarsCount(WebElement item) {
+  public int getStarsCount(WebElement item) {
     int actualStars;
-    if (app_isElementInPresentNoWait(item, By.cssSelector("svg[class*=stars]"), 30)) {
-      actualStars = Integer.parseInt(app_getTextByPatternNoSpace("\\d", item.findElement(By.cssSelector("svg[class*=stars]")).getAttribute("class")));
+    if (isElementPresentNoWait(item, By.cssSelector("svg[class*=stars]"), 30)) {
+      actualStars = Integer.parseInt(textByPatternNoSpace("\\d", item.findElement(By.cssSelector("svg[class*=stars]")).getAttribute("class")));
     } else {
       actualStars = 0;
     }
     return actualStars;
   }
 
-  public String sr_getUrlHead() {
-    return app_getTextByPattern(webDriver.getCurrentUrl(), ".+/[A-Za-z0-9_-]*");
-  }
-
-  public void sr_initSortByDistance(By sortByDistance) {
+  public void initSortByDistance() {
+    By sortByDistance = By.cssSelector("li.sort_distance_from_search a");
+    showDropdown(By.cssSelector("#sortbar_dropdown_button"), By.cssSelector("#sortbar_dropdown_options"));
     wait.until(visibilityOfElementLocated(sortByDistance));
-    webDriver.findElement(sortByDistance).click();
+    clickOn(sortByDistance);
   }
 
-  public int hotel_totalPrice(WebElement item) {
+  public int totalPrice(WebElement item) {
     int totalPrice = 0;
-    if (app_isElementInPresentNoWait(item, By.cssSelector("div.totalPrice"), 30)) {
-      totalPrice = Integer.parseInt(app_getTextByPatternNoSpace("(?<=:).+\\d", item.findElement(By.cssSelector("div.totalPrice")).getText()));
+    if (isElementPresentNoWait(item, By.cssSelector("div.totalPrice"), 30)) {
+      totalPrice = Integer.parseInt(textByPatternNoSpace("(?<=:).+\\d", item.findElement(By.cssSelector("div.totalPrice")).getText()));
     } else {
-      totalPrice = Integer.parseInt(app_getTextByPatternNoSpace("[\\d\\s]+\\d", item.findElement(By.cssSelector("strong.price")).getText()));
+      totalPrice = Integer.parseInt(textByPatternNoSpace("[\\d\\s]+\\d", item.findElement(By.cssSelector("strong.price")).getText()));
     }
     return totalPrice;
   }
 
-  public String hotel_getHotelName(WebElement item) {
+  public String getHotelName(WebElement item) {
     wait.until(presenceOfNestedElementLocatedBy(item, By.cssSelector("span.sr-hotel__name")));
     return (item.findElement(By.cssSelector("span.sr-hotel__name")).getText());
   }

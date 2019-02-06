@@ -6,12 +6,12 @@ import org.testng.annotations.BeforeClass;
 public class TBaseWithLogin extends TBase {
   @BeforeClass(alwaysRun = true)
   public void setUp() throws Exception {
-    app.getAccountNavigator().hdr_login("pkt.autotests@gmail.com", "123456789");
+    app.getHeaderHelper().hdr_login("pkt.autotests@gmail.com", "123456789");
   }
 
   @AfterClass(alwaysRun = true)
   public void tearDown() throws Exception {
-    app.getAccountNavigator().hdr_logOut();
+    app.getHeaderHelper().logOut();
   }
 
 }

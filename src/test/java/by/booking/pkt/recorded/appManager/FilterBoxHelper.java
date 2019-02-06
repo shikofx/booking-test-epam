@@ -15,37 +15,38 @@ public class FilterBoxHelper extends HelperBase{
     super(webDriver, wait);
   }
 
-  public List<WebElement> fb_getItemsOfFilterByBudget() {
-    return webDriver.findElements(By.cssSelector("a[data-id^=pri]"));
+  public List<WebElement> getAllBudgets() {
+    return getElements(By.cssSelector("a[data-id^=pri]"));
   }
 
-  public void fb_selectOnlyAvailableON() {
-    webDriver.findElement(By.cssSelector("[data-name=oos] div")).click();
-    webDriver.navigate().refresh();
+  public void selectOnlyAvailable() {
+    clickOn(By.cssSelector("[data-name=oos] div"));
+    refreshDriver();
   }
 
-  public int fb_getNigtsCount() {
-    return Integer.parseInt(app_getTextByPatternNoSpace("\\d+", webDriver.findElement(By.cssSelector("div.sb-dates__los")).getText()));
+  public int getNigtsCount() {
+    return Integer.parseInt(textByPatternNoSpace("\\d+", getText(By.cssSelector("div.sb-dates__los"))));
   }
 
-  public void fb_setStarsCount(int stars) {
-    webDriver.findElement(By.cssSelector("a[data-id^=class][data-value='" + stars + "']")).click();
+  public void setStarsCount(int stars) {
+    clickOn(By.cssSelector("a[data-id^=class][data-value='" + stars + "']"));
   }
 
   @Nullable
-  public int fb_selectBudget(int budget) {
-    List<WebElement> filterItems = fb_getItemsOfFilterByBudget();
+  public int selectBudgetAndGetMax(int budget) {
+    List<WebElement> filterItems = getAllBudgets();
     WebElement filterElement = null;
     for (int i = 0; i < filterItems.size(); i++) {
       filterElement = filterItems.get(i);
-      if (budget < Integer.parseInt(filterElement.getAttribute("data-value"))) {
+      if (budget < Integer.parseInt(getAttribute(filterElement, "data-value"))) {
         break;
       }
     }
     filterElement.click();
-    int totalBudget = fb_getNigtsCount() * Integer.parseInt(filterElement.getAttribute("data-value"));
-    if (budget * fb_getNigtsCount() > totalBudget)
+    int totalBudget = getNigtsCount() * Integer.parseInt(getAttribute(filterElement, "data-value"));
+    if (budget * getNigtsCount() > totalBudget)
       totalBudget = Integer.MAX_VALUE;
     return totalBudget;
   }
+
 }
