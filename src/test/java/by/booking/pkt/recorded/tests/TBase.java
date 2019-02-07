@@ -6,11 +6,11 @@ import org.testng.annotations.BeforeClass;
 
 public class TBase {
 
-  protected final ApplicationManager app = new ApplicationManager();
+  protected ApplicationManager app = new ApplicationManager();
 
   @BeforeClass(alwaysRun = true)
   public void setUp() throws Exception {
-    app.init();
+    app.init(10);
   }
 
   @AfterClass(alwaysRun = true)

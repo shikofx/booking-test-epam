@@ -5,11 +5,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Set;
 
-public class WindowNavigator extends HelperBase {
+public class WindowManager extends ManagerBase {
 
 
-  public WindowNavigator(WebDriver webDriver, WebDriverWait wait) {
-    super(webDriver, wait);
+  public WindowManager(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
+    super(webDriver, wait, implicitlyWait);
   }
 
   public void goToUrl(String url) {

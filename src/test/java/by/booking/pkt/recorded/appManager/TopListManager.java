@@ -10,25 +10,25 @@ import java.util.List;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.numberOfElementsToBe;
 
-public class TopListNavigator extends HelperBase {
-  public TopListNavigator(WebDriver webDriver, WebDriverWait wait) {
-    super(webDriver, wait);
+public class TopListManager extends ManagerBase {
+  public TopListManager(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
+    super(webDriver, wait, implicitlyWait);
   }
 
   public WebElement createWishlistInTop(String listName) {
-    showDropdown(By.cssSelector("#wrap-hotelpage-top .js-wl-dropdown-handle"), By.cssSelector("#hotel-wishlists"));
-    List<WebElement> oldWishlists = getElements(By.cssSelector("#hotel-wishlists label.js-wl-dropdown-item"));
+    showDropdown(By.cssSelector("#wrap-hotelpage-top .js-wl-dropdown-handle"), By.cssSelector("#hotel-wishlists"), 5);
+    List<WebElement> oldWishlists = webDriver.findElements(By.cssSelector("#hotel-wishlists label.js-wl-dropdown-item"));
     typeText(By.cssSelector("#hotel-wishlists input[type=text]"), listName);
     submitWishlistCreating();
     wait.until(numberOfElementsToBe(By.cssSelector("#hotel-wishlists label.js-wl-dropdown-item"), oldWishlists.size() + 1));
-    List<WebElement> newWishlists = getElements(By.cssSelector("#hotel-wishlists label.js-wl-dropdown-item"));
+    List<WebElement> newWishlists = webDriver.findElements(By.cssSelector("#hotel-wishlists label.js-wl-dropdown-item"));
     unselectAllElementsInList(oldWishlists);
     newWishlists.removeAll(oldWishlists);
     return newWishlists.iterator().next();
   }
 
   private void submitWishlistCreating() {
-    getElement(By.cssSelector("#hotel-wishlists input[type=text]")).sendKeys(Keys.ENTER);
+    webDriver.findElement(By.cssSelector("#hotel-wishlists input[type=text]")).sendKeys(Keys.ENTER);
   }
 
   public boolean goToCreatedWishlist(WebElement newWishlist) {

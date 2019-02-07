@@ -9,58 +9,76 @@ import java.util.concurrent.TimeUnit;
 public class ApplicationManager{
   WebDriver webDriver;
   WebDriverWait wait;
-  private HeaderHelper navigationHelper;
 
-  private FilterBoxHelper filterBoxHelper;
-  private WindowNavigator windowNavigator;
-  private SearchHelper searchHelper;
-  private SearchResultsHelper searchResultsHelper;
-  private TopListNavigator topListNavigator;
-  private WishlistHelper wishlistHelper;
-  private HeaderHelper headerHelper;
 
-  public void init() {
-    wishlistHelper = new WishlistHelper(webDriver, wait);
-    windowNavigator = new WindowNavigator(webDriver, wait);
-    headerHelper = new HeaderHelper(webDriver, wait);
+  private int implicitlyWait;
+  private AccountManager navigationHelper;
+
+  private FilterManager filterManager;
+  private WindowManager windowManeger;
+  private SearchManager searchManager;
+  private ResultsManager resultsManager;
+  private TopListManager topListManager;
+  private WishlistManager wishlistManager;
+  private AccountManager accountManager;
+
+  public void init(int implicitlyWait) {
     webDriver = new ChromeDriver();
-    webDriver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+    setImplicitlyWait(implicitlyWait);
     wait = new WebDriverWait(webDriver, 15);
-    windowNavigator.maximazeWindow();
-    windowNavigator.goToUrl("https://www.booking.com");
+
+    accountManager = new AccountManager(webDriver, wait, implicitlyWait);
+    filterManager = new FilterManager(webDriver, wait, implicitlyWait);
+    searchManager = new SearchManager(webDriver, wait, implicitlyWait);
+    resultsManager = new ResultsManager(webDriver, wait, implicitlyWait);
+    topListManager = new TopListManager(webDriver, wait, implicitlyWait);
+    windowManeger = new WindowManager(webDriver, wait, implicitlyWait);
+    wishlistManager = new WishlistManager(webDriver, wait, implicitlyWait);
+
+    windowManeger.maximazeWindow();
+    windowManeger.goToUrl("https://www.booking.com");
 
   }
 
   public void stop() {
-    webDriver.quit();
+    // webDriver.quit();
 
   }
 
-  public HeaderHelper getHeaderHelper() {
-    return headerHelper;
+  public int getImplicitlyWait() {
+    return implicitlyWait;
   }
 
-  public FilterBoxHelper getFilterBoxHelper() {
-    return filterBoxHelper;
+  public void setImplicitlyWait(int implicitlyWait) {
+    webDriver.manage().timeouts().implicitlyWait(implicitlyWait, TimeUnit.SECONDS);
+    this.implicitlyWait = implicitlyWait;
   }
 
-  public WindowNavigator getWindowNavigator() {
-    return windowNavigator;
+  public AccountManager getAccountManager() {
+    return new AccountManager(webDriver, wait, implicitlyWait);
   }
 
-  public SearchHelper getSearchHelper() {
-    return searchHelper;
+  public FilterManager getFilterManager() {
+    return filterManager;
   }
 
-  public SearchResultsHelper getSearchResultsHelper() {
-    return searchResultsHelper;
+  public WindowManager getWindowManeger() {
+    return windowManeger;
   }
 
-  public TopListNavigator getTopListNavigator() {
-    return topListNavigator;
+  public SearchManager getSearchManager() {
+    return searchManager;
   }
 
-  public WishlistHelper getWishlistHelper() {
-    return wishlistHelper;
+  public ResultsManager getResultsManager() {
+    return resultsManager;
+  }
+
+  public TopListManager getTopListManager() {
+    return topListManager;
+  }
+
+  public WishlistManager getWishlistManager() {
+    return wishlistManager;
   }
 }

@@ -8,15 +8,15 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
-public class FilterBoxHelper extends HelperBase{
+public class FilterManager extends ManagerBase {
 
 
-  public FilterBoxHelper(WebDriver webDriver, WebDriverWait wait) {
-    super(webDriver, wait);
+  public FilterManager(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
+    super(webDriver, wait, implicitlyWait);
   }
 
   public List<WebElement> getAllBudgets() {
-    return getElements(By.cssSelector("a[data-id^=pri]"));
+    return webDriver.findElements(By.cssSelector("a[data-id^=pri]"));
   }
 
   public void selectOnlyAvailable() {
@@ -28,8 +28,15 @@ public class FilterBoxHelper extends HelperBase{
     return Integer.parseInt(textByPatternNoSpace("\\d+", getText(By.cssSelector("div.sb-dates__los"))));
   }
 
-  public void setStarsCount(int stars) {
-    clickOn(By.cssSelector("a[data-id^=class][data-value='" + stars + "']"));
+  public boolean selectStarsCount(int stars) {
+    WebElement filterElement = webDriver.findElement(By.cssSelector("a[data-id^=class][data-value='" + stars + "']"));
+    if (!filterElement.findElement(By.cssSelector("input")).isSelected())
+      clickOn(filterElement.findElement(By.cssSelector("div")));
+    if (filterElement.findElement(By.cssSelector("input")).isSelected()) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @Nullable
@@ -43,9 +50,13 @@ public class FilterBoxHelper extends HelperBase{
       }
     }
     filterElement.click();
-    int totalBudget = getNigtsCount() * Integer.parseInt(getAttribute(filterElement, "data-value"));
-    if (budget * getNigtsCount() > totalBudget)
-      totalBudget = Integer.MAX_VALUE;
+    int totalBudget = 0;
+    if (filterElement.findElement(By.cssSelector("input")).isSelected()) {
+      totalBudget = getNigtsCount() * Integer.parseInt(getAttribute(filterElement, "data-value"));
+      if (budget * getNigtsCount() > totalBudget)
+        totalBudget = Integer.MAX_VALUE;
+    }
+
     return totalBudget;
   }
 

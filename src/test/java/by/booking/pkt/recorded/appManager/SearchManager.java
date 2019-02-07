@@ -5,9 +5,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class SearchHelper extends HelperBase {
-  public SearchHelper(WebDriver webDriver, WebDriverWait wait) {
-    super(webDriver, wait);
+public class SearchManager extends ManagerBase {
+  public SearchManager(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
+    super(webDriver, wait, implicitlyWait);
   }
 
   public void initSearch() {
@@ -30,7 +30,9 @@ public class SearchHelper extends HelperBase {
   }
 
   public void setAdultsCount(int adultsCount) {
-    showDropdown(By.cssSelector("label#xp__guests__toggle"), By.cssSelector("div.xp__guests__inputs"));
+    if (getAttribute(By.cssSelector("label#xp__guests__toggle+div"), ("className")).contains("hidden")) {
+      clickOn(By.cssSelector("label#xp__guests__toggle"));
+    }
     int actualAdultsCount = -1;
     while (adultsCount != actualAdultsCount) {
       actualAdultsCount = Integer.parseInt(getAttribute(By.cssSelector("#group_adults"), "defaultValue"));
@@ -43,7 +45,9 @@ public class SearchHelper extends HelperBase {
   }
 
   public void setRoomsCount(int roomsCount) {
-    showDropdown(By.cssSelector("label#xp__guests__toggle"), By.cssSelector("div.xp__guests__inputs"));
+    if (getAttribute(By.cssSelector("label#xp__guests__toggle+div"), ("className")).contains("hidden")) {
+      clickOn(By.cssSelector("label#xp__guests__toggle"));
+    }
     int actualRoomsCount = -1;
     while (roomsCount != actualRoomsCount) {
       actualRoomsCount = Integer.parseInt(getAttribute(By.cssSelector("#no_rooms"), "defaultValue"));
@@ -57,7 +61,7 @@ public class SearchHelper extends HelperBase {
 
   public void setDatesRange(String checkInDate, String checkOutDate) {
     String firstDayOfMonthMonth = getFirstDayOfMonth(checkInDate);
-    showDropdown(By.cssSelector("div.xp__dates.xp__group"), By.cssSelector("div.bui-calendar"));
+    showDropdown(By.cssSelector("div.xp__dates.xp__group"), By.cssSelector("div.bui-calendar"), 5);
     while (!firstDayOfMonthMonth.equals(getAttribute(By.cssSelector("div.bui-calendar td[data-date^='20']"), "data-date"))) {
       clickOn(By.cssSelector("div[data-bui-ref=calendar-next]"));
     }
@@ -78,10 +82,17 @@ public class SearchHelper extends HelperBase {
   }
 
   public void fillSearchForm(String place, String checkInDate, String checkOutDate, int roomsCount, int adultsCount, int childrenCount) {
+
     setPlace(place);
     setDatesRange(checkInDate, checkOutDate);
     setRoomsCount(roomsCount);
     setAdultsCount(adultsCount);
     setChildrenCount(childrenCount);
   }
+
+  public void selectCurrency(String currency) {
+    showDropdown(By.cssSelector("[data-id=currency_selector]"), By.cssSelector("#current_currency_foldout"), 5);
+    clickOn(By.cssSelector("a[data-currency=" + currency));
+  }
+
 }
