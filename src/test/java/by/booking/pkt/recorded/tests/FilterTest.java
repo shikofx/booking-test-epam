@@ -9,8 +9,7 @@ public class FilterTest extends TBase {
   @Test
   public void testFilterByBudget() {
     int budget = 13000;
-    app.getSearchManager().selectCurrency("RUB");
-    app.getSearchManager().fillSearchForm("Минск", "2019-03-24", "2019-04-03", 5, 2, 4);
+    app.getSearchManager().fillSearchForm("RUB","Минск", "2019-03-24", "2019-04-03", 5, 2, 4);
     app.getSearchManager().initSearch();
     //app.getFilterManager().selectOnlyAvailable();
     int maxBudget = app.getFilterManager().selectBudgetAndGetMax(budget);
@@ -30,8 +29,7 @@ public class FilterTest extends TBase {
   public void testFilterByStars() {
     int stars = 3;
     SoftAssert softAssert = new SoftAssert();
-    app.getSearchManager().selectCurrency("RUB");
-    app.getSearchManager().fillSearchForm("Минск", "2019-03-24", "2019-04-03", 5, 2, 4);
+    app.getSearchManager().fillSearchForm("RUB", "Минск", "2019-03-24", "2019-04-03", 5, 2, 4);
     app.getSearchManager().initSearch();
     //app.getFilterManager().selectOnlyAvailable();
     Assertion assertion = new Assertion();

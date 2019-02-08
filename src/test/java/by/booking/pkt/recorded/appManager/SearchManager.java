@@ -81,7 +81,7 @@ public class SearchManager extends ManagerBase {
     typeText(By.cssSelector("#ss"), place);
   }
 
-  public void fillSearchForm(String place, String checkInDate, String checkOutDate, int roomsCount, int adultsCount, int childrenCount) {
+  public void fillSearchForm(String currency, String place, String checkInDate, String checkOutDate, int roomsCount, int adultsCount, int childrenCount) {
 
     setPlace(place);
     setDatesRange(checkInDate, checkOutDate);

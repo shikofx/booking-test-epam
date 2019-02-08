@@ -1,5 +1,6 @@
 package by.booking.pkt.recorded.appManager;
 
+import by.booking.pkt.recorded.Model.AccountData;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -20,7 +21,7 @@ public class AccountManager extends ManagerBase {
     clickOn(By.cssSelector("div[class*=wishlists"));
   }
 
-  public void login(String username, String password) throws NullPointerException {
+  public void login(AccountData accountData) throws NullPointerException {
     By logInButton = findLoginButton();
     boolean devidedForm = isDevidedForm();
     clickOn(logInButton);
@@ -31,18 +32,18 @@ public class AccountManager extends ManagerBase {
       System.out.println("Form 1");
       wait.until(visibilityOfElementLocated(By.cssSelector("form.nw-signin")));
       signInForm = webDriver.findElement(By.cssSelector("form.nw-signin"));
-      typeText(signInForm, usernameLocator, username);
+      typeText(signInForm, usernameLocator, accountData.getUsername());
       clickOn(signInForm, By.cssSelector("[type=submit]"));
       wait.until(visibilityOfElementLocated(passwordLocator));
       signInForm = webDriver.findElement(By.cssSelector("form.nw-signin"));
-      typeText(signInForm, passwordLocator, password);
+      typeText(signInForm, passwordLocator, accountData.getPassword());
       clickOn(signInForm, By.cssSelector("[type=submit]"));
     } else {
       System.out.println("Form 2");
       wait.until(visibilityOfElementLocated(By.cssSelector("form[target=log_tar]")));
       signInForm = webDriver.findElement(By.cssSelector("form[target=log_tar]"));
-      typeText(signInForm, usernameLocator, username);
-      typeText(signInForm, passwordLocator, password);
+      typeText(signInForm, usernameLocator, accountData.getUsername());
+      typeText(signInForm, passwordLocator, accountData.getPassword());
       clickOn(signInForm, By.cssSelector("[type=submit]"));
     }
   }
