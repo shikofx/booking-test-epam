@@ -22,8 +22,7 @@ public class WishlistManager extends ManagerBase {
     Alert alertCreateList = wait.until(alertIsPresent());
     alertCreateList.sendKeys(listName);
     alertCreateList.accept();
-    //wait.until(ale);
-    // refreshDriver();
+    refreshDriver();
   }
 
   public List<WebElement> getAllLists() {

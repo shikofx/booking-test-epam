@@ -11,6 +11,7 @@ public class TBase {
   @BeforeClass(alwaysRun = true)
   public void setUp() throws Exception {
     app.init(10);
+
   }
 
   @AfterClass(alwaysRun = true)

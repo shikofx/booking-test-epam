@@ -8,12 +8,12 @@ import org.testng.asserts.SoftAssert;
 import java.util.List;
 import java.util.Set;
 
-public class WishlistTest extends TBase {
+public class WishlistTest extends TBaseWithLogin {
 
   @Test
   public void testListSendLink() throws Exception {
     Assertion assertion = new Assertion();
-    app.getAccountManager().login("pkt.autotests@gmail.com", "123456789");
+  //  app.getAccountManager().login("pkt.autotests@gmail.com", "123456789");
     app.getAccountManager().goToWishlistPage();
     String currentListName = app.getWishlistManager().defaultListName();
     String urlForList = app.getWishlistManager().getUrlToSend();
@@ -27,7 +27,7 @@ public class WishlistTest extends TBase {
   public void testListCreate() throws InterruptedException {
     String newListName = "Go HOME";
     Assertion assertion = new Assertion();
-    app.getAccountManager().login("pkt.autotests@gmail.com", "123456789");
+ //   app.getAccountManager().login("pkt.autotests@gmail.com", "123456789");
     app.getAccountManager().goToWishlistPage();
     List<WebElement> oldLists = app.getWishlistManager().getAllLists();
     app.getWishlistManager().newList(newListName);
@@ -41,7 +41,7 @@ public class WishlistTest extends TBase {
   public void testItemAddToNewList() {
     String newListName = "Go to";
     SoftAssert softAssert = new SoftAssert();
-    app.getAccountManager().login("pkt.autotests@gmail.com", "123456789");
+   // app.getAccountManager().login("pkt.autotests@gmail.com", "123456789");
     app.getSearchManager().selectCurrency("RUB");
     app.getSearchManager().fillSearchForm("Минск", "2019-03-24", "2019-04-03", 5, 2, 4);
     app.getSearchManager().initSearch();
