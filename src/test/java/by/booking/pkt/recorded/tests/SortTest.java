@@ -1,5 +1,6 @@
 package by.booking.pkt.recorded.tests;
 
+import by.booking.pkt.recorded.Model.SearchData;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 import org.testng.asserts.Assertion;
@@ -10,7 +11,7 @@ import java.util.List;
 public class SortTest extends TBase {
   @Test
   public void testSortByDistance() {
-    app.getSearchManager().fillSearchForm("RUB","Минск", "2019-03-24", "2019-04-03", 5, 2, 4);
+    app.getSearchManager().fillSearchForm(new SearchData("RUB", "Минск", "2019-03-24", "2019-04-03", 5, 2, 4));
     app.getSearchManager().initSearch();
     //app.getFilterManager().selectOnlyAvailable();
     app.getResultsManager().initSortByDistance();
@@ -32,7 +33,7 @@ public class SortTest extends TBase {
   @Test
   public void sortByPrice() {
     SoftAssert softAssert = new SoftAssert();
-    app.getSearchManager().fillSearchForm("RUB","Минск", "2019-03-24", "2019-04-03", 5, 2, 4);
+    app.getSearchManager().fillSearchForm(new SearchData("RUB", "Минск", "2019-03-24", "2019-04-03", 5, 2, 4));
     app.getSearchManager().initSearch();
     // app.getFilterManager().selectOnlyAvailable();
     app.getResultsManager().initSortByPrice();

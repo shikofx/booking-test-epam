@@ -1,5 +1,6 @@
 package by.booking.pkt.recorded.tests;
 
+import by.booking.pkt.recorded.Model.SearchData;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 import org.testng.asserts.Assertion;
@@ -39,7 +40,7 @@ public class WishlistTest extends TBaseWithLogin {
   public void testItemAddToNewList() {
     String newListName = "Go to";
     SoftAssert softAssert = new SoftAssert();
-    app.getSearchManager().fillSearchForm("RUB","Минск", "2019-03-24", "2019-04-03", 5, 2, 4);
+    app.getSearchManager().fillSearchForm(new SearchData("RUB", "Минск", "2019-03-24", "2019-04-03", 5, 2, 4));
     app.getSearchManager().initSearch();
 
     String searchResultsWindow = app.getWindowManeger().currentWindowHadle();

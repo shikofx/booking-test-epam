@@ -1,5 +1,6 @@
 package by.booking.pkt.recorded.appManager;
 
+import by.booking.pkt.recorded.Model.SearchData;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -81,18 +82,19 @@ public class SearchManager extends ManagerBase {
     typeText(By.cssSelector("#ss"), place);
   }
 
-  public void fillSearchForm(String currency, String place, String checkInDate, String checkOutDate, int roomsCount, int adultsCount, int childrenCount) {
-
-    setPlace(place);
-    setDatesRange(checkInDate, checkOutDate);
-    setRoomsCount(roomsCount);
-    setAdultsCount(adultsCount);
-    setChildrenCount(childrenCount);
+  public void fillSearchForm(SearchData searchData) {
+    selectCurrency(searchData.getCurrency());
+    setPlace(searchData.getPlace());
+    setDatesRange(searchData.getCheckInDate(), searchData.getCheckOutDate());
+    setRoomsCount(searchData.getRoomsCount());
+    setAdultsCount(searchData.getAdultsCount());
+    setChildrenCount(searchData.getChildrenCount());
   }
 
   public void selectCurrency(String currency) {
     showDropdown(By.cssSelector("[data-id=currency_selector]"), By.cssSelector("#current_currency_foldout"), 5);
-    clickOn(By.cssSelector("a[data-currency=" + currency));
+    if (!getAttribute(By.cssSelector("a[data-currency=" + currency), "aria-selected").equals("true"))
+      clickOn(By.cssSelector("a[data-currency=" + currency));
   }
-
 }
+
