@@ -11,8 +11,9 @@ public class SearchPage extends HelperBase {
     super(webDriver, wait, implicitlyWait);
   }
 
-  public void initSearch() {
+  public SearchPage initSearch() {
     clickOn(By.cssSelector("button[data-sb-id=main][type=submit]"));
+    return this;
   }
 
   public void setChildrenCount(int childrenCount) {
@@ -82,13 +83,14 @@ public class SearchPage extends HelperBase {
     typeText(By.cssSelector("#ss"), place);
   }
 
-  public void fillForm(SearchData searchData) {
+  public SearchPage fillForm(SearchData searchData) {
     selectCurrency(searchData.getCurrency());
     setPlace(searchData.withPlace());
     setDatesRange(searchData.getInDate(), searchData.getOutDate());
     setRoomsCount(searchData.getRoomsCount());
     setAdultsCount(searchData.getAdultsCount());
     setChildrenCount(searchData.getChildrenCount());
+    return this;
   }
 
   public void selectCurrency(String currency) {
