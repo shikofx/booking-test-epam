@@ -1,6 +1,6 @@
-package by.booking.pkt.recorded.appManager;
+package by.booking.pkt.recorded.web;
 
-import by.booking.pkt.recorded.Model.AccountData;
+import by.booking.pkt.recorded.model.User;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -10,18 +10,29 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
 
-public class AccountManager extends ManagerBase {
+public class AccountHelper extends HelperBase {
 
-  public AccountManager(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
+  public AccountHelper(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
     super(webDriver, wait, implicitlyWait);
   }
 
-  public void goToWishlistPage() {
-    showDropdown(By.cssSelector("#current_account span[class=user_name_block]"), By.cssSelector(".profile-menu"), 5);
+  public void wishlists() {
+    accountMenu();
     clickOn(By.cssSelector("div[class*=wishlists"));
   }
 
-  public void login(AccountData accountData) throws NullPointerException {
+  public void logout() {
+    accountMenu();
+    clickOn(By.cssSelector("input[name=logout]+input"));
+  }
+
+  public AccountHelper accountMenu() {
+    showDropdown(By.cssSelector("#current_account span[class=user_name_block]"), By.cssSelector(".profile-menu"), 5);
+    return this;
+  }
+
+
+  public void loginAs(User user) throws NullPointerException {
     By logInButton = findLoginButton();
     boolean devidedForm = isDevidedForm();
     clickOn(logInButton);
@@ -32,25 +43,20 @@ public class AccountManager extends ManagerBase {
       System.out.println("Form 1");
       wait.until(visibilityOfElementLocated(By.cssSelector("form.nw-signin")));
       signInForm = webDriver.findElement(By.cssSelector("form.nw-signin"));
-      typeText(signInForm, usernameLocator, accountData.getUsername());
+      typeText(signInForm, usernameLocator, user.getUsername());
       clickOn(signInForm, By.cssSelector("[type=submit]"));
       wait.until(visibilityOfElementLocated(passwordLocator));
       signInForm = webDriver.findElement(By.cssSelector("form.nw-signin"));
-      typeText(signInForm, passwordLocator, accountData.getPassword());
+      typeText(signInForm, passwordLocator, user.getPassword());
       clickOn(signInForm, By.cssSelector("[type=submit]"));
     } else {
       System.out.println("Form 2");
       wait.until(visibilityOfElementLocated(By.cssSelector("form[target=log_tar]")));
       signInForm = webDriver.findElement(By.cssSelector("form[target=log_tar]"));
-      typeText(signInForm, usernameLocator, accountData.getUsername());
-      typeText(signInForm, passwordLocator, accountData.getPassword());
+      typeText(signInForm, usernameLocator, user.getUsername());
+      typeText(signInForm, passwordLocator, user.getPassword());
       clickOn(signInForm, By.cssSelector("[type=submit]"));
     }
-  }
-
-  public void logOut() {
-    showDropdown(By.cssSelector("#current_account span[class=user_name_block]"), By.cssSelector(".profile-menu"), 30);
-    clickOn(By.cssSelector("input[name=logout]+input"));
   }
 
   private boolean isDevidedForm() {
@@ -74,7 +80,7 @@ public class AccountManager extends ManagerBase {
     }
     if(isDropedMenu) {
       showDropdown(By.cssSelector("#current_account a"), By.cssSelector("div.profile-menu"), 5);
-      return By.cssSelector("div.profile-menu-auth-item a.js-header-login-link");
+      return By.cssSelector("div.profile-menu-auth-item a.js-header-loginAs-link");
     } else {
       return By.cssSelector("#current_account a");
     }

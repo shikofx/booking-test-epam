@@ -1,54 +1,48 @@
-package by.booking.pkt.recorded.appManager;
+package by.booking.pkt.recorded.web;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Set;
 
-public class WindowManager extends ManagerBase {
+public class WindowHelper extends HelperBase {
 
 
-  public WindowManager(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
+  public WindowHelper(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
     super(webDriver, wait, implicitlyWait);
   }
 
-  public void goToUrl(String url) {
+  public void goTo(String url) {
     webDriver.get(url);
   }
 
-  public String app_switchToNewWindow(Set<String> oldWindowSet) {
+  public String getNew(Set<String> oldWindowSet) {
     Set<String> newWindowSet = webDriver.getWindowHandles();
     String newWindow = null;
     if (newWindowSet.removeAll(oldWindowSet) && newWindowSet.size() == 1) {
       newWindow = newWindowSet.iterator().next();
-      webDriver.switchTo().window(newWindow);
     }
     return newWindow;
   }
+
 
   public void maximazeWindow() {
     webDriver.manage().window().maximize();
   }
 
-  public void switchToWindow(String hotelWindow) {
+  public void switchTo(String hotelWindow) {
     webDriver.switchTo().window(hotelWindow);
   }
 
-  public void closeCurrentWindows() {
+  public void close() {
     webDriver.close();
   }
 
-  public Set<String> windowHandles() {
+  public Set<String> all() {
     return webDriver.getWindowHandles();
   }
 
-  public String currentWindowHadle() {
+  public String handle() {
     return webDriver.getWindowHandle();
   }
-
-  public String getCurrentUrlHead() {
-    return getTextByPattern(webDriver.getCurrentUrl(), ".+/[A-Za-z0-9_-]*");
-  }
-
-
 }

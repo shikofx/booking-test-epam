@@ -1,5 +1,6 @@
 package by.booking.pkt.recorded.appManager;
 
+import by.booking.pkt.recorded.web.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -12,31 +13,28 @@ public class ApplicationManager{
 
 
   private int implicitlyWait;
-  private AccountManager navigationHelper;
-
-  private FilterManager filterManager;
-  private WindowManager windowManeger;
-  private SearchManager searchManager;
-  private ResultsManager resultsManager;
-  private TopListManager topListManager;
-  private WishlistManager wishlistManager;
-  private AccountManager accountManager;
+  private AccountHelper navigationHelper;
+  private WindowHelper windowManeger;
+  private SearchPage searchPage;
+  private ResultsPage resultsManager;
+  private HotelPage topListManager;
+  private WishlistsPage wishlistManager;
+  private AccountHelper account;
 
   public void init(int implicitlyWait) {
     webDriver = new ChromeDriver();
     setImplicitlyWait(implicitlyWait);
-    wait = new WebDriverWait(webDriver, 15);
+    wait = new WebDriverWait(webDriver, 30);
 
-    accountManager = new AccountManager(webDriver, wait, implicitlyWait);
-    filterManager = new FilterManager(webDriver, wait, implicitlyWait);
-    searchManager = new SearchManager(webDriver, wait, implicitlyWait);
-    resultsManager = new ResultsManager(webDriver, wait, implicitlyWait);
-    topListManager = new TopListManager(webDriver, wait, implicitlyWait);
-    windowManeger = new WindowManager(webDriver, wait, implicitlyWait);
-    wishlistManager = new WishlistManager(webDriver, wait, implicitlyWait);
+    account = new AccountHelper(webDriver, wait, implicitlyWait);
+    searchPage = new SearchPage(webDriver, wait, implicitlyWait);
+    resultsManager = new ResultsPage(webDriver, wait, implicitlyWait);
+    topListManager = new HotelPage(webDriver, wait, implicitlyWait);
+    windowManeger = new WindowHelper(webDriver, wait, implicitlyWait);
+    wishlistManager = new WishlistsPage(webDriver, wait, implicitlyWait);
 
     windowManeger.maximazeWindow();
-    windowManeger.goToUrl("https://www.booking.com");
+    windowManeger.goTo("https://www.booking.com");
 
   }
 
@@ -54,31 +52,27 @@ public class ApplicationManager{
     this.implicitlyWait = implicitlyWait;
   }
 
-  public AccountManager getAccountManager() {
-    return new AccountManager(webDriver, wait, implicitlyWait);
+  public AccountHelper account() {
+    return account;
   }
 
-  public FilterManager getFilterManager() {
-    return filterManager;
-  }
-
-  public WindowManager getWindowManeger() {
+  public WindowHelper windows() {
     return windowManeger;
   }
 
-  public SearchManager getSearchManager() {
-    return searchManager;
+  public SearchPage forSearch() {
+    return searchPage;
   }
 
-  public ResultsManager getResultsManager() {
+  public ResultsPage results() {
     return resultsManager;
   }
 
-  public TopListManager getTopListManager() {
+  public HotelPage hotel() {
     return topListManager;
   }
 
-  public WishlistManager getWishlistManager() {
+  public WishlistsPage wishlists() {
     return wishlistManager;
   }
 }

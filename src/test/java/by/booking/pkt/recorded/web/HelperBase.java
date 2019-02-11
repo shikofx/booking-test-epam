@@ -1,4 +1,4 @@
-package by.booking.pkt.recorded.appManager;
+package by.booking.pkt.recorded.web;
 
 import org.jetbrains.annotations.Nullable;
 import org.openqa.selenium.*;
@@ -11,13 +11,13 @@ import java.util.regex.Pattern;
 import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
 
-public class ManagerBase {
+public class HelperBase {
   protected int implicitlyWait;
   protected WebDriver webDriver;
   protected WebDriverWait wait;
   private boolean acceptNextAlert = true;
 
-  public ManagerBase(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
+  public HelperBase(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
     this.webDriver = webDriver;
     this.wait = wait;
     this.implicitlyWait = implicitlyWait;
@@ -143,6 +143,7 @@ public class ManagerBase {
     return inElement.getAttribute(attributeName);
   }
 
+  @Nullable
   public String getAttribute(By where, String attributeName) {
     return webDriver.findElement(where).getAttribute(attributeName);
   }
@@ -152,7 +153,6 @@ public class ManagerBase {
   }
 
   public String getText(By locator) {
-    wait.until(presenceOfElementLocated(locator));
     return webDriver.findElement(locator).getText();
   }
 

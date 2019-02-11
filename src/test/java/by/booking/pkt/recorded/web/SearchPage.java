@@ -1,13 +1,13 @@
-package by.booking.pkt.recorded.appManager;
+package by.booking.pkt.recorded.web;
 
-import by.booking.pkt.recorded.Model.SearchData;
+import by.booking.pkt.recorded.model.SearchData;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class SearchManager extends ManagerBase {
-  public SearchManager(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
+public class SearchPage extends HelperBase {
+  public SearchPage(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
     super(webDriver, wait, implicitlyWait);
   }
 
@@ -82,10 +82,10 @@ public class SearchManager extends ManagerBase {
     typeText(By.cssSelector("#ss"), place);
   }
 
-  public void fillSearchForm(SearchData searchData) {
+  public void fillForm(SearchData searchData) {
     selectCurrency(searchData.getCurrency());
-    setPlace(searchData.getPlace());
-    setDatesRange(searchData.getCheckInDate(), searchData.getCheckOutDate());
+    setPlace(searchData.withPlace());
+    setDatesRange(searchData.getInDate(), searchData.getOutDate());
     setRoomsCount(searchData.getRoomsCount());
     setAdultsCount(searchData.getAdultsCount());
     setChildrenCount(searchData.getChildrenCount());
@@ -93,8 +93,8 @@ public class SearchManager extends ManagerBase {
 
   public void selectCurrency(String currency) {
     showDropdown(By.cssSelector("[data-id=currency_selector]"), By.cssSelector("#current_currency_foldout"), 5);
-    if (!getAttribute(By.cssSelector("a[data-currency=" + currency), "aria-selected").equals("true"))
-      clickOn(By.cssSelector("a[data-currency=" + currency));
+    if (getAttribute(By.cssSelector("a[data-currency=" + currency + "]"), "aria-selected") == null)
+      clickOn(By.cssSelector("a[data-currency=" + currency + "]"));
   }
 }
 

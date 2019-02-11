@@ -1,10 +1,10 @@
-package by.booking.pkt.recorded.Model;
+package by.booking.pkt.recorded.model;
 
-public class AccountData {
+public class User {
   private final String username;
   private final String password;
 
-  public AccountData(String username, String password) {
+  public User(String username, String password) {
     this.username = username;
     this.password = password;
   }

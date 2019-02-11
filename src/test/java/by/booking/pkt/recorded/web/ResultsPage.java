@@ -1,5 +1,7 @@
-package by.booking.pkt.recorded.appManager;
+package by.booking.pkt.recorded.web;
 
+import by.booking.pkt.recorded.model.Filter;
+import org.jetbrains.annotations.Nullable;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -8,20 +10,23 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfNestedElementLocatedBy;
-import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
+import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
-public class ResultsManager extends ManagerBase {
-  public ResultsManager(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
+public class ResultsPage extends HelperBase {
+  public ResultsPage(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
     super(webDriver, wait, implicitlyWait);
   }
 
-  public void goToHotelPage(int itemNumber) {
-    WebElement item = webDriver.findElement(By.cssSelector("#hotellist_inner>.sr_item:nth-of-type(" + itemNumber + ")"));
+  public void goTo(int resultNumber) {
+    WebElement item = webDriver.findElement(By.cssSelector("#hotellist_inner>.sr_item:nth-of-type(" + resultNumber + ")"));
     clickOn(item, By.cssSelector(".sr-cta-button-row"));
   }
 
-  public List<WebElement> getAllResults() {
+  public void goTo(WebElement result) {
+    clickOn(result, By.cssSelector(".sr-cta-button-row"));
+  }
+
+  public List<WebElement> getAll() {
     List<WebElement> searchResultItems;
     //Найти все отели до записи: есть еще отели вне определенной локации
     if (isElementPresent(By.cssSelector("div.sr_separator"))) {
@@ -87,5 +92,56 @@ public class ResultsManager extends ManagerBase {
       }
     }
     return availableResults;
+  }
+
+  public List<WebElement> getAllBudgets() {
+    return webDriver.findElements(By.cssSelector("a[data-id^=pri]"));
+  }
+
+  public void selectOnlyAvailable() {
+    clickOn(By.cssSelector("[data-name=oos] div"));
+    refreshDriver();
+  }
+
+  public int getNigtsCount() {
+    wait.until(presenceOfElementLocated(By.cssSelector("div.wl-bui-header h1")));
+    return Integer.parseInt(textByPatternNoSpace("\\d+", getText(By.cssSelector("div.sb-dates__los"))));
+  }
+
+  public boolean selectStarsCount(Filter filter) {
+    WebElement filterElement = webDriver.findElement(By.cssSelector("a[data-id^=class][data-value='" + filter.getStars() + "']"));
+    if (!filterElement.findElement(By.cssSelector("input")).isSelected())
+      clickOn(filterElement.findElement(By.cssSelector("div")));
+    if (filterElement.findElement(By.cssSelector("input")).isSelected()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  @Nullable
+  public WebElement selectBudget(Filter filter) {
+    List<WebElement> filterItems = getAllBudgets();
+    WebElement filterElement = null;
+    for (int i = 0; i < filterItems.size(); i++) {
+      filterElement = filterItems.get(i);
+      if (filter.getBudget() < Integer.parseInt(getAttribute(filterElement, "data-value"))) {
+        break;
+      }
+    }
+    if (!filterElement.findElement(By.cssSelector("input")).isSelected())
+      filterElement.click();
+
+    return filterElement;
+  }
+
+  public int getBudget(WebElement filterElement, Filter filter) {
+    int totalBudget = 0;
+    if (filterElement.findElement(By.cssSelector("input")).isSelected()) {
+      totalBudget = getNigtsCount() * Integer.parseInt(getAttribute(filterElement, "data-value"));
+      if (filter.getBudget() * getNigtsCount() > totalBudget)
+        totalBudget = Integer.MAX_VALUE;
+    }
+    return totalBudget;
   }
 }
