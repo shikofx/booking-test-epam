@@ -1,6 +1,6 @@
-package by.booking.pkt.recorded.web;
+package by.booking.pkt.application.web;
 
-import by.booking.pkt.recorded.model.Wishlist;
+import by.booking.pkt.model.Wishlist;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;

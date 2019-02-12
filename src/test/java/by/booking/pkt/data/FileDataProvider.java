@@ -1,5 +1,6 @@
 package by.booking.pkt.data;
 
+import by.booking.pkt.model.SearchData;
 import com.opencsv.CSVReader;
 import org.testng.annotations.DataProvider;
 
@@ -16,7 +17,42 @@ import java.util.List;
 public class FileDataProvider {
 
   @DataProvider
+  public static Object[] searchDataFromCSV(Method m) throws IOException {
+
+    List<SearchData> result = null;
+    if (m.isAnnotationPresent(DataSourceFileAnnotation.class)) {
+      DataSourceFileAnnotation dataSource = m.getAnnotation(DataSourceFileAnnotation.class);
+      File csvFile = new File(dataSource.value());
+
+      result = new ArrayList<>();
+      CSVReader reader = new CSVReader(new FileReader(csvFile));
+      String[] nextLine;
+      SearchData data = new SearchData();
+      while ((nextLine = reader.readNext()) != null) {
+        System.out.println(Arrays.toString(nextLine));
+        data = new SearchData().
+                withUsername(nextLine[0]).
+                withPassword(nextLine[1]).
+                withCurrency(nextLine[2]).
+                withPlace(nextLine[3]).
+                withInDate(nextLine[4]).
+                withOutDate(nextLine[5]).
+                withRooms(Integer.parseInt(nextLine[6])).
+                withAdults(Integer.parseInt(nextLine[7])).
+                withChildren(Integer.parseInt(nextLine[8])).
+                withUserBudget(Integer.parseInt(nextLine[9])).
+                withStars(Integer.parseInt(nextLine[10]));
+        result.add(data);
+      }
+    } else {
+      throw new Error("There is no @DataSourceFileAnnotation on method " + m);
+    }
+    return result.toArray(new Object[result.size()]);
+  }
+
+  @DataProvider
   public static Object[][] dataFromCSV(Method m) throws IOException {
+
     if (m.isAnnotationPresent(DataSourceFileAnnotation.class)) {
       int length = m.getParameterTypes().length;
       DataSourceFileAnnotation dataSource = m.getAnnotation(DataSourceFileAnnotation.class);
@@ -26,7 +62,7 @@ public class FileDataProvider {
       CSVReader reader = new CSVReader(new FileReader(csvFile));
       String[] nextLine;
       while ((nextLine = reader.readNext()) != null) {
-        System.out.println(Arrays.toString(nextLine));
+        //System.out.println(Arrays.toString(nextLine));
         Object[] parameters = new Object[length];
         for (int i = 0; i < length; i++) {
           if (i < nextLine.length) {
@@ -35,6 +71,7 @@ public class FileDataProvider {
             parameters[i] = null;
           }
         }
+
         result.add(parameters);
       }
       return result.toArray(new Object[result.size()][]);

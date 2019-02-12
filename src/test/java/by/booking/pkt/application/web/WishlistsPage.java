@@ -1,6 +1,6 @@
-package by.booking.pkt.recorded.web;
+package by.booking.pkt.application.web;
 
-import by.booking.pkt.recorded.model.Wishlist;
+import by.booking.pkt.model.Wishlist;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -26,7 +26,7 @@ public class WishlistsPage extends HelperBase {
     wait.until(visibilityOfElementLocated(By.cssSelector("[data-id=currency_selector]")));  //refreshDriver());
   }
 
-  public List<WebElement> getAllLists() {
+  public List<WebElement> getAll() {
     showDropdown(By.cssSelector("div[class*=bui-dropdown] span"), By.cssSelector(".listview__lists"), 5);
     List<WebElement> wishlists = webDriver.findElements(By.cssSelector(".listview__lists div"));
     hideDropdown(By.cssSelector("div[class*=bui-dropdown] span"), By.cssSelector(".listview__lists"), 5);

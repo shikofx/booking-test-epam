@@ -1,4 +1,4 @@
-package by.booking.pkt.recorded.web;
+package by.booking.pkt.application.web;
 
 import org.jetbrains.annotations.Nullable;
 import org.openqa.selenium.*;

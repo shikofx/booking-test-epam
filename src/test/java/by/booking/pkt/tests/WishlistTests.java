@@ -1,7 +1,7 @@
-package by.booking.pkt.recorded.tests;
+package by.booking.pkt.tests;
 
-import by.booking.pkt.recorded.model.SearchData;
-import by.booking.pkt.recorded.model.Wishlist;
+import by.booking.pkt.model.SearchData;
+import by.booking.pkt.model.Wishlist;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 import org.testng.asserts.Assertion;
@@ -10,14 +10,14 @@ import org.testng.asserts.SoftAssert;
 import java.util.List;
 import java.util.Set;
 
-public class WishlistTests extends TBaseWithLogin {
+public class WishlistTests extends TBase {
 
   @Test
   public void testListSendLink() throws Exception {
-    app.account().accountMenu().wishlists();
+    app.account().to().wishlists();
     Wishlist listToSend = app.wishlists().currentList();
     String urlToSend = app.wishlists().sendUrl();
-    app.account().accountMenu().logout();
+    app.account().to().logout();
     app.windows().goTo(urlToSend);
     Wishlist actualList = app.wishlists().currentList();
     Assertion assertion = new Assertion();
@@ -26,11 +26,11 @@ public class WishlistTests extends TBaseWithLogin {
 
   @Test(enabled = true)
   public void testListCreate() throws InterruptedException {
-    app.account().accountMenu().wishlists();
-    List<WebElement> oldLists = app.wishlists().getAllLists();
+    app.account().to().wishlists();
+    List<WebElement> oldLists = app.wishlists().getAll();
     Wishlist newList = new Wishlist("Go BR");
     app.wishlists().create(newList);
-    List<WebElement> newLists = app.wishlists().getAllLists();
+    List<WebElement> newLists = app.wishlists().getAll();
     Wishlist defaultList = app.wishlists().defaultList();
     Assertion assertion = new Assertion();
     //assertion.assertTrue(newLists.contains(oldLists), "New wishlists doesn't contain old wishlists");
@@ -78,7 +78,7 @@ public class WishlistTests extends TBaseWithLogin {
 
     softAssert.assertAll();
 
-    app.account().accountMenu().logout();
+    app.account().to().logout();
     app.windows().close();
     app.windows().switchTo(hotelWindow);
     app.windows().close();

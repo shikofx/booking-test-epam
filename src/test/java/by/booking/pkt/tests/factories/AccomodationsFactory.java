@@ -1,6 +1,5 @@
 package by.booking.pkt.tests.factories;
 
-import by.booking.pkt.tests.SearchAccomodationTests;
 import org.testng.annotations.Factory;
 
 public class AccomodationsFactory {

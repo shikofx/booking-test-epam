@@ -1,6 +1,5 @@
-package by.booking.pkt.recorded.web;
+package by.booking.pkt.application.web;
 
-import by.booking.pkt.recorded.model.User;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -17,22 +16,22 @@ public class AccountHelper extends HelperBase {
   }
 
   public void wishlists() {
-    accountMenu();
+    to();
     clickOn(By.cssSelector("div[class*=wishlists"));
   }
 
   public void logout() {
-    accountMenu();
+    to();
     clickOn(By.cssSelector("input[name=logout]+input"));
   }
 
-  public AccountHelper accountMenu() {
+  public AccountHelper to() {
     showDropdown(By.cssSelector("#current_account span[class=user_name_block]"), By.cssSelector(".profile-menu"), 5);
     return this;
   }
 
 
-  public void loginAs(User user) throws NullPointerException {
+  public void loginAs(String username, String password) throws NullPointerException {
     By logInButton = findLoginButton();
     boolean devidedForm = isDevidedForm();
     clickOn(logInButton);
@@ -43,18 +42,18 @@ public class AccountHelper extends HelperBase {
       System.out.println("Form 1");
       wait.until(visibilityOfElementLocated(By.cssSelector("form.nw-signin")));
       signInForm = webDriver.findElement(By.cssSelector("form.nw-signin"));
-      typeText(signInForm, usernameLocator, user.getUsername());
+      typeText(signInForm, usernameLocator, username);
       clickOn(signInForm, By.cssSelector("[type=submit]"));
       wait.until(visibilityOfElementLocated(passwordLocator));
       signInForm = webDriver.findElement(By.cssSelector("form.nw-signin"));
-      typeText(signInForm, passwordLocator, user.getPassword());
+      typeText(signInForm, passwordLocator, password);
       clickOn(signInForm, By.cssSelector("[type=submit]"));
     } else {
       System.out.println("Form 2");
       wait.until(visibilityOfElementLocated(By.cssSelector("form[target=log_tar]")));
       signInForm = webDriver.findElement(By.cssSelector("form[target=log_tar]"));
-      typeText(signInForm, usernameLocator, user.getUsername());
-      typeText(signInForm, passwordLocator, user.getPassword());
+      typeText(signInForm, usernameLocator, username);
+      typeText(signInForm, passwordLocator, password);
       clickOn(signInForm, By.cssSelector("[type=submit]"));
     }
   }

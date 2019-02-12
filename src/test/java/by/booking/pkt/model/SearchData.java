@@ -1,7 +1,9 @@
-package by.booking.pkt.recorded.model;
+package by.booking.pkt.model;
 
 public class SearchData {
-
+  private int parametersCount;
+  private String username;
+  private String password;
   private String currency;
   private String place;
   private String inDate;
@@ -9,16 +11,32 @@ public class SearchData {
   private int roomsCount;
   private int adultsCount;
   private int childrenCount;
+  private int userBudget;
+  private int stars;
 
   public SearchData() {
+    username = "";
+    password = "";
     currency = "";
     place = "";
     inDate = "";
     outDate = "";
-    roomsCount = 0;
-    adultsCount = 2;
+    roomsCount = 1;
+    adultsCount = 1;
     childrenCount = 0;
+    userBudget = 0;
+    stars = 0;
+  }
 
+  public SearchData withUsername(String username) {
+    this.username = username;
+    return this;
+  }
+
+
+  public SearchData withPassword(String password) {
+    this.password = password;
+    return this;
   }
 
   public SearchData withCurrency(String currency) {
@@ -56,6 +74,24 @@ public class SearchData {
     return this;
   }
 
+  public SearchData withUserBudget(int budget) {
+    this.userBudget = budget;
+    return this;
+  }
+
+  public SearchData withStars(int stars) {
+    this.stars = stars;
+    return this;
+  }
+
+  public String userName() {
+    return username;
+  }
+
+  public String userPassword() {
+    return password;
+  }
+
   public String getCurrency() {
     return currency;
   }
@@ -82,5 +118,13 @@ public class SearchData {
 
   public int getChildrenCount() {
     return childrenCount;
+  }
+
+  public int userBudget() {
+    return userBudget;
+  }
+
+  public int stars() {
+    return stars;
   }
 }

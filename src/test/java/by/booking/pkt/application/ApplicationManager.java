@@ -1,32 +1,76 @@
 package by.booking.pkt.application;
 
+import by.booking.pkt.application.web.*;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import ru.stqa.selenium.factory.WebDriverPool;
 
 import java.util.concurrent.TimeUnit;
 
-import static org.testng.Assert.fail;
-
 public class ApplicationManager {
-  protected WebDriver driver;
-  private WebDriverWait wait;
-  private StringBuffer verificationErrors = new StringBuffer();
+  protected WebDriver webDriver;
+  protected WebDriverWait wait;
 
-  public void init() {
-    driver = WebDriverPool.DEFAULT.getDriver(DesiredCapabilities.chrome());
-    driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-    System.out.println("startBrowser");
+
+  private int implicitlyWait;
+  private AccountHelper navigationHelper;
+  private WindowHelper windowHelper;
+  private SearchPage searchPage;
+  private ResultsPage resultsPage;
+  private HotelPage topListManager;
+  private WishlistsPage wishlistManager;
+  private AccountHelper account;
+
+  public void init(int implicitlyWait) {
+    webDriver = new ChromeDriver();
+    setImplicitlyWait(implicitlyWait);
+    wait = new WebDriverWait(webDriver, 30);
+
+    account = new AccountHelper(webDriver, wait, implicitlyWait);
+    searchPage = new SearchPage(webDriver, wait, implicitlyWait);
+    resultsPage = new ResultsPage(webDriver, wait, implicitlyWait);
+    topListManager = new HotelPage(webDriver, wait, implicitlyWait);
+    windowHelper = new WindowHelper(webDriver, wait, implicitlyWait);
+    wishlistManager = new WishlistsPage(webDriver, wait, implicitlyWait);
+
+    windowHelper.maximazeWindow();
   }
 
   public void stop() {
-    WebDriverPool.DEFAULT.dismissAll();
-    String verificationErrorString = verificationErrors.toString();
-    if (!"".equals(verificationErrorString)) {
-      fail(verificationErrorString);
-    }
-    driver = null;
-    System.out.println("stopBrowser");
+    // webDriver.quit();
+
+  }
+
+  public int getImplicitlyWait() {
+    return implicitlyWait;
+  }
+
+  public void setImplicitlyWait(int implicitlyWait) {
+    webDriver.manage().timeouts().implicitlyWait(implicitlyWait, TimeUnit.SECONDS);
+    this.implicitlyWait = implicitlyWait;
+  }
+
+  public AccountHelper account() {
+    return account;
+  }
+
+  public WindowHelper windows() {
+    return windowHelper;
+  }
+
+  public SearchPage forSearch() {
+    return searchPage;
+  }
+
+  public ResultsPage results() {
+    return resultsPage;
+  }
+
+  public HotelPage hotel() {
+    return topListManager;
+  }
+
+  public WishlistsPage wishlists() {
+    return wishlistManager;
   }
 }

@@ -1,4 +1,4 @@
-package by.booking.pkt.recorded.model;
+package by.booking.pkt.model;
 
 import java.util.Objects;
 
