@@ -15,7 +15,7 @@ public class SortResultsTests extends TBase {
             withUsername("pkt.autotests@gmail.com").withPassword("123456789").
             withCurrency("RUB").withPlace("Минск").
             withInDate("2019-03-24").withOutDate("2019-04-03").
-            withRooms(5).withAdults(2).withChildren(4).withUserBudget(13000);
+            withRooms(5).withAdults(2).withChildren(4).withMaxBudget(13000);
 
     app.account().loginAs(searchData.userName(), searchData.userPassword());
 

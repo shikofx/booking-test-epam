@@ -11,7 +11,8 @@ public class SearchData {
   private int roomsCount;
   private int adultsCount;
   private int childrenCount;
-  private int userBudget;
+  private int minBudget;
+  private int maxBudget;
   private int stars;
 
   public SearchData() {
@@ -24,7 +25,8 @@ public class SearchData {
     roomsCount = 1;
     adultsCount = 1;
     childrenCount = 0;
-    userBudget = 0;
+    minBudget = 0;
+    maxBudget = 0;
     stars = 0;
   }
 
@@ -74,8 +76,13 @@ public class SearchData {
     return this;
   }
 
-  public SearchData withUserBudget(int budget) {
-    this.userBudget = budget;
+  public SearchData withMinBudget(int budget) {
+    this.maxBudget = budget;
+    return this;
+  }
+
+  public SearchData withMaxBudget(int budget) {
+    this.maxBudget = budget;
     return this;
   }
 
@@ -120,8 +127,12 @@ public class SearchData {
     return childrenCount;
   }
 
-  public int userBudget() {
-    return userBudget;
+  public int maxBudget() {
+    return maxBudget;
+  }
+
+  public int minBudget() {
+    return minBudget;
   }
 
   public int stars() {

@@ -44,16 +44,27 @@ public class FilterBlock extends HelperBase {
   }
 
   @Nullable
-  public FilterBlock selectBudget(int budget) {
-    for (WebElement e:getAllBudgets()) {
-        if (!e.findElement(By.cssSelector("input")).isSelected()) {
-          e.click();
-          maxBudget = Integer.parseInt(getAttribute(e, "data-value"));
-          if (maxBudget < budget)
-            maxBudget = Integer.MAX_VALUE;
-          break;
-        }
-      } else {
+  public FilterBlock selectBudget(int min, int max) {
+    int temp = 0;
+    List<WebElement> all = getAllBudgets();
+    int previous = 0;
+    int current = 0;
+    int last = 0;
+
+    for (int i = 0; i<all.size();i++) {
+      current = Integer.parseInt(getAttribute(all.get(i), "data-value"));
+      if(i>0)
+        previous =  Integer.parseInt(getAttribute(all.get(i-1), "data-value"));
+      if(i==(all.size()-1)&&max>current){
+        maxBudget = Integer.MAX_VALUE;
+      }
+
+      if(min<=current && min >previous)
+        minBudget = previous;
+      if(max<current)
+        maxBudget = current;
+      if(min<=current&&max>=current)
+        clickOn(all.get(i));
     }
     refreshDriver();
     return this;
@@ -62,4 +73,8 @@ public class FilterBlock extends HelperBase {
   public int getMax() {
     return maxBudget;
   }
+  public int getMin() {
+    return minBudget;
+  }
+
 }

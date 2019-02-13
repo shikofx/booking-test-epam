@@ -18,10 +18,11 @@ public class FilterResultsTests extends TBaseMethods {
   @DataSourceFileAnnotation("src\\test\\resources\\search-positive.data")
   public void testFilterByBudget(SearchData searchData) {
     app.forSearch().fillForm(searchData).initSearch();
-    int maxBudget = app.filters().selectBudget(searchData.userBudget()).getMax();
+    app.filters().selectBudget(searchData.minBudget(),searchData.maxBudget());
+    int maxBudget = app.filters().getMax();
+    int minBudget = app.filters().getMin();
     Assertion assertion = new Assertion();
     assertion.assertNotEquals(maxBudget, 0, "Filter by budget has not selected!");
-
     int nightsCount = app.filters().getNigtsCount();
     int maxTotalPrice = nightsCount*maxBudget;
 
@@ -44,7 +45,7 @@ public class FilterResultsTests extends TBaseMethods {
             withUsername("pkt.autotests@gmail.com").withPassword("123456789").
             withCurrency("RUB").withPlace("Минск").
             withInDate("2019-03-24").withOutDate("2019-04-03").
-            withRooms(5).withAdults(2).withChildren(4).withUserBudget(13000);
+            withRooms(5).withAdults(2).withChildren(4).withMaxBudget(13000);
     app.account().loginAs(searchData.userName(), searchData.userPassword());
     SoftAssert softAssert = new SoftAssert();
     app.forSearch().fillForm(searchData).initSearch();

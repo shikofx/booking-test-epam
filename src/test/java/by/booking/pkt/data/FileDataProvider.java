@@ -40,8 +40,9 @@ public class FileDataProvider {
                 withRooms(Integer.parseInt(nextLine[6])).
                 withAdults(Integer.parseInt(nextLine[7])).
                 withChildren(Integer.parseInt(nextLine[8])).
-                withUserBudget(Integer.parseInt(nextLine[9])).
-                withStars(Integer.parseInt(nextLine[10]));
+                withMinBudget(Integer.parseInt(nextLine[9])).
+                withMaxBudget(Integer.parseInt(nextLine[10])).
+                withStars(Integer.parseInt(nextLine[11]));
         result.add(data);
       }
     } else {
