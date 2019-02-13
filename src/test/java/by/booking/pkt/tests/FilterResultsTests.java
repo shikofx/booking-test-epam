@@ -18,18 +18,21 @@ public class FilterResultsTests extends TBaseMethods {
   @DataSourceFileAnnotation("src\\test\\resources\\search-positive.data")
   public void testFilterByBudget(SearchData searchData) {
     app.forSearch().fillForm(searchData).initSearch();
-    WebElement budgetElement = app.results().selectBudget(searchData.userBudget());
-    //int maxBudget = app.results().getBudget(budgetElement, searchData.userBudget());
+    int maxBudget = app.filters().selectBudget(searchData.userBudget()).getMax();
     Assertion assertion = new Assertion();
-    //assertion.assertNotEquals(maxBudget, 0, "Filter by budget has not selected!");
-    app.windows().back();
+    assertion.assertNotEquals(maxBudget, 0, "Filter by budget has not selected!");
+
+    int nightsCount = app.filters().getNigtsCount();
+    int maxTotalPrice = nightsCount*maxBudget;
+
+
     SoftAssert softAssert = new SoftAssert();
     List<Hotel> hotels = app.results().availableHotels();
     System.out.println("Считали весь список");
     //Очень долго длятся проверки!!!
 //    for (Hotel h : hotels) {
-//        softAssert.assertTrue(h.currentPrice() <= maxBudget,
-//                "Budget " + maxBudget + " less than total price " + h.currentPrice() + " for " + h.getName());
+//        softAssert.assertTrue(h.currentPrice() <= maxTotalPrice,
+//                "Budget " + maxTotalPrice + " less than total price " + h.currentPrice() + " for " + h.getName());
 //    }
     softAssert.assertAll();
 
@@ -48,9 +51,9 @@ public class FilterResultsTests extends TBaseMethods {
     app.forSearch().initSearch();
     //app.getFilter().selectOnlyAvailable();
     Assertion assertion = new Assertion();
-    assertion.assertTrue(app.results().selectStarsCount(searchData.stars()), "Count of stars has not selected!");
+    assertion.assertTrue(app.filters().selectStarsCount(searchData.stars()), "Count of stars has not selected!");
 
-    for (WebElement hotel : app.results().getAll()) {
+    for (WebElement hotel : app.results().getAllResults()) {
       int starsCount = app.results().getStarsCount(hotel);
       String hotelName = app.results().getHotelName(hotel);
       softAssert.assertEquals(starsCount, searchData.stars(), "For hotel " + hotelName + " stars count is not valid!");

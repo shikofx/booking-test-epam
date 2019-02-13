@@ -24,7 +24,7 @@ public class FileDataProvider {
       DataSourceFileAnnotation dataSource = m.getAnnotation(DataSourceFileAnnotation.class);
       File csvFile = new File(dataSource.value());
 
-      result = new ArrayList<>();
+      result = new ArrayList<SearchData>();
       CSVReader reader = new CSVReader(new FileReader(csvFile));
       String[] nextLine;
       SearchData data = new SearchData();

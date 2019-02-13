@@ -13,25 +13,30 @@ public class ApplicationManager {
 
 
   private int implicitlyWait;
-  private AccountHelper navigationHelper;
+  private AccountHelper accountHelper;
   private WindowHelper windowHelper;
   private SearchPage searchPage;
   private ResultsPage resultsPage;
-  private HotelPage topListManager;
-  private WishlistsPage wishlistManager;
-  private AccountHelper account;
+  private HotelPage hotelPage;
+  private WishlistsPage wishlistsPage;
+
+
+
+  private FilterBlock filterBlock;
+
 
   public void init(int implicitlyWait) {
     webDriver = new ChromeDriver();
     setImplicitlyWait(implicitlyWait);
     wait = new WebDriverWait(webDriver, 30);
 
-    account = new AccountHelper(webDriver, wait, implicitlyWait);
+    accountHelper = new AccountHelper(webDriver, wait, implicitlyWait);
     searchPage = new SearchPage(webDriver, wait, implicitlyWait);
     resultsPage = new ResultsPage(webDriver, wait, implicitlyWait);
-    topListManager = new HotelPage(webDriver, wait, implicitlyWait);
+    filterBlock = new FilterBlock(webDriver, wait, implicitlyWait);
+    hotelPage = new HotelPage(webDriver, wait, implicitlyWait);
     windowHelper = new WindowHelper(webDriver, wait, implicitlyWait);
-    wishlistManager = new WishlistsPage(webDriver, wait, implicitlyWait);
+    wishlistsPage = new WishlistsPage(webDriver, wait, implicitlyWait);
 
     windowHelper.maximazeWindow();
   }
@@ -51,7 +56,7 @@ public class ApplicationManager {
   }
 
   public AccountHelper account() {
-    return account;
+    return accountHelper;
   }
 
   public WindowHelper windows() {
@@ -67,10 +72,14 @@ public class ApplicationManager {
   }
 
   public HotelPage hotel() {
-    return topListManager;
+    return hotelPage;
   }
 
   public WishlistsPage wishlists() {
-    return wishlistManager;
+    return wishlistsPage;
+  }
+
+  public FilterBlock filters() {
+    return filterBlock;
   }
 }

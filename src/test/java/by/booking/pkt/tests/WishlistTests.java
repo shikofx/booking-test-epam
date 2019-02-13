@@ -49,7 +49,7 @@ public class WishlistTests extends TBase {
     String resultsWindow = app.windows().handle();
     Set<String> oldWindows = app.windows().all();
 
-    List<WebElement> allHotels = app.results().getAll();
+    List<WebElement> allHotels = app.results().getAllResults();
     app.results().goTo(allHotels.get(1));
 
     String hotelWindow = app.windows().getNew(oldWindows);
