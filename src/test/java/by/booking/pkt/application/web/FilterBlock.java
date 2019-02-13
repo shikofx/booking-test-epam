@@ -48,19 +48,33 @@ public class FilterBlock extends HelperBase {
     List<WebElement> all = getAllBudgets();
     int previous = 0;
     int current = 0;
-    for (int i = 0; i<all.size();i++) {
-      current = Integer.parseInt(getAttribute(all.get(i), "data-value"));
-      if(i>0)
-        previous =  Integer.parseInt(getAttribute(all.get(i-1), "data-value"));
-      if(i==(all.size()-1)&&max>current){
-        maxBudget = Integer.MAX_VALUE;
+    WebElement e_current;
+    WebElement e_previous = null;
+    for(int i=0;i<all.size();i++){
+      e_current = all.get(i);
+      current = Integer.parseInt(getAttribute(e_current, "data-value"));
+      if(i<(all.size()-1)) {
+        if (i>0) {
+          e_previous = all.get(i-1);
+          previous = Integer.parseInt(getAttribute(e_previous, "data-value"));
+        }
+        if (min <= current && min > previous)
+          minBudget = previous;
+        if (max < current)
+          maxBudget = current;
+        if (min < current || max >= current)
+          clickOn(e_current);
+      } else if(i==(all.size()-1)){
+        if(max>current){
+          maxBudget = Integer.MAX_VALUE;
+          clickOn(e_current);
+        }
+        if(min>current){
+          minBudget = previous;
+          clickOn(e_current);
+        }
+
       }
-      if(min<=current && min >previous)
-        minBudget = previous;
-      if(max<current)
-        maxBudget = current;
-      if(min<current&&max>=current)
-        clickOn(all.get(i));
     }
     refreshDriver();
     return this;
@@ -69,6 +83,7 @@ public class FilterBlock extends HelperBase {
   public int getMax() {
     return maxBudget;
   }
+
   public int getMin() {
     return minBudget;
   }

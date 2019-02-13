@@ -26,7 +26,7 @@ public class FilterResultsTests extends TBaseMethods {
     int nightsCount = app.filters().getNigtsCount();
     int maxTotalPrice = nightsCount*maxBudget;
     int minTotalPrice = nightsCount*minBudget;
-    System.out.println(minTotalPrice + "+++++++++" + maxTotalPrice);
+    System.out.println(minBudget + "+++++++++" + maxBudget);
     SoftAssert softAssert = new SoftAssert();
     List<Hotel> hotels = app.results().availableHotels();
     System.out.println("Считали весь список");
