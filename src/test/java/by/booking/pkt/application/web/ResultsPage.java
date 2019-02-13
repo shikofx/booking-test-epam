@@ -97,7 +97,6 @@ public class ResultsPage extends HelperBase {
   public List<WebElement> getOnlyAvailable() {
     List<WebElement> availableResults = new ArrayList<WebElement>();
     for (WebElement e : getAllResults()) {
-      System.out.println(e.getText());
       if (!this.getAttribute(e, "className").contains("soldout_property")) {
         availableResults.add(e);
       }

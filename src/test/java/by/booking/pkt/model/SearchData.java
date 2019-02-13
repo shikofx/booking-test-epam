@@ -77,7 +77,7 @@ public class SearchData {
   }
 
   public SearchData withMinBudget(int budget) {
-    this.maxBudget = budget;
+    this.minBudget = budget;
     return this;
   }
 

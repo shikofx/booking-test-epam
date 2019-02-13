@@ -25,8 +25,8 @@ public class FilterResultsTests extends TBaseMethods {
     assertion.assertNotEquals(maxBudget, 0, "Filter by budget has not selected!");
     int nightsCount = app.filters().getNigtsCount();
     int maxTotalPrice = nightsCount*maxBudget;
-
-
+    int minTotalPrice = nightsCount*minBudget;
+    System.out.println(minTotalPrice + "+++++++++" + maxTotalPrice);
     SoftAssert softAssert = new SoftAssert();
     List<Hotel> hotels = app.results().availableHotels();
     System.out.println("Считали весь список");

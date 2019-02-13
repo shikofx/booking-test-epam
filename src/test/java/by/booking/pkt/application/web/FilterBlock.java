@@ -45,12 +45,9 @@ public class FilterBlock extends HelperBase {
 
   @Nullable
   public FilterBlock selectBudget(int min, int max) {
-    int temp = 0;
     List<WebElement> all = getAllBudgets();
     int previous = 0;
     int current = 0;
-    int last = 0;
-
     for (int i = 0; i<all.size();i++) {
       current = Integer.parseInt(getAttribute(all.get(i), "data-value"));
       if(i>0)
@@ -58,12 +55,11 @@ public class FilterBlock extends HelperBase {
       if(i==(all.size()-1)&&max>current){
         maxBudget = Integer.MAX_VALUE;
       }
-
       if(min<=current && min >previous)
         minBudget = previous;
       if(max<current)
         maxBudget = current;
-      if(min<=current&&max>=current)
+      if(min<current&&max>=current)
         clickOn(all.get(i));
     }
     refreshDriver();
