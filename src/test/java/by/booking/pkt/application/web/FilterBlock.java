@@ -48,32 +48,33 @@ public class FilterBlock extends HelperBase {
     List<WebElement> all = allBudgets();
     int previous = 0;
     int current = 0;
-    for(int i = 0; i< all.size(); i++){
+    for (int i = 0; i < all.size() && maxBudget == 0; i++) {
       current = Integer.parseInt(getAttribute(all.get(i), "data-value"));
-      if(i<(all.size()-1)) {
-        if (i>0) {
-          previous = Integer.parseInt(getAttribute(all.get(i-1), "data-value"));
+      if (i < (all.size() - 1)) {
+        if (min > previous) {
+          if (i > 0)
+            previous = Integer.parseInt(getAttribute(all.get(i - 1), "data-value"));
+          if (min <= current)
+            minBudget = previous;
         }
-        if (min <= current && min > previous)
-          minBudget = previous;
-        if ((min < current || max <= current)&&maxBudget==0) {
-          maxBudget = current;
+        if (max <= current)
+            maxBudget = current;
+        if (min < current) {
           clickOn(all.get(i));
-          //refreshDriver();
-          //all = allBudgets();
+          refreshDriver();
+          all = allBudgets();
         }
-      } else if(i==(all.size()-1)){
-        if(max>current){
+      } else if (i == (all.size() - 1)) {
+        if (max > current) {
           maxBudget = Integer.MAX_VALUE;
           clickOn(all.get(i));
-//          refreshDriver();
+          refreshDriver();
         }
-        if(min>current){
+        if (min > current) {
           minBudget = previous;
           clickOn(all.get(i));
-//          refreshDriver();
+          refreshDriver();
         }
-
       }
     }
     return this;
