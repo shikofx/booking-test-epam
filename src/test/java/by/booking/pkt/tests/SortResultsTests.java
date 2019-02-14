@@ -26,9 +26,9 @@ public class SortResultsTests extends TBase {
     List<WebElement> availabelResults = app.results().getOnlyAvailable();
     for (int i = 1; i < availabelResults.size(); i++) {
       String currentHotelName = app.results().getHotelName(availabelResults.get(i));
-      int currentDistance = app.results().distanceToDest(availabelResults.get(i));
+      double currentDistance = app.results().distanceToDest(availabelResults.get(i));
       String previousHotelName = app.results().getHotelName(availabelResults.get(i - 1));
-      int previousDistance = app.results().distanceToDest(availabelResults.get(i - 1));
+      double previousDistance = app.results().distanceToDest(availabelResults.get(i - 1));
       assertion.assertTrue(currentDistance >= previousDistance,
               "Unvalid sort by distance.\n" +
                       "The place " + currentHotelName + " with distance " + currentDistance +

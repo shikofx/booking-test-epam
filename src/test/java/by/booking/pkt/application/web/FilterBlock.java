@@ -11,8 +11,8 @@ import java.util.List;
 import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
 
 public class FilterBlock extends HelperBase {
-  private int minBudget;
-  private int maxBudget;
+  private int minBudget =0;
+  private int maxBudget =0;
 
   public FilterBlock(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
     super(webDriver, wait, implicitlyWait);
@@ -42,42 +42,77 @@ public class FilterBlock extends HelperBase {
       return false;
     }
   }
+  public boolean unselectStarsCount(int stars) {
+    WebElement filterElement = webDriver.findElement(By.cssSelector("a[data-id^=class][data-value='" + stars + "']"));
+    if (filterElement.findElement(By.cssSelector("input")).isSelected())
+      clickOn(filterElement.findElement(By.cssSelector("div")));
+    if (!filterElement.findElement(By.cssSelector("input")).isSelected()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   @Nullable
   public FilterBlock selectBudget(int min, int max) {
     List<WebElement> all = allBudgets();
+    minBudget = 0;
+    maxBudget = 0;
     int previous = 0;
     int current = 0;
     for (int i = 0; i < all.size() && maxBudget == 0; i++) {
       current = Integer.parseInt(getAttribute(all.get(i), "data-value"));
       if (i < (all.size() - 1)) {
         if (min > previous) {
-          if (i > 0)
+          if (i > 0) {
             previous = Integer.parseInt(getAttribute(all.get(i - 1), "data-value"));
+            if(min<current&&min>previous){
+              min = Integer.parseInt(getAttribute(all.get(i - 1),"data-value"));
+            }
+          }
           if (min <= current)
             minBudget = previous;
         }
         if (max <= current)
             maxBudget = current;
         if (min < current) {
-          clickOn(all.get(i));
-          refreshDriver();
+          selectBudget(all.get(i));
           all = allBudgets();
         }
       } else if (i == (all.size() - 1)) {
         if (max > current) {
           maxBudget = Integer.MAX_VALUE;
-          clickOn(all.get(i));
-          refreshDriver();
+          selectBudget(all.get(i));
         }
         if (min > current) {
           minBudget = previous;
-          clickOn(all.get(i));
-          refreshDriver();
+          selectBudget(all.get(i));
         }
       }
     }
     return this;
+  }
+
+  @Nullable
+  public FilterBlock unselectAllBudgets(int min, int max) {
+    List<WebElement> all = allBudgets();
+    for (WebElement e:all) {
+      unselectBudget(e);
+    }
+    return this;
+  }
+
+  private void selectBudget(WebElement e) {
+    if(!e.findElement(By.cssSelector("input")).isSelected()) {
+      clickOn(e);
+      refreshDriver();
+    }
+  }
+  private void unselectBudget(WebElement e) {
+    if(!e.findElement(By.cssSelector("input")).isSelected()) {
+      clickOn(e);
+      refreshDriver();
+    }
   }
 
   public int getMax() {

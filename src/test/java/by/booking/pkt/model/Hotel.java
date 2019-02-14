@@ -4,7 +4,7 @@ public class Hotel {
   private String id;
   private String name;
   private int stars;
-  private int distance;
+  private double distance;
   private int totalPrice;
 
 
@@ -26,7 +26,7 @@ public class Hotel {
     return this;
   }
 
-  public int getStars() {
+  public int starsCount() {
     return stars;
   }
 
@@ -35,11 +35,11 @@ public class Hotel {
     return this;
   }
 
-  public int getDistance() {
+  public double getDistance() {
     return distance;
   }
 
-  public Hotel withDistance(int distance) {
+  public Hotel withDistance(double distance) {
     this.distance = distance;
     return this;
   }

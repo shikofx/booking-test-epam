@@ -40,28 +40,31 @@ public class ResultsPage extends HelperBase {
 
   public List<Hotel> availableHotels() {
     List<Hotel> hotels = new ArrayList<Hotel>();
-    List<WebElement> e=getOnlyAvailable();
-//    for (WebElement e : getOnlyAvailable()) {
-//      hotels.add(resultToHotel(e));
-//    }
+    List<WebElement> availableList=getOnlyAvailable();
+    for (WebElement e : availableList) {
+      hotels.add(resultToHotel(e));
+    }
     return hotels;
   }
 
   private Hotel resultToHotel(WebElement e) {
-    return new Hotel().withID(getID(e)).
+    Hotel hotel = new Hotel().
+            withID(getID(e)).
             withName(getHotelName(e)).
             withDistance(distanceToDest(e)).
             withStars(getStarsCount(e)).
             withTotalPrice(totalPrice(e));
+    return hotel;
   }
 
   public String getID(WebElement item) {
     return item.getAttribute("data-hotelid");
   }
 
-  public int distanceToDest(WebElement item) {
-    int distance = 0;
-    distance = Integer.parseInt(textByPatternNoSpace("[\\,\\d]+", item.findElement(By.cssSelector("span.distfromdest")).getText().replace(',', '.')));
+  public double distanceToDest(WebElement item) {
+    double distance = 0;
+    String s = textByPatternNoSpace("[\\,\\d]+", item.findElement(By.cssSelector("span.distfromdest")).getText());
+    distance =Double.parseDouble(textByPatternNoSpace("[\\,\\d]+", item.findElement(By.cssSelector("span.distfromdest")).getText()).replace(',', '.'));
     String meterField = textByPatternNoSpace("\\s.*?\\s", item.findElement(By.cssSelector("span.distfromdest")).getText());
     if (meterField.length() > 1) {
       distance = 1000 * distance;
@@ -71,7 +74,7 @@ public class ResultsPage extends HelperBase {
 
   public int getStarsCount(WebElement item) {
     int actualStars;
-    if (this.isElementPresent(item, By.cssSelector("svg[class*=stars]"))) {
+    if (this.isElementPresent(item, By.cssSelector("svg[class*=stars]"),0)) {
       actualStars = Integer.parseInt(textByPatternNoSpace("\\d", getAttribute(item, By.cssSelector("svg[class*=stars]"), "class")));
     } else {
       actualStars = 0;
@@ -95,8 +98,9 @@ public class ResultsPage extends HelperBase {
   }
 
   public List<WebElement> getOnlyAvailable() {
+    List<WebElement> allResults = getAllResults();
     List<WebElement> availableResults = new ArrayList<WebElement>();
-    for (WebElement e : getAllResults()) {
+    for (WebElement e : allResults) {
       if (!this.getAttribute(e, "className").contains("soldout_property")) {
         availableResults.add(e);
       }
