@@ -18,8 +18,8 @@ public class FilterBlock extends HelperBase {
     super(webDriver, wait, implicitlyWait);
   }
 
-  public List<WebElement> getAllBudgets() {
-    return webDriver.findElements(By.cssSelector("a[data-id^=pri]"));
+  public List<WebElement> allBudgets() {
+    return webDriver.findElements(By.cssSelector("a[data-id^=pri]:not([data-google-track^=Click])"));
   }
 
   public void selectOnlyAvailable() {
@@ -45,38 +45,37 @@ public class FilterBlock extends HelperBase {
 
   @Nullable
   public FilterBlock selectBudget(int min, int max) {
-    List<WebElement> all = getAllBudgets();
+    List<WebElement> all = allBudgets();
     int previous = 0;
     int current = 0;
-    WebElement e_current;
-    WebElement e_previous = null;
-    for(int i=0;i<all.size();i++){
-      e_current = all.get(i);
-      current = Integer.parseInt(getAttribute(e_current, "data-value"));
+    for(int i = 0; i< all.size(); i++){
+      current = Integer.parseInt(getAttribute(all.get(i), "data-value"));
       if(i<(all.size()-1)) {
         if (i>0) {
-          e_previous = all.get(i-1);
-          previous = Integer.parseInt(getAttribute(e_previous, "data-value"));
+          previous = Integer.parseInt(getAttribute(all.get(i-1), "data-value"));
         }
         if (min <= current && min > previous)
           minBudget = previous;
-        if (max < current)
+        if ((min < current || max <= current)&&maxBudget==0) {
           maxBudget = current;
-        if (min < current || max >= current)
-          clickOn(e_current);
+          clickOn(all.get(i));
+          //refreshDriver();
+          //all = allBudgets();
+        }
       } else if(i==(all.size()-1)){
         if(max>current){
           maxBudget = Integer.MAX_VALUE;
-          clickOn(e_current);
+          clickOn(all.get(i));
+//          refreshDriver();
         }
         if(min>current){
           minBudget = previous;
-          clickOn(e_current);
+          clickOn(all.get(i));
+//          refreshDriver();
         }
 
       }
     }
-    refreshDriver();
     return this;
   }
 
