@@ -1,6 +1,5 @@
 package by.booking.pkt.application.web;
 
-import by.booking.pkt.model.Wishlist;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -20,10 +19,10 @@ public class HotelPage extends HelperBase {
     return getTextByPattern(webDriver.getCurrentUrl(), ".+/[A-Za-z0-9_-]*");
   }
 
-  public WebElement createWishlist(Wishlist list) {
-    showDropdown(By.cssSelector("#wrap-hotelpage-top .js-wl-dropdown-handle"), By.cssSelector("#hotel-wishlists"), 5);
+  public WebElement createWishlist(String list) {
+    displayDropDown(By.cssSelector("#wrap-hotelpage-top .js-wl-dropdown-handle"), By.cssSelector("#hotel-wishlists"), 5);
     List<WebElement> oldWishlists = webDriver.findElements(By.cssSelector("#hotel-wishlists label.js-wl-dropdown-item"));
-    typeText(By.cssSelector("#hotel-wishlists input[type=text]"), list.getName());
+    typeText(By.cssSelector("#hotel-wishlists input[type=text]"), list);
     submitWishlistCreating();
     wait.until(numberOfElementsToBe(By.cssSelector("#hotel-wishlists label.js-wl-dropdown-item"), oldWishlists.size() + 1));
     List<WebElement> newWishlists = webDriver.findElements(By.cssSelector("#hotel-wishlists label.js-wl-dropdown-item"));

@@ -29,7 +29,7 @@ public class FileDataProvider {
       String[] nextLine;
       SearchData data = new SearchData();
       while ((nextLine = reader.readNext()) != null) {
-        System.out.println(Arrays.toString(nextLine));
+        System.out.println(m.getName() + "\\\\" + Arrays.toString(nextLine));
         data = new SearchData().
                 withUsername(nextLine[0]).
                 withPassword(nextLine[1]).
@@ -42,7 +42,8 @@ public class FileDataProvider {
                 withChildren(Integer.parseInt(nextLine[8])).
                 withMinBudget(Integer.parseInt(nextLine[9])).
                 withMaxBudget(Integer.parseInt(nextLine[10])).
-                withStars(Integer.parseInt(nextLine[11]));
+                withStars(Integer.parseInt(nextLine[11])).
+                withWishlist(nextLine[12]);
         result.add(data);
       }
     } else {

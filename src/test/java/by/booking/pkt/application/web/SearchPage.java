@@ -17,18 +17,18 @@ public class SearchPage extends HelperBase {
   }
 
   public SearchPage fillForm(SearchData searchData) {
-    setCurrency(searchData.getCurrency());
-    setPlace(searchData.withPlace());
-    setDates(searchData.getInDate(), searchData.getOutDate());
-    setRooms(searchData.getRoomsCount());
-    setAdults(searchData.getAdultsCount());
-    setChildren(searchData.getChildrenCount());
+    setCurrency(searchData.currency());
+    setPlace(searchData.whereGo());
+    setDates(searchData.inDate(), searchData.outDate());
+    setRooms(searchData.roomsCount());
+    setAdults(searchData.adultsCount());
+    setChildren(searchData.childrenCount());
     return this;
   }
 
   public SearchPage setCurrency(String currency) {
     if (!(getAttribute(By.cssSelector("[name=selected_currency]"), "value").equals(currency))) {
-      showDropdown(By.cssSelector("[data-id=currency_selector]"), By.cssSelector("#current_currency_foldout"), 5);
+      displayDropDown(By.cssSelector("[data-id=currency_selector]"), By.cssSelector("#current_currency_foldout"), 5);
       clickOn(By.cssSelector("a[data-currency=" + currency + "]"));
     }
     return this;
@@ -41,7 +41,7 @@ public class SearchPage extends HelperBase {
 
   public SearchPage setDates(String checkInDate, String checkOutDate) {
     String firstDayOfMonthMonth = getFirstDayOfMonth(checkInDate);
-    showDropdown(By.cssSelector("div.xp__dates.xp__group"), By.cssSelector("div.bui-calendar"), 5);
+    displayDropDown(By.cssSelector("div.xp__dates.xp__group"), By.cssSelector("div.bui-calendar"), 5);
     while (!firstDayOfMonthMonth.equals(getAttribute(By.cssSelector("div.bui-calendar td[data-date^='20']"), "data-date"))) {
       clickOn(By.cssSelector("div[data-bui-ref=calendar-next]"));
     }

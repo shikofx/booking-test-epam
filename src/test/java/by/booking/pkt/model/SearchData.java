@@ -1,7 +1,6 @@
 package by.booking.pkt.model;
 
 public class SearchData {
-  private int parametersCount;
   private String username;
   private String password;
   private String currency;
@@ -14,6 +13,7 @@ public class SearchData {
   private int minBudget;
   private int maxBudget;
   private int stars;
+  private String wishlistName;
 
   public SearchData() {
     username = "";
@@ -91,6 +91,11 @@ public class SearchData {
     return this;
   }
 
+  public SearchData withWishlist(String wishlistName) {
+    this.wishlistName = wishlistName;
+    return this;
+  }
+
   public String userName() {
     return username;
   }
@@ -99,31 +104,31 @@ public class SearchData {
     return password;
   }
 
-  public String getCurrency() {
+  public String currency() {
     return currency;
   }
 
-  public String withPlace() {
+  public String whereGo() {
     return place;
   }
 
-  public String getInDate() {
+  public String inDate() {
     return inDate;
   }
 
-  public String getOutDate() {
+  public String outDate() {
     return outDate;
   }
 
-  public int getRoomsCount() {
+  public int roomsCount() {
     return roomsCount;
   }
 
-  public int getAdultsCount() {
+  public int adultsCount() {
     return adultsCount;
   }
 
-  public int getChildrenCount() {
+  public int childrenCount() {
     return childrenCount;
   }
 
@@ -137,5 +142,9 @@ public class SearchData {
 
   public int stars() {
     return stars;
+  }
+
+  public String getWishlistName() {
+    return wishlistName;
   }
 }

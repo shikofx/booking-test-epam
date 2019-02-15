@@ -1,15 +1,17 @@
 package by.booking.pkt.application.web;
 
 import org.jetbrains.annotations.Nullable;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
-import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
+import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
 public class HelperBase {
   protected int implicitlyWait;
@@ -32,22 +34,38 @@ public class HelperBase {
     return wait;
   }
 
-  public void showDropdown(By whatClick, By whatWait, int secondsToWait) {
+  public void displayDropDown(By whatClick, By whatWait, int secondsToWait) {
     wait.until(visibilityOfElementLocated(whatClick));
     for (int i = 0; i < 3; i++) {
       if (!isElementPresent(whatWait, secondsToWait) || !isElementDisplayed(whatWait))
+
         clickOn(whatClick);
       else break;
     }
   }
 
-  protected void hideDropdown(By whatClick, By whatWait, int secondsToWait) {
-    wait.until(presenceOfElementLocated(whatClick));
-    for (int i = 0; i < 3; i++) {
-      if (isElementPresent(whatWait, secondsToWait))
-        clickOn(whatClick);
-      else break;
-    }
+  public void displayDropDown(By toClick, By toWait) {
+    wait.until((WebDriver d) -> {
+      try {
+        d.findElement(toClick).click();
+        return d.findElement(toWait).isDisplayed() ? d.findElement(toWait) : null;
+      } catch (StaleElementReferenceException e) {
+        return null;
+      }
+    });
+  }
+
+  protected void hideDropdown(By toClick, By toWait) {
+    boolean flag = false;
+    wait.until((WebDriver d) -> {
+      if (isElementDisplayed(toWait)) {
+        d.findElement(toClick).click();
+        wait.until(not(visibilityOf(d.findElement(toWait))));
+      } else {
+        return true;
+      }
+      return false;
+    });
   }
 
   @Nullable
@@ -99,30 +117,6 @@ public class HelperBase {
     return isElementPresent;
   }
 
-  private boolean isAlertPresent() {
-    try {
-      webDriver.switchTo().alert();
-      return true;
-    } catch (NoAlertPresentException e) {
-      return false;
-    }
-  }
-
-  private String closeAlertAndGetItsText() {
-    try {
-      Alert alert = webDriver.switchTo().alert();
-      String alertText = alert.getText();
-      if (acceptNextAlert) {
-        alert.accept();
-      } else {
-        alert.dismiss();
-      }
-      return alertText;
-    } finally {
-      acceptNextAlert = true;
-    }
-  }
-
   protected void clickOn(By locator) {
     webDriver.findElement(locator).click();
   }
@@ -161,9 +155,11 @@ public class HelperBase {
     inElement.findElement(locator).clear();
     inElement.findElement(locator).sendKeys(text);
   }
+
   protected void typeText(By where, String text) {
     clickOn(where);
     webDriver.findElement(where).clear();
     webDriver.findElement(where).sendKeys(text);
   }
+
 }

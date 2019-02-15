@@ -46,6 +46,10 @@ public class ApplicationManager {
 
   }
 
+  public void clear() {
+    webDriver.manage().deleteAllCookies();
+  }
+
   public int getImplicitlyWait() {
     return implicitlyWait;
   }

@@ -32,20 +32,27 @@ public class FilterBlock extends HelperBase {
     return Integer.parseInt(textByPatternNoSpace("\\d+", getText(By.cssSelector("div.sb-dates__los"))));
   }
 
-  public boolean selectStarsCount(int stars) {
-    WebElement filterElement = webDriver.findElement(By.cssSelector("a[data-id^=class][data-value='" + stars + "']"));
-    if (!filterElement.findElement(By.cssSelector("input")).isSelected())
+  public boolean selectStars(int stars) {
+    WebElement filterElement = webDriver.findElement(By.cssSelector("a[data-id^=class-" + stars));
+    if (!filterElement.findElement(By.cssSelector("input")).isSelected()) {
       clickOn(filterElement.findElement(By.cssSelector("div")));
+      refreshDriver();
+    }
+    filterElement = webDriver.findElement(By.cssSelector("a[data-id^=class-" + stars));
     if (filterElement.findElement(By.cssSelector("input")).isSelected()) {
       return true;
     } else {
       return false;
     }
   }
-  public boolean unselectStarsCount(int stars) {
-    WebElement filterElement = webDriver.findElement(By.cssSelector("a[data-id^=class][data-value='" + stars + "']"));
-    if (filterElement.findElement(By.cssSelector("input")).isSelected())
+
+  public boolean unselectStars(int stars) {
+    WebElement filterElement = webDriver.findElement(By.cssSelector("a[data-id^=class-" + stars));
+    if (filterElement.findElement(By.cssSelector("input")).isSelected()) {
       clickOn(filterElement.findElement(By.cssSelector("div")));
+      refreshDriver();
+    }
+    filterElement = webDriver.findElement(By.cssSelector("a[data-id^=class-" + stars));
     if (!filterElement.findElement(By.cssSelector("input")).isSelected()) {
       return true;
     } else {
@@ -94,10 +101,11 @@ public class FilterBlock extends HelperBase {
   }
 
   @Nullable
-  public FilterBlock unselectAllBudgets(int min, int max) {
+  public FilterBlock unselectAllBudgets() {
     List<WebElement> all = allBudgets();
-    for (WebElement e:all) {
+    for (WebElement e : allBudgets()) {
       unselectBudget(e);
+      all = allBudgets();
     }
     return this;
   }
@@ -109,7 +117,7 @@ public class FilterBlock extends HelperBase {
     }
   }
   private void unselectBudget(WebElement e) {
-    if(!e.findElement(By.cssSelector("input")).isSelected()) {
+    if (e.findElement(By.cssSelector("input")).isSelected()) {
       clickOn(e);
       refreshDriver();
     }

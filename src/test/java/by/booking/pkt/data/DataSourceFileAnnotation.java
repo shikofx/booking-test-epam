@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation for soutce of file to DataProvider dataFromCSV
+ * Annotation for soutce of file menuTo DataProvider dataFromCSV
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

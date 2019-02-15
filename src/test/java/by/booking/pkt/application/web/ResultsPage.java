@@ -111,14 +111,16 @@ public class ResultsPage extends HelperBase {
   public void initSortByPrice() {
     wait.until(visibilityOfElementLocated(By.cssSelector("li.sort_price")));
     clickOn(By.cssSelector("li.sort_price"));
+    refreshDriver();
   }
 
 
   public void initSortByDistance() {
     By sortByDistance = By.cssSelector("li.sort_distance_from_search a");
-    showDropdown(By.cssSelector("#sortbar_dropdown_button"), By.cssSelector("#sortbar_dropdown_options"), 5);
+    displayDropDown(By.cssSelector("#sortbar_dropdown_button"), By.cssSelector("#sortbar_dropdown_options"), 5);
     wait.until(visibilityOfElementLocated(sortByDistance));
     clickOn(sortByDistance);
+    refreshDriver();
   }
 
 }

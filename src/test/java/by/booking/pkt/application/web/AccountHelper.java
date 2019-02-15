@@ -16,17 +16,18 @@ public class AccountHelper extends HelperBase {
   }
 
   public void wishlists() {
-    to();
-    clickOn(By.cssSelector("div[class*=wishlists"));
+    menuTo();
+    //wait.until(visibilityOfElementLocated(By.cssSelector("div[class*=wishlists]")));
+    clickOn(By.cssSelector("div[class*=wishlists]"));
   }
 
   public void logout() {
-    to();
+    menuTo();
     clickOn(By.cssSelector("input[name=logout]+input"));
   }
 
-  public AccountHelper to() {
-    showDropdown(By.cssSelector("#current_account span[class=user_name_block]"), By.cssSelector(".profile-menu"), 5);
+  public AccountHelper menuTo() {
+    displayDropDown(By.cssSelector("#current_account span[class=user_name_block]"), By.cssSelector(".profile-menu"), 5);
     return this;
   }
 
@@ -78,7 +79,7 @@ public class AccountHelper extends HelperBase {
       isDropedMenu = false;
     }
     if(isDropedMenu) {
-      showDropdown(By.cssSelector("#current_account a"), By.cssSelector("div.profile-menu"), 5);
+      displayDropDown(By.cssSelector("#current_account a"), By.cssSelector("div.profile-menu"), 5);
       return By.cssSelector("div.profile-menu-auth-item a.js-header-loginAs-link");
     } else {
       return By.cssSelector("#current_account a");
