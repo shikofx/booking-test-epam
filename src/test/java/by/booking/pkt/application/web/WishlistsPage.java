@@ -1,10 +1,12 @@
 package by.booking.pkt.application.web;
 
+import by.booking.pkt.model.Hotel;
 import by.booking.pkt.model.Wishlist;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
@@ -15,25 +17,60 @@ public class WishlistsPage extends HelperBase {
     super(webDriver, wait, implicitlyWait);
   }
 
-  public WishlistsPage createNewWithName(String listName) throws InterruptedException {
-
-    System.out.println(webDriver.findElement(By.cssSelector(".js-listview-header-dropdown span")).getText());
-    displayDropDown(By.cssSelector("div[class*=bui-dropdown] span"), By.cssSelector("div.listview__lists"), 5);
-    List<WebElement> beforeList = webDriver.findElements(By.cssSelector("div:not(.fly-dropdown_hidden) .listview__lists div"));
-    hideDropdown(By.cssSelector("div[class*=bui-dropdown] span"), By.cssSelector("div.listview__lists"));
+  public Wishlist createNewWithName(String listName) throws InterruptedException {
+    List<Wishlist> beforeList = getWishlists();
     Alert alertCreateList = alertAfterClick(By.cssSelector("button[class*=js-listview-create-list] span"));
     alertCreateList.sendKeys(listName);
     alertCreateList.accept();
-
     wait.until((WebDriver d) -> {
       return d.findElement(By.cssSelector(".js-listview-header-dropdown span")).getText().equals(listName);
     });
-    System.out.println(webDriver.findElement(By.cssSelector(".js-listview-header-dropdown span")).getText());
-    displayDropDown(By.cssSelector("div[class*=bui-dropdown] span"), By.cssSelector("div.listview__lists"), 5);
-    List<WebElement> afterList = webDriver.findElements(By.cssSelector("div:not(.fly-dropdown_hidden) .listview__lists div"));
-    System.out.println(beforeList.size() + "++" + afterList.size());
-    //refreshDriver();
-    return this;
+    List<Wishlist> afterList = getWishlists();
+    if(afterList.size()==(beforeList.size()+1)){
+      Comparator<? super Wishlist> byId = (wl1, wl2)->Integer.compare(wl1.getId(),wl2.getId());
+      return afterList.stream().max(byId).get();
+    } else {
+      return null;
+    }
+  }
+
+  private void refreshWislists() {
+    displayDropDown(By.cssSelector("div[class*=bui-dropdown] span"), By.cssSelector("div:last-of-type .listview__lists"), 5);
+    hideDropdown(By.cssSelector("div[class*=bui-dropdown] span"), By.cssSelector("div:last-of-type .listview__lists"));
+  }
+
+  public List<Wishlist> getWishlists() {
+    refreshWislists();
+    List<Wishlist> wishlists = new ArrayList<>();
+    for(WebElement e:getWishlistsElements()){
+      Wishlist wl=new Wishlist().
+              withId(getWishlistId(e)).
+              withName(getWishlistName(e)).
+              withHotels(getWishlistHotels(e));
+      System.out.println(wl.toString());
+      wishlists.add(wl);
+    }
+    return wishlists;
+  }
+
+  private List<Hotel> getWishlistHotels(WebElement e) {
+    List<Hotel> hotels = new ArrayList<>();
+    return hotels;
+  }
+
+  private String getWishlistName(WebElement e) {
+    String s = e.getText();//findElement(By.cssSelector("span.listmap__list_name")).getText();
+    return s;
+  }
+
+  private int getWishlistId(WebElement e) {
+    int id=Integer.parseInt(e.getAttribute("data-id"));
+    return id;
+  }
+
+  private List<WebElement> getWishlistsElements() {
+    List<WebElement> list = webDriver.findElements(By.cssSelector("div:last-of-type .listview__lists div"));//("div:not(.fly-dropdown_hidden) .listview__lists div"));
+    return list;
   }
 
   public WishlistsPage deleteWishlist(Wishlist list) throws InterruptedException {
@@ -73,10 +110,9 @@ public class WishlistsPage extends HelperBase {
     return url;
   }
 
- /* public Wishlist defaultList() {
-    wait.until(presenceOfElementLocated(By.cssSelector("div[class*=bui-dropdown]")));
-    return new Wishlist(webDriver.findElement(By.cssSelector("div[class*=bui-dropdown] span")).getText());
-  }*/
+  public String defaultList() {
+    return webDriver.findElement(By.cssSelector("div[class*=bui-dropdown] span")).getText();
+  }
 
  /* public Wishlist currentList() {
     wait.until(presenceOfElementLocated(By.cssSelector("div.wl-bui-header h1")));

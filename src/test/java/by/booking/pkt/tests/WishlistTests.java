@@ -3,8 +3,10 @@ package by.booking.pkt.tests;
 import by.booking.pkt.data.DataSourceFileAnnotation;
 import by.booking.pkt.data.FileDataProvider;
 import by.booking.pkt.model.SearchData;
+import by.booking.pkt.model.Wishlist;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
+import org.testng.asserts.Assertion;
 import org.testng.asserts.SoftAssert;
 
 import java.util.List;
@@ -19,16 +21,14 @@ public class WishlistTests extends TBase {
   public void testListCreate(SearchData searchData) throws InterruptedException {
     app.account().loginAs(searchData.userName(), searchData.userPassword());
     app.account().menuTo().wishlists();
-    app.wishlists().createNewWithName("Best wishlist");
-    //List<Wishlist> oldLists = app.wishlists().getAll();
-   /* Wishlist newList = new Wishlist("Go BR");
-    app.wishlists().create(newList);
-    List<WebElement> newLists = app.wishlists().getAll();
-    Wishlist defaultList = app.wishlists().defaultList();
+    Wishlist newWishlist = app.wishlists().createNewWithName(searchData.getWishlistName());
+    String defaultListName = app.wishlists().defaultList();
+    System.out.println(newWishlist.getId()+"-"+newWishlist.getName()+"-"+defaultListName);
     Assertion assertion = new Assertion();
-    //assertion.assertTrue(newLists.contains(oldLists), "New wishlists doesn't contain old wishlists");
-    assertion.assertEquals(newLists.size(), oldLists.size() + 1, "Lists count does not change!");
-    assertion.assertEquals(defaultList.getName(), newList.getName(), "New list is not default!");*/
+    assertion.assertNotEquals(newWishlist, null, "Wishlist create failed!");
+    assertion.assertEquals(newWishlist.getName(), searchData.getWishlistName(), "Name of new list is not valid!");
+    assertion.assertEquals(defaultListName, searchData.getWishlistName(), "Name of default list is not '"+searchData.getWishlistName()+"'!");
+
 
   }
 
