@@ -16,17 +16,17 @@ public class AccountHelper extends HelperBase {
   }
 
   public void wishlists() {
-    menuTo();
+    goTo();
     //wait.until(visibilityOfElementLocated(By.cssSelector("div[class*=wishlists]")));
     clickOn(By.cssSelector("div[class*=wishlists]"));
   }
 
   public void logout() {
-    menuTo();
+    goTo();
     clickOn(By.cssSelector("input[name=logout]+input"));
   }
 
-  public AccountHelper menuTo() {
+  public AccountHelper goTo() {
     displayDropDown(By.cssSelector("#current_account span[class=user_name_block]"), By.cssSelector(".profile-menu"), 5);
     return this;
   }
@@ -40,7 +40,6 @@ public class AccountHelper extends HelperBase {
     By usernameLocator = By.cssSelector("[name=username]");
     By passwordLocator = By.cssSelector("[name=password]");
     if (devidedForm) {
-      System.out.println("Form 1");
       wait.until(visibilityOfElementLocated(By.cssSelector("form.nw-signin")));
       signInForm = webDriver.findElement(By.cssSelector("form.nw-signin"));
       typeText(signInForm, usernameLocator, username);
@@ -50,7 +49,6 @@ public class AccountHelper extends HelperBase {
       typeText(signInForm, passwordLocator, password);
       clickOn(signInForm, By.cssSelector("[type=submit]"));
     } else {
-      System.out.println("Form 2");
       wait.until(visibilityOfElementLocated(By.cssSelector("form[target=log_tar]")));
       signInForm = webDriver.findElement(By.cssSelector("form[target=log_tar]"));
       typeText(signInForm, usernameLocator, username);

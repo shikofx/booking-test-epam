@@ -1,5 +1,7 @@
 package by.booking.pkt.model;
 
+import java.util.Objects;
+
 public class Hotel {
   private String id;
   private String name;
@@ -10,6 +12,21 @@ public class Hotel {
 
   public String getId() {
     return id;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Hotel hotel = (Hotel) o;
+    return Objects.equals(id, hotel.id) &&
+            Objects.equals(name, hotel.name);
+  }
+
+  @Override
+  public int hashCode() {
+
+    return Objects.hash(id, name);
   }
 
   public Hotel withID(String id) {
@@ -51,5 +68,13 @@ public class Hotel {
   public Hotel withTotalPrice(int totalPrice) {
     this.totalPrice = totalPrice;
     return this;
+  }
+
+  @Override
+  public String toString() {
+    return "Hotel{" +
+            "id='" + id + '\'' +
+            ", name='" + name + '\'' +
+            '}';
   }
 }

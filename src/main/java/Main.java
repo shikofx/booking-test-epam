@@ -9,6 +9,8 @@ public class Main {
     System.out.println(getStringByPattern("[\\,\\d]+", "1,900 rм от центра"));
     String s = "9 963 руб.";
     System.out.println(getStringByPattern("[\\s\\d]+\\d", s));
+    s = "jhghgkj (0)";
+    System.out.println(getStringByPattern(".+(?=\\s)", s));
 
   }
 

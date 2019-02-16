@@ -5,7 +5,7 @@ public class TBaseMethods extends TBase {
 //
 //  @BeforeMethod(alwaysRun = true)
 //  public void goToBooking() throws Exception {
-//    app.windows().goTo("https://booking.com");
+//    app.windows().goToWishlist("https://booking.com");
 //  }
 //
 //  @AfterMethod(alwaysRun = true)

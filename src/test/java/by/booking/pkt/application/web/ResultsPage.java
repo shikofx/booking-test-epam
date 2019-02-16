@@ -22,8 +22,13 @@ public class ResultsPage extends HelperBase {
     clickOn(item, By.cssSelector(".sr-cta-button-row"));
   }
 
-  public void goTo(WebElement result) {
-    clickOn(result, By.cssSelector(".sr-cta-button-row"));
+  public ResultsPage goToHotel(Hotel hotel) {
+    hotelToElement(hotel).findElement(By.cssSelector(".sr_cta_button")).click();
+    return this;
+  }
+
+  private WebElement hotelToElement(Hotel hotel) {
+    return webDriver.findElement(By.cssSelector("div.sr_item[data-hotelid='" + hotel.getId() + "']"));
   }
 
 
@@ -38,9 +43,20 @@ public class ResultsPage extends HelperBase {
     return searchResult;
   }
 
+  public Hotel getFirstHotel() {
+    WebElement searchResult;
+    if (isElementPresent(By.cssSelector("div.sr_separator"), 0)) {
+      searchResult = webDriver.findElement(By.xpath("//*/div[contains(@class,'sr_separator')]/preceding-sibling::div[contains(@class,'sr_item')]"));
+    } else {
+      searchResult = webDriver.findElement(By.cssSelector("div.sr_item"));
+    }
+    Hotel hotel = resultToHotel(searchResult);
+    return hotel;
+  }
+
   public List<Hotel> availableHotels() {
     List<Hotel> hotels = new ArrayList<Hotel>();
-    List<WebElement> availableList=getOnlyAvailable();
+    List<WebElement> availableList = getOnlyAvailable();
     for (WebElement e : availableList) {
       hotels.add(resultToHotel(e));
     }
@@ -63,18 +79,22 @@ public class ResultsPage extends HelperBase {
 
   public double distanceToDest(WebElement item) {
     double distance = 0;
-    String s = textByPatternNoSpace("[\\,\\d]+", item.findElement(By.cssSelector("span.distfromdest")).getText());
-    distance =Double.parseDouble(textByPatternNoSpace("[\\,\\d]+", item.findElement(By.cssSelector("span.distfromdest")).getText()).replace(',', '.'));
-    String meterField = textByPatternNoSpace("\\s.*?\\s", item.findElement(By.cssSelector("span.distfromdest")).getText());
-    if (meterField.length() > 1) {
-      distance = 1000 * distance;
+    if (isElementPresent(item, By.cssSelector("span.distfromdest"), 0)) {
+      String s = textByPatternNoSpace("[\\,\\d]+", item.findElement(By.cssSelector("span.distfromdest")).getText());
+      distance = Double.parseDouble(textByPatternNoSpace("[\\,\\d]+", item.findElement(By.cssSelector("span.distfromdest")).getText()).replace(',', '.'));
+      String meterField = textByPatternNoSpace("\\s.*?\\s", item.findElement(By.cssSelector("span.distfromdest")).getText());
+      if (meterField.length() > 1) {
+        distance = 1000 * distance;
+      }
+      return distance;
+    } else {
+      return 0;
     }
-    return distance;
   }
 
   public int getStarsCount(WebElement item) {
     int actualStars;
-    if (this.isElementPresent(item, By.cssSelector("svg[class*=stars]"),0)) {
+    if (this.isElementPresent(item, By.cssSelector("svg[class*=stars]"), 0)) {
       actualStars = Integer.parseInt(textByPatternNoSpace("\\d", getAttribute(item, By.cssSelector("svg[class*=stars]"), "class")));
     } else {
       actualStars = 0;

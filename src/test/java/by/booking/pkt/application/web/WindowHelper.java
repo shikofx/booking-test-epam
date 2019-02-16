@@ -50,4 +50,8 @@ public class WindowHelper extends HelperBase {
     String currentUrl = webDriver.getCurrentUrl();
     webDriver.navigate().back();
   }
+
+  public void refreshPage() {
+    webDriver.navigate().refresh();
+  }
 }
