@@ -1,4 +1,4 @@
-package by.booking.pkt.application.web;
+package by.booking.pkt.web;
 
 import org.jetbrains.annotations.Nullable;
 import org.openqa.selenium.By;
@@ -23,20 +23,20 @@ public class FilterBlock extends HelperBase {
   }
 
   public void selectOnlyAvailable() {
-    clickOn(By.cssSelector("[data-name=oos] div"));
-    refreshDriver();
+    webDriver.findElement(By.cssSelector("[data-name=oos] div")).click();
+    refreshPage();
   }
 
   public int getNigtsCount() {
     wait.until(presenceOfElementLocated(By.cssSelector("div.sb-dates__los")));
-    return Integer.parseInt(textByPatternNoSpace("\\d+", getText(By.cssSelector("div.sb-dates__los"))));
+    return Integer.parseInt(textByPatternNoSpace("\\d+", webDriver.findElement(By.cssSelector("div.sb-dates__los")).getText()));
   }
 
   public boolean selectStars(int stars) {
     WebElement filterElement = webDriver.findElement(By.cssSelector("a[data-id^=class-" + stars));
     if (!filterElement.findElement(By.cssSelector("input")).isSelected()) {
-      clickOn(filterElement.findElement(By.cssSelector("div")));
-      refreshDriver();
+      filterElement.findElement(By.cssSelector("div")).click();
+      refreshPage();
     }
     filterElement = webDriver.findElement(By.cssSelector("a[data-id^=class-" + stars));
     if (filterElement.findElement(By.cssSelector("input")).isSelected()) {
@@ -49,8 +49,8 @@ public class FilterBlock extends HelperBase {
   public boolean unselectStars(int stars) {
     WebElement filterElement = webDriver.findElement(By.cssSelector("a[data-id^=class-" + stars));
     if (filterElement.findElement(By.cssSelector("input")).isSelected()) {
-      clickOn(filterElement.findElement(By.cssSelector("div")));
-      refreshDriver();
+      filterElement.findElement(By.cssSelector("div")).click();
+      refreshPage();
     }
     filterElement = webDriver.findElement(By.cssSelector("a[data-id^=class-" + stars));
     if (!filterElement.findElement(By.cssSelector("input")).isSelected()) {
@@ -68,13 +68,13 @@ public class FilterBlock extends HelperBase {
     int previous = 0;
     int current = 0;
     for (int i = 0; i < all.size() && maxBudget == 0; i++) {
-      current = Integer.parseInt(getAttribute(all.get(i), "data-value"));
+      current = Integer.parseInt(all.get(i).getAttribute("data-value"));
       if (i < (all.size() - 1)) {
         if (min > previous) {
           if (i > 0) {
-            previous = Integer.parseInt(getAttribute(all.get(i - 1), "data-value"));
+            previous = Integer.parseInt(all.get(i - 1).getAttribute("data-value"));
             if(min<current&&min>previous){
-              min = Integer.parseInt(getAttribute(all.get(i - 1),"data-value"));
+              min = Integer.parseInt(all.get(i - 1).getAttribute("data-value"));
             }
           }
           if (min <= current)
@@ -112,14 +112,14 @@ public class FilterBlock extends HelperBase {
 
   private void selectBudget(WebElement e) {
     if(!e.findElement(By.cssSelector("input")).isSelected()) {
-      clickOn(e);
-      refreshDriver();
+      e.click();
+      refreshPage();
     }
   }
   private void unselectBudget(WebElement e) {
     if (e.findElement(By.cssSelector("input")).isSelected()) {
-      clickOn(e);
-      refreshDriver();
+      e.click();
+      refreshPage();
     }
   }
 

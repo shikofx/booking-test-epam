@@ -1,4 +1,4 @@
-package by.booking.pkt.application.web;
+package by.booking.pkt.web;
 
 import by.booking.pkt.model.Hotel;
 import by.booking.pkt.model.Wishlist;
@@ -71,7 +71,7 @@ public class HotelPage extends HelperBase {
     WebElement wishlistElement = wishlistToElement(wishlist);
     String url = webDriver.getCurrentUrl();
     if (wishlistElement.findElement(By.cssSelector("input")).isSelected()) {
-      clickOn(wishlistElement, By.cssSelector("input~span a"));
+      wishlistElement.findElement(By.cssSelector("input~span a")).click();
     }
     return this;
   }
@@ -83,7 +83,7 @@ public class HotelPage extends HelperBase {
   private void unselectAllElements(List<WebElement> list) {
     for (WebElement e : list) {
       if (e.findElement(By.cssSelector("input")).isSelected())
-        clickOn(e, By.cssSelector("input~span.bui-checkbox__label"));
+        e.findElement(By.cssSelector("input~span.bui-checkbox__label")).click();
     }
   }
 }

@@ -1,4 +1,4 @@
-package by.booking.pkt.application.web;
+package by.booking.pkt.web;
 
 import by.booking.pkt.model.Hotel;
 import by.booking.pkt.model.Wishlist;
@@ -118,7 +118,7 @@ public class WishlistsPage extends HelperBase {
     wait.until(visibilityOfElementLocated(By.cssSelector("div[class=bui-dropdown]+button")));
     displayDropDown(By.cssSelector("div[class=bui-dropdown]+button"), By.cssSelector("div.listview-share"), 5);
     wait.until(visibilityOfElementLocated(By.cssSelector("p[class*=content] input")));
-    String url = getAttribute(By.cssSelector("p[class*=content] input"), "defaultValue");
+    String url = webDriver.findElement(By.cssSelector("p[class*=content] input")).getAttribute("defaultValue");
     return url;
   }
   public String defaultList() {
@@ -153,11 +153,6 @@ public class WishlistsPage extends HelperBase {
             withName(item.findElement(By.cssSelector("h1 a")).getText());
     //Для тестового задания опустил считывание всех данных об отеле
   }
-  public String getUrlOf(WebElement hotel) {
-    return getTextByPattern(getAttribute(hotel, By.cssSelector("header[class*=header] a"), "href"), ".+/[A-Za-z0-9_-]*");
-  }
-
-
   public boolean findWishlist(Wishlist newWishlist) {
     for (Wishlist wl : getWishlists()) {
       if (wl.equals(newWishlist))

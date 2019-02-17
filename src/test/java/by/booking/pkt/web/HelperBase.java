@@ -1,4 +1,4 @@
-package by.booking.pkt.application.web;
+package by.booking.pkt.web;
 
 import org.jetbrains.annotations.Nullable;
 import org.openqa.selenium.By;
@@ -38,12 +38,13 @@ public class HelperBase {
     wait.until(visibilityOfElementLocated(whatClick));
     for (int i = 0; i < 3; i++) {
       if (!isElementPresent(whatWait, secondsToWait) || !isElementDisplayed(whatWait))
-
-        clickOn(whatClick);
+        webDriver.findElement(whatClick).click();
       else break;
     }
   }
-
+  public void refreshPage() {
+    webDriver.navigate().refresh();
+  }
   public void displayDropDown(By toClick, By toWait) {
     wait.until((WebDriver d) -> {
       try {
@@ -117,47 +118,14 @@ public class HelperBase {
     return isElementPresent;
   }
 
-  protected void clickOn(By locator) {
-    webDriver.findElement(locator).click();
-  }
-
-  protected void clickOn(WebElement element) {
-    element.click();
-  }
-
-  protected void clickOn(WebElement inElement, By locator) {
-    inElement.findElement(locator).click();
-  }
-
-  protected void refreshDriver() {
-    webDriver.navigate().refresh();
-  }
-
-  protected String getAttribute(WebElement inElement, String attributeName) {
-    return inElement.getAttribute(attributeName);
-  }
-
-  @Nullable
-  public String getAttribute(By where, String attributeName) {
-    return webDriver.findElement(where).getAttribute(attributeName);
-  }
-
-  protected String getAttribute(WebElement inElement, By locator, String attributeName) {
-    return inElement.findElement(locator).getAttribute(attributeName);
-  }
-
-  public String getText(By locator) {
-    return webDriver.findElement(locator).getText();
-  }
-
   protected void typeText(WebElement inElement, By locator, String text) {
-    clickOn(inElement, locator);
+    inElement.findElement(locator).click();
     inElement.findElement(locator).clear();
     inElement.findElement(locator).sendKeys(text);
   }
 
   protected void typeText(By where, String text) {
-    clickOn(where);
+    webDriver.findElement(where).click();
     webDriver.findElement(where).clear();
     webDriver.findElement(where).sendKeys(text);
   }

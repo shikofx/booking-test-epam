@@ -1,5 +1,5 @@
 
-package by.booking.pkt.application.web;
+package by.booking.pkt.web;
 
 import by.booking.pkt.model.Hotel;
 import org.openqa.selenium.By;
@@ -19,7 +19,7 @@ public class ResultsPage extends HelperBase {
 
   public void goTo(int resultNumber) {
     WebElement item = webDriver.findElement(By.cssSelector("#hotellist_inner>.sr_item:nth-of-type(" + resultNumber + ")"));
-    clickOn(item, By.cssSelector(".sr-cta-button-row"));
+    item.findElement(By.cssSelector(".sr-cta-button-row")).click();
   }
 
   public ResultsPage goToHotel(Hotel hotel) {
@@ -95,7 +95,7 @@ public class ResultsPage extends HelperBase {
   public int getStarsCount(WebElement item) {
     int actualStars;
     if (this.isElementPresent(item, By.cssSelector("svg[class*=stars]"), 0)) {
-      actualStars = Integer.parseInt(textByPatternNoSpace("\\d", getAttribute(item, By.cssSelector("svg[class*=stars]"), "class")));
+      actualStars = Integer.parseInt(textByPatternNoSpace("\\d", item.findElement(By.cssSelector("svg[class*=stars]")).getAttribute("class")));
     } else {
       actualStars = 0;
     }
@@ -113,7 +113,6 @@ public class ResultsPage extends HelperBase {
   }
 
   public String getHotelName(WebElement hotel) {
-    //wait.until(presenceOfNestedElementLocatedBy(hotel, By.cssSelector("span.sr-hotel__name")));
     return (hotel.findElement(By.cssSelector("span.sr-hotel__name")).getText());
   }
 
@@ -121,7 +120,7 @@ public class ResultsPage extends HelperBase {
     List<WebElement> allResults = getAllResults();
     List<WebElement> availableResults = new ArrayList<WebElement>();
     for (WebElement e : allResults) {
-      if (!this.getAttribute(e, "className").contains("soldout_property")) {
+      if (!e.getAttribute("className").contains("soldout_property")) {
         availableResults.add(e);
       }
     }
@@ -130,8 +129,8 @@ public class ResultsPage extends HelperBase {
 
   public void initSortByPrice() {
     wait.until(visibilityOfElementLocated(By.cssSelector("li.sort_price")));
-    clickOn(By.cssSelector("li.sort_price"));
-    refreshDriver();
+    webDriver.findElement(By.cssSelector("li.sort_price")).click();
+    refreshPage();
   }
 
 
@@ -139,8 +138,8 @@ public class ResultsPage extends HelperBase {
     By sortByDistance = By.cssSelector("li.sort_distance_from_search a");
     displayDropDown(By.cssSelector("#sortbar_dropdown_button"), By.cssSelector("#sortbar_dropdown_options"), 5);
     wait.until(visibilityOfElementLocated(sortByDistance));
-    clickOn(sortByDistance);
-    refreshDriver();
+    webDriver.findElement(sortByDistance).click();
+    refreshPage();
   }
 
 }

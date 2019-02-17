@@ -1,4 +1,4 @@
-package by.booking.pkt.application.web;
+package by.booking.pkt.web;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -49,9 +49,5 @@ public class WindowHelper extends HelperBase {
   public void back() {
     String currentUrl = webDriver.getCurrentUrl();
     webDriver.navigate().back();
-  }
-
-  public void refreshPage() {
-    webDriver.navigate().refresh();
   }
 }

@@ -15,7 +15,7 @@ public class WishlistTests extends TBase {
   @DataSourceFileAnnotation("src\\test\\resources\\search-positive.data")
   public void testListCreate(SearchData searchData) throws InterruptedException {
     app.account().loginAs(searchData.userName(), searchData.userPassword());
-    app.account().goTo().wishlists();
+    app.account().menu().wishlists();
     Wishlist newWishlist = app.wishlists().createNewWithName(searchData.getWishlistName());
     String defaultListName = app.wishlists().defaultList();
     app.wishlists().deleteWishlist(newWishlist);
@@ -33,14 +33,14 @@ public class WishlistTests extends TBase {
   @DataSourceFileAnnotation("src\\test\\resources\\search-positive.data")
   public void testListSendLink(SearchData searchData) throws Exception {
     app.account().loginAs(searchData.userName(), searchData.userPassword());
-    app.account().goTo().wishlists();
+    app.account().menu().wishlists();
     Wishlist newWishlist = app.wishlists().createNewWithName(searchData.getWishlistName());
     app.windows().refreshPage();
     app.wishlists().setAsDefault(newWishlist);
     String urlToSend = app.wishlists().sendUrl();
     app.windows().goTo(urlToSend);
     String sendedListName = app.wishlists().sendedListName();
-    app.account().goTo().wishlists();
+    app.account().menu().wishlists();
     app.wishlists().deleteWishlist(newWishlist);
     app.account().logout();
     Assertion assertion = new Assertion();
