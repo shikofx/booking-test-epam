@@ -1,6 +1,7 @@
-package by.booking.pkt.web;
+package by.booking.pkt.application;
 
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Set;
@@ -10,6 +11,7 @@ public class WindowHelper extends HelperBase {
 
   public WindowHelper(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
     super(webDriver, wait, implicitlyWait);
+    PageFactory.initElements(webDriver, this);
   }
 
   public void goTo(String url) {

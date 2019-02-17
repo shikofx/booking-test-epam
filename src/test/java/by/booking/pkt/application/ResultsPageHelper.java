@@ -1,10 +1,11 @@
 
-package by.booking.pkt.web;
+package by.booking.pkt.application;
 
 import by.booking.pkt.model.Hotel;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.ArrayList;
@@ -12,9 +13,10 @@ import java.util.List;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
 
-public class ResultsPage extends HelperBase {
-  public ResultsPage(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
+public class ResultsPageHelper extends HelperBase {
+  public ResultsPageHelper(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
     super(webDriver, wait, implicitlyWait);
+    PageFactory.initElements(webDriver, this);
   }
 
   public void goTo(int resultNumber) {
@@ -22,7 +24,7 @@ public class ResultsPage extends HelperBase {
     item.findElement(By.cssSelector(".sr-cta-button-row")).click();
   }
 
-  public ResultsPage goToHotel(Hotel hotel) {
+  public ResultsPageHelper goToHotel(Hotel hotel) {
     hotelToElement(hotel).findElement(By.cssSelector(".sr_cta_button")).click();
     return this;
   }

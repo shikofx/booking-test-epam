@@ -1,22 +1,29 @@
-package by.booking.pkt.web;
+package by.booking.pkt.application;
 
 import by.booking.pkt.model.SearchData;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class SearchPage extends HelperBase {
-  public SearchPage(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
+public class SearchPageHelper extends HelperBase {
+  public SearchPageHelper(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
     super(webDriver, wait, implicitlyWait);
+    PageFactory.initElements(webDriver, this);
   }
 
-  public SearchPage initSearch() {
+  @FindBy(id = "ss")
+  private WebElement placeInput;
+
+  public SearchPageHelper initSearch() {
     webDriver.findElement(By.cssSelector("button[data-sb-id=main][type=submit]")).click();
     return this;
   }
 
-  public SearchPage fillForm(SearchData searchData) {
+  public SearchPageHelper fillForm(SearchData searchData) {
     setCurrency(searchData.currency());
     setPlace(searchData.whereGo());
     setDates(searchData.inDate(), searchData.outDate());
@@ -26,7 +33,7 @@ public class SearchPage extends HelperBase {
     return this;
   }
 
-  public SearchPage setCurrency(String currency) {
+  public SearchPageHelper setCurrency(String currency) {
     if (!(webDriver.findElement(By.cssSelector("[name=selected_currency]")).getAttribute("value").equals(currency))) {
       displayDropDown(By.cssSelector("[data-id=currency_selector]"), By.cssSelector("#current_currency_foldout"), 5);
       webDriver.findElement(By.cssSelector("a[data-currency=" + currency + "]")).click();
@@ -34,12 +41,12 @@ public class SearchPage extends HelperBase {
     return this;
   }
 
-  public SearchPage setPlace(String place) {
-    typeText(By.cssSelector("#ss"), place);
+  public SearchPageHelper setPlace(String place) {
+    inputText(placeInput, place);
     return this;
   }
 
-  public SearchPage setDates(String checkInDate, String checkOutDate) {
+  public SearchPageHelper setDates(String checkInDate, String checkOutDate) {
     String firstDayOfMonthMonth = getFirstDayOfMonth(checkInDate);
     displayDropDown(By.cssSelector("div.xp__dates.xp__group"), By.cssSelector("div.bui-calendar"), 5);
     while (!firstDayOfMonthMonth.equals(webDriver.findElement(By.cssSelector("div.bui-calendar td[data-date^='20']")).getAttribute("data-date"))) {
@@ -51,17 +58,17 @@ public class SearchPage extends HelperBase {
     return this;
   }
 
-  public SearchPage setChildren(int count) {
+  public SearchPageHelper setChildren(int count) {
     setCount("group_children", count);
     return this;
   }
 
-  public SearchPage setAdults(int count) {
+  public SearchPageHelper setAdults(int count) {
     setCount("group_adults", count);
     return this;
   }
 
-  public SearchPage setRooms(int count) {
+  public SearchPageHelper setRooms(int count) {
     setCount("no_rooms", count);
     return this;
   }

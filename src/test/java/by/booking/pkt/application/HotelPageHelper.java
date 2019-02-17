@@ -1,4 +1,4 @@
-package by.booking.pkt.web;
+package by.booking.pkt.application;
 
 import by.booking.pkt.model.Hotel;
 import by.booking.pkt.model.Wishlist;
@@ -7,6 +7,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.ArrayList;
@@ -14,10 +16,14 @@ import java.util.List;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.numberOfElementsToBe;
 
-public class HotelPage extends HelperBase {
-  public HotelPage(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
+public class HotelPageHelper extends HelperBase {
+  public HotelPageHelper(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
     super(webDriver, wait, implicitlyWait);
+    PageFactory.initElements(webDriver, this);
   }
+
+  @FindBy(css = "#hotel-wishlists input[type=text]")
+  private WebElement newListInput;
 
   public String getUrl() {
     return getTextByPattern(webDriver.getCurrentUrl(), ".+/[A-Za-z0-9_-]*");
@@ -56,18 +62,18 @@ public class HotelPage extends HelperBase {
     return Integer.parseInt(wl.findElement(By.cssSelector("input")).getAttribute("data-list-id"));
   }
 
-  private HotelPage enterWishlistName(String listName) {
-    typeText(By.cssSelector("#hotel-wishlists input[type=text]"), listName);
+  private HotelPageHelper enterWishlistName(String listName) {
+    inputText(newListInput, listName);
     return this;
   }
 
-  private HotelPage submitWishlistCreating(int size) {
+  private HotelPageHelper submitWishlistCreating(int size) {
     webDriver.findElement(By.cssSelector("#hotel-wishlists input[type=text]")).sendKeys(Keys.ENTER);
     wait.until(numberOfElementsToBe(By.cssSelector("#hotel-wishlists label.js-wl-dropdown-item"), size + 1));
     return this;
   }
 
-  public HotelPage goToWishlist(Wishlist wishlist) {
+  public HotelPageHelper goToWishlist(Wishlist wishlist) {
     WebElement wishlistElement = wishlistToElement(wishlist);
     String url = webDriver.getCurrentUrl();
     if (wishlistElement.findElement(By.cssSelector("input")).isSelected()) {

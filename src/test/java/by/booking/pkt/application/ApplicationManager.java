@@ -1,6 +1,5 @@
 package by.booking.pkt.application;
 
-import by.booking.pkt.web.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -15,29 +14,26 @@ public class ApplicationManager {
   private int implicitlyWait;
   private AccountHelper accountHelper;
   private WindowHelper windowHelper;
-  private SearchPage searchPage;
-  private ResultsPage resultsPage;
-  private HotelPage hotelPage;
-  private WishlistsPage wishlistsPage;
+  private SearchPageHelper searchPageHelper;
+  private ResultsPageHelper resultsPageHelper;
+  private HotelPageHelper hotelPageHelper;
+  private WishlistsPageHelper wishlistsPageHelper;
 
 
-
-  private FilterBlock filterBlock;
+  private FilterBoxHelper filterBoxHelper;
 
 
   public void init(int implicitlyWait) {
     webDriver = new ChromeDriver();
     setImplicitlyWait(implicitlyWait);
     wait = new WebDriverWait(webDriver, 30);
-
     accountHelper = new AccountHelper(webDriver, wait, implicitlyWait);
-    searchPage = new SearchPage(webDriver, wait, implicitlyWait);
-    resultsPage = new ResultsPage(webDriver, wait, implicitlyWait);
-    filterBlock = new FilterBlock(webDriver, wait, implicitlyWait);
-    hotelPage = new HotelPage(webDriver, wait, implicitlyWait);
+    searchPageHelper = new SearchPageHelper(webDriver, wait, implicitlyWait);
+    resultsPageHelper = new ResultsPageHelper(webDriver, wait, implicitlyWait);
+    filterBoxHelper = new FilterBoxHelper(webDriver, wait, implicitlyWait);
+    hotelPageHelper = new HotelPageHelper(webDriver, wait, implicitlyWait);
     windowHelper = new WindowHelper(webDriver, wait, implicitlyWait);
-    wishlistsPage = new WishlistsPage(webDriver, wait, implicitlyWait);
-
+    wishlistsPageHelper = new WishlistsPageHelper(webDriver, wait, implicitlyWait);
     windowHelper.maximazeWindow();
   }
 
@@ -67,23 +63,23 @@ public class ApplicationManager {
     return windowHelper;
   }
 
-  public SearchPage forSearch() {
-    return searchPage;
+  public SearchPageHelper forSearch() {
+    return searchPageHelper;
   }
 
-  public ResultsPage results() {
-    return resultsPage;
+  public ResultsPageHelper results() {
+    return resultsPageHelper;
   }
 
-  public HotelPage hotel() {
-    return hotelPage;
+  public HotelPageHelper hotel() {
+    return hotelPageHelper;
   }
 
-  public WishlistsPage wishlists() {
-    return wishlistsPage;
+  public WishlistsPageHelper wishlists() {
+    return wishlistsPageHelper;
   }
 
-  public FilterBlock filters() {
-    return filterBlock;
+  public FilterBoxHelper filters() {
+    return filterBoxHelper;
   }
 }

@@ -48,8 +48,8 @@ public class HotelTests extends TBaseMethods {
 
     Assertion assertion = new Assertion();
     assertion.assertTrue(app.wishlists().findWishlist(newWishlist), "There is no such wishlist!");
-    Hotel hotelInList = app.wishlists().hotelsInList().get(0);
-    assertion.assertTrue(hotelInList.equals(newWishlist.getHotelList().get(0)), "There is no suh hotel in wishlist");
+    Hotel hotel = app.wishlists().hotelsInList().get(0);
+    assertion.assertTrue(hotel.equals(newWishlist.getHotelList().get(0)), "There is no suh hotel in wishlist");
     softAssert.assertAll();
 
    /* app.account().goToWishlist().logout();

@@ -1,8 +1,9 @@
-package by.booking.pkt.web;
+package by.booking.pkt.application;
 
 import by.booking.pkt.model.Hotel;
 import by.booking.pkt.model.Wishlist;
 import org.openqa.selenium.*;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.ArrayList;
@@ -11,10 +12,11 @@ import java.util.List;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
-public class WishlistsPage extends HelperBase {
+public class WishlistsPageHelper extends HelperBase {
 
-  public WishlistsPage(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
+  public WishlistsPageHelper(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
     super(webDriver, wait, implicitlyWait);
+    PageFactory.initElements(webDriver, this);
   }
 
   public Wishlist createNewWithName(String listName) throws InterruptedException {
@@ -34,7 +36,7 @@ public class WishlistsPage extends HelperBase {
     }
   }
 
-  public WishlistsPage deleteWishlist(Wishlist list) throws InterruptedException {
+  public WishlistsPageHelper deleteWishlist(Wishlist list) throws InterruptedException {
     displayDropDown(By.cssSelector("div[class*=bui-dropdown] span"), By.cssSelector("div:last-of-type .listview__lists"), 5);
     WebElement wishlistElement = webDriver.findElement(By.cssSelector("div:last-of-type .listview__lists div[data-id='" + list.getId() + "']"));
     Alert alertDeleteList = alertAfterClick(wishlistElement.findElement(By.cssSelector("span.listmap__remove_list")));
@@ -43,7 +45,7 @@ public class WishlistsPage extends HelperBase {
     return this;
   }
 
-  public WishlistsPage setAsDefault(Wishlist wishlist) {
+  public WishlistsPageHelper setAsDefault(Wishlist wishlist) {
     displayDropDown(By.cssSelector("div[class*=bui-dropdown] span"), By.cssSelector("div:last-of-type .listview__lists"), 5);
     WebElement list = webDriver.findElement(By.cssSelector("div:last-of-type .listview__lists div[data-id='" + wishlist.getId() + "']"));
     if (!list.getAttribute("class").contains("selected"))
