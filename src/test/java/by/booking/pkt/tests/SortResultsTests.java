@@ -14,7 +14,7 @@ public class SortResultsTests extends TBase {
           dataProviderClass = FileDataProvider.class, dataProvider = "searchDataFromCSV")
   @DataSourceFileAnnotation("src\\test\\resources\\search-positive.data")
   public void testSortByDistance(SearchData searchData) {
-    app.forSearch().fillForm(searchData).initSearch();
+    app.searchPage().searchFor(searchData);
     app.results().initSortByDistance();
     List<Hotel> availableHotels = app.results().availableHotels();
     for (int i = 1; i < availableHotels.size(); i++) {
@@ -34,7 +34,7 @@ public class SortResultsTests extends TBase {
           dataProviderClass = FileDataProvider.class, dataProvider = "searchDataFromCSV")
   @DataSourceFileAnnotation("src\\test\\resources\\search-positive.data")
   public void testSortByPrice(SearchData searchData) {
-    app.forSearch().fillForm(searchData).initSearch();
+    app.searchPage().searchFor(searchData);
     app.results().initSortByPrice();
     List<Hotel> availableHotels = app.results().availableHotels();
     for (int i = 1; i < availableHotels.size(); i++) {

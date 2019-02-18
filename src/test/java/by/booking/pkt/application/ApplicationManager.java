@@ -63,7 +63,7 @@ public class ApplicationManager {
     return windowHelper;
   }
 
-  public SearchPageHelper forSearch() {
+  public SearchPageHelper searchPage() {
     return searchPageHelper;
   }
 

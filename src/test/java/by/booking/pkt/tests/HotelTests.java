@@ -19,13 +19,13 @@ public class HotelTests extends TBaseMethods {
   @DataSourceFileAnnotation("src\\test\\resources\\search-positive.data")
   public void testaddHotelToNewList(SearchData searchData) {
     app.account().loginAs(searchData.userName(), searchData.userPassword());
-    app.forSearch().fillForm(searchData).initSearch();
+    app.searchPage().searchFor(searchData);
 
     String resultsWindow = app.windows().handle();
     Set<String> oldWindows = app.windows().all();
 
     Hotel first = app.results().getFirstHotel();
-    app.results().goToHotel(first);
+    app.results().goToHotelPage(first);
 
     String hotelWindow = app.windows().getNew(oldWindows);
     app.windows().switchTo(hotelWindow);
@@ -52,10 +52,10 @@ public class HotelTests extends TBaseMethods {
     assertion.assertTrue(hotel.equals(newWishlist.getHotelList().get(0)), "There is no suh hotel in wishlist");
     softAssert.assertAll();
 
-   /* app.account().goToWishlist().logout();
-    app.windows().close();
-    app.windows().switchTo(hotelWindow);
-    app.windows().close();
-    app.windows().switchTo(resultsWindow);*/
+//    app.account().wishlists().logout();
+//    app.windows().close();
+//    app.windows().switchTo(hotelWindow);
+//    app.windows().close();
+//    app.windows().switchTo(resultsWindow);
   }
 }

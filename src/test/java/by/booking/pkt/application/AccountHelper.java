@@ -18,7 +18,7 @@ public class AccountHelper extends HelperBase {
   }
 
   @FindBy(css = "#current_account span[class=user_name_block]")
-  private WebElement currentAccountMenu;
+  private WebElement initCurrentAccountMenu;
 
   @FindBy(css = ".profile-navigationMenu")
   private WebElement navigationMenu;
@@ -57,7 +57,7 @@ public class AccountHelper extends HelperBase {
   private WebElement submitInForm;
 
   public AccountHelper navigationMenu() {
-    displayDropDown(By.cssSelector("#current_account span[class=user_name_block]"), By.cssSelector(".profile-navigationMenu"), 5);
+    displayDropDown(initCurrentAccountMenu, navigationMenu, 5);
     return this;
   }
 
@@ -76,14 +76,10 @@ public class AccountHelper extends HelperBase {
     boolean isDevidedForm = isDevidedForm();
     logInButton.click();
     if (isDevidedForm) {
-      wait.until((WebDriver d) -> {
-        return usernameOnPage.isEnabled() && usernameOnPage.isDisplayed();
-      });
+      isElementPresentAndVisible(usernameOnPage);
       inputText(usernameOnPage, username);
       submitOnPage.click();
-      wait.until((WebDriver d) -> {
-        return passwordOnPage.isEnabled() && passwordOnPage.isDisplayed();
-      });
+      isElementPresentAndVisible(passwordOnPage);
       inputText(passwordOnPage, password);
       submitOnPage.click();
     } else {

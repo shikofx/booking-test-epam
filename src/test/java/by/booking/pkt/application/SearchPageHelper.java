@@ -18,86 +18,113 @@ public class SearchPageHelper extends HelperBase {
   @FindBy(id = "ss")
   private WebElement placeInput;
 
-  public SearchPageHelper initSearch() {
-    webDriver.findElement(By.cssSelector("button[data-sb-id=main][type=submit]")).click();
+  @FindBy(css = "[data-id=currency_selector]")
+  private WebElement currencySelectButton;
+
+  @FindBy(css = "button[data-sb-id=main][type=submit]")
+  private WebElement searchButton;
+
+  @FindBy(css = "#current_currency_foldout")
+  private WebElement currencyPanel;
+
+  @FindBy(css = "[name=selected_currency]")
+  private WebElement selectedCurrency;
+
+  @FindBy(css = "div.xp__dates.xp__group")
+  private WebElement initCalendar;
+
+  @FindBy(css = "div.bui-calendar")
+  private WebElement calendarPanel;
+
+  @FindBy(css = "div.bui-calendar td[data-date^='20']")
+  private WebElement firstDate;
+
+  @FindBy(css = "div[data-bui-ref=calendar-next]")
+  private WebElement nextMonth;
+
+  @FindBy(css = "label#xp__guests__toggle")
+  private WebElement initGuestsPanel;
+
+  @FindBy(css = "div.focussable")
+  private WebElement guestsPanel;
+
+  public SearchPageHelper searchFor(SearchData searchData) {
+    setCurrency(searchData.currency()).
+            setPlace(searchData.whereGo()).
+            setDates(searchData.inDate(), searchData.outDate()).
+            setRooms(searchData.roomsCount()).
+            setAdults(searchData.adultsCount()).
+            setChildren(searchData.childrenCount()).
+            initSearch();
     return this;
   }
 
-  public SearchPageHelper fillForm(SearchData searchData) {
-    setCurrency(searchData.currency());
-    setPlace(searchData.whereGo());
-    setDates(searchData.inDate(), searchData.outDate());
-    setRooms(searchData.roomsCount());
-    setAdults(searchData.adultsCount());
-    setChildren(searchData.childrenCount());
+  private SearchPageHelper initSearch() {
+    searchButton.click();
     return this;
   }
 
-  public SearchPageHelper setCurrency(String currency) {
-    if (!(webDriver.findElement(By.cssSelector("[name=selected_currency]")).getAttribute("value").equals(currency))) {
-      displayDropDown(By.cssSelector("[data-id=currency_selector]"), By.cssSelector("#current_currency_foldout"), 5);
+  private SearchPageHelper setCurrency(String currency) {
+    if (!selectedCurrency.getAttribute("value").equals(currency)) {
+      displayDropDown(currencySelectButton, currencyPanel, 5);
       webDriver.findElement(By.cssSelector("a[data-currency=" + currency + "]")).click();
     }
     return this;
   }
 
-  public SearchPageHelper setPlace(String place) {
+  private SearchPageHelper setPlace(String place) {
     inputText(placeInput, place);
     return this;
   }
 
-  public SearchPageHelper setDates(String checkInDate, String checkOutDate) {
-    String firstDayOfMonthMonth = getFirstDayOfMonth(checkInDate);
-    displayDropDown(By.cssSelector("div.xp__dates.xp__group"), By.cssSelector("div.bui-calendar"), 5);
-    while (!firstDayOfMonthMonth.equals(webDriver.findElement(By.cssSelector("div.bui-calendar td[data-date^='20']")).getAttribute("data-date"))) {
-      webDriver.findElement(By.cssSelector("div[data-bui-ref=calendar-next]")).click();
+  private SearchPageHelper setDates(String checkInDate, String checkOutDate) {
+    String firstDayOfMonthMonth = firstDate(checkInDate);
+    displayDropDown(initCalendar, calendarPanel, 5);
+    while (!firstDayOfMonthMonth.equals(firstDate.getAttribute("data-date"))) {
+      nextMonth.click();
     }
     webDriver.findElement(By.cssSelector("div.bui-calendar td[data-date='" + checkInDate + "']")).click();
     webDriver.findElement(By.cssSelector("div.bui-calendar td[data-date='" + checkOutDate + "']")).click();
-    webDriver.findElement(By.cssSelector("div.xp__dates.xp__group")).click();
+    initCalendar.click();
     return this;
-  }
-
-  public SearchPageHelper setChildren(int count) {
-    setCount("group_children", count);
-    return this;
-  }
-
-  public SearchPageHelper setAdults(int count) {
-    setCount("group_adults", count);
-    return this;
-  }
-
-  public SearchPageHelper setRooms(int count) {
-    setCount("no_rooms", count);
-    return this;
-  }
-
-  public void setCount(String id, int count) {
-    openGuestsParameters();
-    int actualCount = -1;
-    while (count != actualCount) {
-      actualCount = Integer.parseInt(webDriver.findElement(By.cssSelector("#" + id)).getAttribute("defaultValue"));
-      if (actualCount > count && actualCount > 0) {
-        webDriver.findElement(By.cssSelector("#" + id + "~button[class*=subtract-button]")).click();
-      } else if (actualCount < count) {
-        webDriver.findElement(By.cssSelector("#" + id + "~button[class*=add-button]")).click();
-      }
-    }
   }
 
   @NotNull
-  private String getFirstDayOfMonth(String checkInDate) {
+  private String firstDate(String checkInDate) {
     String[] firstMonthArray = checkInDate.split("-");
     firstMonthArray[2] = "01";
     return firstMonthArray[0] + "-" + firstMonthArray[1] + "-" + firstMonthArray[2];
   }
 
-  private void openGuestsParameters() {
-    if (webDriver.findElement(By.cssSelector("label#xp__guests__toggle+div")).getAttribute("className").contains("hidden")) {
-      webDriver.findElement(By.cssSelector("label#xp__guests__toggle")).click();
-    }
+  private SearchPageHelper setChildren(int count) {
+    setCount("group_children", count);
+    return this;
   }
 
+  private SearchPageHelper setAdults(int count) {
+    setCount("group_adults", count);
+    return this;
+  }
+
+  private SearchPageHelper setRooms(int count) {
+    setCount("no_rooms", count);
+    return this;
+  }
+
+  private void setCount(String id, int count) {
+    displayDropDown(initGuestsPanel, guestsPanel,5);
+    int actualCount = -1;
+    By minusBy = By.cssSelector("#" + id + "~button[class*=subtract-button]");
+    By plusBy = By.cssSelector("#" + id + "~button[class*=add-button]");
+    By currentValueBy = By.cssSelector("#" + id);
+    while (count != actualCount) {
+      actualCount = Integer.parseInt(webDriver.findElement(currentValueBy).getAttribute("defaultValue"));
+      if (actualCount > count && actualCount > 0) {
+        webDriver.findElement(minusBy).click();
+      } else if (actualCount < count) {
+        webDriver.findElement(plusBy).click();
+      }
+    }
+  }
 }
 

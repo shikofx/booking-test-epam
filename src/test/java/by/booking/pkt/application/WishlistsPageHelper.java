@@ -3,6 +3,7 @@ package by.booking.pkt.application;
 import by.booking.pkt.model.Hotel;
 import by.booking.pkt.model.Wishlist;
 import org.openqa.selenium.*;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -14,18 +15,52 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
 public class WishlistsPageHelper extends HelperBase {
 
+  public static final String REGEX_WISHLIST_NAME = ".+(?=\\s)";
+
   public WishlistsPageHelper(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
     super(webDriver, wait, implicitlyWait);
     PageFactory.initElements(webDriver, this);
   }
 
+  @FindBy(css = "button[class*=js-listview-create-list] span")
+  private WebElement createButton;
+
+  @FindBy(css = ".js-listview-header-dropdown span")
+  private WebElement dropdownListHeader;
+
+  @FindBy(css = "div[class*=bui-dropdown] span")
+  private WebElement defaultWishlist;
+
+  @FindBy(css = "div:last-of-type .listview__lists")
+  private WebElement actualWishlistPanel;
+
+  @FindBy(css = "span.listmap__remove_list")
+  private WebElement removeWishlistButton;
+
+  @FindBy(css = "div:last-of-type .listview__lists div")
+  private List<WebElement> allWishlists;
+
+  @FindBy(css = "div[class=bui-dropdown]+button")
+  private WebElement shareWishlistButton;
+
+  @FindBy(css = "div.listview-share")
+  private WebElement shareWishlistPanel;
+
+  @FindBy(css = "p[class*=content] input")
+  private WebElement shareURLInput;
+
+  @FindBy(css = "div.wl-bui-header h1")
+  private WebElement wishlistHeader;
+
+  @FindBy(css = ".bui-carousel__item")
+  private List<WebElement> hotelsInWishlist;
   public Wishlist createNewWithName(String listName) throws InterruptedException {
     List<Wishlist> beforeList = getWishlists();
-    Alert alertCreateList = alertAfterClick(By.cssSelector("button[class*=js-listview-create-list] span"));
+    Alert alertCreateList = alertAfterClick(createButton);
     alertCreateList.sendKeys(listName);
     alertCreateList.accept();
     wait.until((WebDriver d) -> {
-      return d.findElement(By.cssSelector(".js-listview-header-dropdown span")).getText().equals(listName);
+      return dropdownListHeader.getText().equals(listName);
     });
     List<Wishlist> afterList = getWishlists();
     if(afterList.size()==(beforeList.size()+1)){
@@ -37,31 +72,35 @@ public class WishlistsPageHelper extends HelperBase {
   }
 
   public WishlistsPageHelper deleteWishlist(Wishlist list) throws InterruptedException {
-    displayDropDown(By.cssSelector("div[class*=bui-dropdown] span"), By.cssSelector("div:last-of-type .listview__lists"), 5);
-    WebElement wishlistElement = webDriver.findElement(By.cssSelector("div:last-of-type .listview__lists div[data-id='" + list.getId() + "']"));
-    Alert alertDeleteList = alertAfterClick(wishlistElement.findElement(By.cssSelector("span.listmap__remove_list")));
+    displayDropDown(defaultWishlist, actualWishlistPanel, 5);
+    By removeButtonBy = By.cssSelector("span.listmap__remove_list");
+    Alert alertDeleteList = alertAfterClick(elementFromWishlist(list).findElement(removeButtonBy));
     alertDeleteList.accept();
-    //refreshDriver();
     return this;
   }
 
+  private WebElement elementFromWishlist(Wishlist wishlist){
+    By wishlistBy = By.cssSelector("div[data-id='" + wishlist.getId() + "']");
+    return actualWishlistPanel.findElement(wishlistBy);
+  }
+
   public WishlistsPageHelper setAsDefault(Wishlist wishlist) {
-    displayDropDown(By.cssSelector("div[class*=bui-dropdown] span"), By.cssSelector("div:last-of-type .listview__lists"), 5);
-    WebElement list = webDriver.findElement(By.cssSelector("div:last-of-type .listview__lists div[data-id='" + wishlist.getId() + "']"));
+    displayDropDown(defaultWishlist, actualWishlistPanel, 5);
+    WebElement list = elementFromWishlist(wishlist);
     if (!list.getAttribute("class").contains("selected"))
       list.click();
     return this;
   }
 
   private void refreshWislists() {
-    displayDropDown(By.cssSelector("div[class*=bui-dropdown] span"), By.cssSelector("div:last-of-type .listview__lists"), 5);
-    hideDropdown(By.cssSelector("div[class*=bui-dropdown] span"), By.cssSelector("div:last-of-type .listview__lists"));
+    displayDropDown(defaultWishlist, actualWishlistPanel, 5);
+    hideDropdown(defaultWishlist, actualWishlistPanel);
   }
 
   public List<Wishlist> getWishlists() {
     refreshWislists();
     List<Wishlist> wishlists = new ArrayList<>();
-    for(WebElement e:getWishlistsElements()){
+    for(WebElement e:allWishlists){
       Wishlist wl=new Wishlist().
               withId(getWishlistId(e)).
               withName(getWishlistName(e)).
@@ -70,14 +109,15 @@ public class WishlistsPageHelper extends HelperBase {
     }
     return wishlists;
   }
-
+//NotRealized
   private List<Hotel> getWishlistHotels(WebElement e) {
     List<Hotel> hotels = new ArrayList<>();
     return hotels;
   }
 
   private String getWishlistName(WebElement e) {
-    return getTextByPattern(".+(?=\\s)", e.findElement(By.cssSelector("span.listmap__list_name")).getAttribute("textContent"));
+    By wishlistNameBy = By.cssSelector("span.listmap__list_name");
+    return getTextByPattern(REGEX_WISHLIST_NAME, e.findElement(wishlistNameBy).getAttribute("textContent"));
   }
 
   private int getWishlistId(WebElement e) {
@@ -85,67 +125,26 @@ public class WishlistsPageHelper extends HelperBase {
     return id;
   }
 
-  private List<WebElement> getWishlistsElements() {
-    List<WebElement> list = webDriver.findElements(By.cssSelector("div:last-of-type .listview__lists div"));//("div:not(.fly-dropdown_hidden) .listview__lists div"));
-    return list;
-  }
-
-
-
-  private Alert alertAfterClick(By toClick) {
-    wait.until(visibilityOfElementLocated(toClick));
-    return wait.until((WebDriver d) -> {
-      d.findElement(toClick).click();
-      try {
-        return d.switchTo().alert();
-      } catch (NoAlertPresentException e) {
-        return null;
-      }
-    });
-  }
-
-  private Alert alertAfterClick(WebElement toClick) {
-    wait.until(visibilityOfAllElements(toClick));
-    return wait.until((WebDriver d) -> {
-      toClick.click();
-      try {
-        return d.switchTo().alert();
-      } catch (NoAlertPresentException e) {
-        return null;
-      }
-    });
-  }
-
   public String sendUrl() {
-    wait.until(visibilityOfElementLocated(By.cssSelector("div[class=bui-dropdown]+button")));
-    displayDropDown(By.cssSelector("div[class=bui-dropdown]+button"), By.cssSelector("div.listview-share"), 5);
-    wait.until(visibilityOfElementLocated(By.cssSelector("p[class*=content] input")));
-    String url = webDriver.findElement(By.cssSelector("p[class*=content] input")).getAttribute("defaultValue");
+    isElementPresentAndVisible(shareWishlistButton);
+    displayDropDown(shareWishlistButton, shareWishlistPanel, 5);
+    String url = shareURLInput.getAttribute("defaultValue");
     return url;
   }
   public String defaultList() {
-    wait.until(presenceOfElementLocated(By.cssSelector("div[class*=bui-dropdown] span")));
-    return webDriver.findElement(By.cssSelector("div[class*=bui-dropdown] span")).getText();
+    wait.until((WebDriver d) -> defaultWishlist);
+    return defaultWishlist.getText();
   }
-
 
   public String sendedListName() {
-    wait.until(presenceOfElementLocated(By.cssSelector("div.wl-bui-header h1")));
-    return webDriver.findElement(By.cssSelector("div.wl-bui-header h1")).getText();
-  }
-
-  public List<WebElement> allHotelElements() {
-    return webDriver.findElements(By.cssSelector(".bui-carousel__item"));
+    wait.until((WebDriver d)->wishlistHeader);
+    return wishlistHeader.getText();
   }
 
   public List<Hotel> hotelsInList() {
-    List<WebElement> hotelsElements = allHotelElements();
     List<Hotel> hotels = new ArrayList<>();
-    for (WebElement e : hotelsElements) {
-      Hotel h = elementToHotel(e);
-      System.out.println(h.toString());
+    for (WebElement e : hotelsInWishlist) {
       hotels.add(elementToHotel(e));
-
     }
     return hotels;
   }

@@ -14,8 +14,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.openqa.selenium.support.ui.ExpectedConditions.numberOfElementsToBe;
-
 public class HotelPageHelper extends HelperBase {
   public HotelPageHelper(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
     super(webDriver, wait, implicitlyWait);
@@ -37,30 +35,21 @@ public class HotelPageHelper extends HelperBase {
   public Wishlist createWishlist(String listName, Hotel hotel) {
     displayDropDown(saveButton, wishlistsPanel, 5);
     List<WebElement> oldWishlists = wishlistsOnPanel;
-    enterWishlistName(listName).newListInput.sendKeys(Keys.ENTER);
+    enterWishlistName(listName).submitCreating();
     wait.until((WebDriver d)-> (wishlistsOnPanel.size()==(oldWishlists.size()+1)));
     unselectAllElements(oldWishlists);
     List<WebElement> newWishlists = wishlistsOnPanel;
     newWishlists.removeAll(oldWishlists);
     WebElement newWishlistElement = newWishlists.iterator().next();
-    Wishlist wishlist = elementToWishList(newWishlistElement, hotel);
-    return wishlist;
-  }
-
-  private Wishlist elementToWishList(WebElement wl, Hotel hotel) {
-    return new Wishlist().withId(getId(wl)).
-            withName(getName(wl)).
-            withHotels(getHotels(hotel));
-  }
-
-  @NotNull
-  private List<Hotel> getHotels(Hotel hotel) {
     List<Hotel> hotelList = new ArrayList<>();
     hotelList.add(hotel);
-    return hotelList;
+
+    return new Wishlist().withId(getId(newWishlistElement)).
+            withName(getName(newWishlistElement)).
+            withHotels(hotelList);
   }
 
-  private String getName(WebElement wl) {
+ private String getName(WebElement wl) {
     return wl.findElement(By.cssSelector("span")).getText();
   }
 
@@ -73,11 +62,8 @@ public class HotelPageHelper extends HelperBase {
     return this;
   }
 
-  private HotelPageHelper submitWishlistCreating(int size) {
-    //List<WebElement>ol
+  private HotelPageHelper submitCreating() {
     newListInput.sendKeys(Keys.ENTER);
-    wait.until((WebDriver d)-> (wishlistsOnPanel.size()==size+1));
-//    wait.until(numberOfElementsToBe(By.cssSelector("#hotel-wishlists label.js-wl-dropdown-item"), size + 1));
     return this;
   }
 
@@ -90,7 +76,8 @@ public class HotelPageHelper extends HelperBase {
   }
 
   private WebElement wishlistToElement(Wishlist wishlist) {
-    return webDriver.findElement(By.xpath("//input[@data-list-id='" + wishlist.getId() + "']/parent::*"));
+    By wishlistBy = By.xpath("//input[@data-list-id='" + wishlist.getId() + "']/parent::*");
+    return webDriver.findElement(wishlistBy);
   }
 
   private void unselectAllElements(List<WebElement> list) {

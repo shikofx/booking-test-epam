@@ -16,7 +16,7 @@ public class FilterResultsTests extends TBase {
           dataProviderClass = FileDataProvider.class, dataProvider = "searchDataFromCSV")
   @DataSourceFileAnnotation("src\\test\\resources\\search-positive.data")
   public void testFilterByBudget(SearchData searchData) {
-    app.forSearch().fillForm(searchData).initSearch();
+    app.searchPage().searchFor(searchData);
     app.filters().selectBudget(searchData.minBudget(), searchData.maxBudget());
     int maxBudget = app.filters().getMax();
     int minBudget = app.filters().getMin();
@@ -41,7 +41,7 @@ public class FilterResultsTests extends TBase {
           dataProviderClass = FileDataProvider.class, dataProvider = "searchDataFromCSV")
   @DataSourceFileAnnotation("src\\test\\resources\\search-positive.data")
   public void testFilterByStars(SearchData searchData) {
-    app.forSearch().fillForm(searchData).initSearch();
+    app.searchPage().searchFor(searchData);
     Assertion assertion = new Assertion();
     assertion.assertTrue(app.filters().selectStars(searchData.stars()), "Count of stars has not selected!");
     SoftAssert softAssert = new SoftAssert();
