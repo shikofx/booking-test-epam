@@ -25,16 +25,22 @@ public class HotelPageHelper extends HelperBase {
   @FindBy(css = "#hotel-wishlists input[type=text]")
   private WebElement newListInput;
 
-  public String getUrl() {
-    return getTextByPattern(webDriver.getCurrentUrl(), ".+/[A-Za-z0-9_-]*");
-  }
+  @FindBy(css = "#wrap-hotelpage-top .js-wl-dropdown-handle")
+  private WebElement saveButton;
+
+  @FindBy(css = "#hotel-wishlists")
+  private WebElement wishlistsPanel;
+
+  @FindBy(css = "#hotel-wishlists label.js-wl-dropdown-item")
+  private List<WebElement> wishlistsOnPanel;
 
   public Wishlist createWishlist(String listName, Hotel hotel) {
-    displayDropDown(By.cssSelector("#wrap-hotelpage-top .js-wl-dropdown-handle"), By.cssSelector("#hotel-wishlists"), 5);
-    List<WebElement> oldWishlists = webDriver.findElements(By.cssSelector("#hotel-wishlists label.js-wl-dropdown-item"));
-    enterWishlistName(listName).submitWishlistCreating(oldWishlists.size());
+    displayDropDown(saveButton, wishlistsPanel, 5);
+    List<WebElement> oldWishlists = wishlistsOnPanel;
+    enterWishlistName(listName).newListInput.sendKeys(Keys.ENTER);
+    wait.until((WebDriver d)-> (wishlistsOnPanel.size()==(oldWishlists.size()+1)));
     unselectAllElements(oldWishlists);
-    List<WebElement> newWishlists = webDriver.findElements(By.cssSelector("#hotel-wishlists label.js-wl-dropdown-item"));
+    List<WebElement> newWishlists = wishlistsOnPanel;
     newWishlists.removeAll(oldWishlists);
     WebElement newWishlistElement = newWishlists.iterator().next();
     Wishlist wishlist = elementToWishList(newWishlistElement, hotel);
@@ -68,14 +74,15 @@ public class HotelPageHelper extends HelperBase {
   }
 
   private HotelPageHelper submitWishlistCreating(int size) {
-    webDriver.findElement(By.cssSelector("#hotel-wishlists input[type=text]")).sendKeys(Keys.ENTER);
-    wait.until(numberOfElementsToBe(By.cssSelector("#hotel-wishlists label.js-wl-dropdown-item"), size + 1));
+    //List<WebElement>ol
+    newListInput.sendKeys(Keys.ENTER);
+    wait.until((WebDriver d)-> (wishlistsOnPanel.size()==size+1));
+//    wait.until(numberOfElementsToBe(By.cssSelector("#hotel-wishlists label.js-wl-dropdown-item"), size + 1));
     return this;
   }
 
   public HotelPageHelper goToWishlist(Wishlist wishlist) {
     WebElement wishlistElement = wishlistToElement(wishlist);
-    String url = webDriver.getCurrentUrl();
     if (wishlistElement.findElement(By.cssSelector("input")).isSelected()) {
       wishlistElement.findElement(By.cssSelector("input~span a")).click();
     }

@@ -22,7 +22,6 @@ public class HelperBase {
     this.webDriver = webDriver;
     this.wait = wait;
     this.implicitlyWait = implicitlyWait;
-
   }
 
   public HelperBase refreshPage() {
@@ -39,7 +38,6 @@ public class HelperBase {
     }
     return this;
   }
-
 
   protected HelperBase hideDropdown(WebElement toClick, WebElement toWait) {
     wait.until((WebDriver d) -> {
@@ -103,5 +101,4 @@ public class HelperBase {
     where.clear();
     where.sendKeys(text);
   }
-
 }
