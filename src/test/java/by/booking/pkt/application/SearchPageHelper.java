@@ -9,6 +9,9 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
+import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
+
 public class SearchPageHelper extends HelperBase {
   public SearchPageHelper(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
     super(webDriver, wait, implicitlyWait);
@@ -66,7 +69,9 @@ public class SearchPageHelper extends HelperBase {
 
   private SearchPageHelper setCurrency(String currency) {
     if (!selectedCurrency.getAttribute("value").equals(currency)) {
-      displayDropDown(currencySelectButton, currencyPanel, 5);
+   //   wait.until((WebDriver d)->{return currencyPanel.isEnabled();});
+     // displayDropDown(By.cssSelector("[data-id=currency_selector]"), By.cssSelector("#current_currency_foldout"), 15);
+      displayDropDown(currencySelectButton, currencyPanel, 15);
       webDriver.findElement(By.cssSelector("a[data-currency=" + currency + "]")).click();
     }
     return this;

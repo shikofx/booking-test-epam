@@ -21,6 +21,15 @@ public class HelperBase {
     this.implicitlyWait = implicitlyWait;
   }
 
+  public void displayDropDown(By whatClick, By whatWait, int secondsToWait) {
+    wait.until(visibilityOfElementLocated(whatClick));
+    for (int i = 0; i < 3; i++) {
+      if (!isElementPresent(whatWait, secondsToWait) || !isElementDisplayed(whatWait))
+        webDriver.findElement(whatClick).click();
+      else break;
+    }
+  }
+
   public HelperBase refreshPage() {
     webDriver.navigate().refresh();
     return this;
@@ -28,11 +37,14 @@ public class HelperBase {
 
   public HelperBase displayDropDown(WebElement whatClick, WebElement whatWait, int secondsToWait) {
     wait.until(visibilityOf(whatClick));
-    for (int i = 0; i < 3; i++) {
-      if (!isElementPresent(whatWait, secondsToWait) || !isElementDisplayed(whatWait))
+    whatClick.click();
+    /*for (int i = 0; i < 3; i++) {
+      if (!isElementDisplayed(whatWait))
+        whatClick.click();
+      if (!isElementPresent(whatWait, secondsToWait))
         whatClick.click();
       else break;
-    }
+    }*/
     return this;
   }
 
@@ -69,6 +81,10 @@ public class HelperBase {
     return whatWait.isDisplayed();
   }
 
+  private boolean isElementDisplayed(By whatWait) {
+    return webDriver.findElement(whatWait).isDisplayed();
+  }
+
   public boolean isElementPresent(By locator, int secondsToWait) {
     setImplicitlyWait(secondsToWait);
     boolean isElementPresent = webDriver.findElements(locator).size() > 0;
@@ -97,7 +113,7 @@ public class HelperBase {
     return isElementPresent;
   }
 
-  public boolean isElementPresentAndVisible(WebElement e){
+  public boolean isElementPresentAndVisible(WebElement e) {
     return wait.until((WebDriver d) -> {
       return e.isEnabled() && e.isDisplayed();
     });
