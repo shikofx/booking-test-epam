@@ -15,50 +15,55 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
 public class SearchPageHelper extends HelperBase {
   public SearchPageHelper(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
     super(webDriver, wait, implicitlyWait);
-    PageFactory.initElements(webDriver, this);
   }
 
   @FindBy(id = "ss")
-  private WebElement placeInput;
+  public WebElement placeInput;
 
   @FindBy(css = "[data-id=currency_selector]")
-  private WebElement currencySelectButton;
+  public WebElement currencySelectButton;
 
   @FindBy(css = "button[data-sb-id=main][type=submit]")
-  private WebElement searchButton;
+  public WebElement searchButton;
 
   @FindBy(css = "#current_currency_foldout")
-  private WebElement currencyPanel;
+  public WebElement currencyPanel;
 
   @FindBy(css = "[name=selected_currency]")
-  private WebElement selectedCurrency;
+  public WebElement selectedCurrency;
 
   @FindBy(css = "div.xp__dates.xp__group")
-  private WebElement initCalendar;
+  public WebElement initCalendar;
 
   @FindBy(css = "div.bui-calendar")
-  private WebElement calendarPanel;
+  public WebElement calendarPanel;
 
   @FindBy(css = "div.bui-calendar td[data-date^='20']")
-  private WebElement firstDate;
+  public WebElement firstDate;
 
   @FindBy(css = "div[data-bui-ref=calendar-next]")
-  private WebElement nextMonth;
+  public WebElement nextMonth;
 
   @FindBy(css = "label#xp__guests__toggle")
-  private WebElement initGuestsPanel;
+  public WebElement initGuestsPanel;
 
   @FindBy(css = "div.focussable")
-  private WebElement guestsPanel;
+  public WebElement guestsPanel;
 
   public SearchPageHelper searchFor(SearchData searchData) {
     setCurrency(searchData.currency()).
             setPlace(searchData.whereGo()).
             setDates(searchData.inDate(), searchData.outDate()).
+            initGuestsPanel().
             setRooms(searchData.roomsCount()).
             setAdults(searchData.adultsCount()).
             setChildren(searchData.childrenCount()).
             initSearch();
+    return this;
+  }
+
+  private SearchPageHelper initGuestsPanel() {
+    displayDropDown(initGuestsPanel, guestsPanel, 5);
     return this;
   }
 
@@ -84,7 +89,7 @@ public class SearchPageHelper extends HelperBase {
 
   private SearchPageHelper setDates(String checkInDate, String checkOutDate) {
     String firstDayOfMonthMonth = firstDate(checkInDate);
-    displayDropDown(initCalendar, calendarPanel, 5);
+    displayDropDown(initCalendar, calendarPanel,5);
     while (!firstDayOfMonthMonth.equals(firstDate.getAttribute("data-date"))) {
       nextMonth.click();
     }
@@ -117,7 +122,6 @@ public class SearchPageHelper extends HelperBase {
   }
 
   private void setCount(String id, int count) {
-    displayDropDown(initGuestsPanel, guestsPanel,5);
     int actualCount = -1;
     By minusBy = By.cssSelector("#" + id + "~button[class*=subtract-button]");
     By plusBy = By.cssSelector("#" + id + "~button[class*=add-button]");
