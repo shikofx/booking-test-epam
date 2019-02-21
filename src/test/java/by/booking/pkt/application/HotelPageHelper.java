@@ -36,7 +36,10 @@ public class HotelPageHelper extends HelperBase {
     displayDropDown(saveButton, wishlistsPanel, 5);
     List<WebElement> oldWishlists = wishlistsOnPanel;
     enterWishlistName(listName).submitCreating();
-    wait.until((WebDriver d)-> (wishlistsOnPanel.size()==(oldWishlists.size()+1)));
+    System.out.println(wishlistsOnPanel.size()+ "++++++"+oldWishlists);
+    wait.until((WebDriver d)->{
+            int wls = wishlistsOnPanel.size();
+            return wls==(oldWishlists.size()+1);});
     unselectAllElements(oldWishlists);
     List<WebElement> newWishlists = wishlistsOnPanel;
     newWishlists.removeAll(oldWishlists);

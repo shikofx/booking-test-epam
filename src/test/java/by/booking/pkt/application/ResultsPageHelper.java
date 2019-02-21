@@ -37,6 +37,9 @@ public class ResultsPageHelper extends HelperBase {
   @FindBy(css = "div.sr_item")
   private List<WebElement> allResults;
 
+  @FindBy(css = "div.sr_item")
+  private WebElement firstHotelItem;
+
   @FindBy(css = "#sortbar_dropdown_button")
   private WebElement additionalSortsButton;
 
@@ -74,7 +77,7 @@ public class ResultsPageHelper extends HelperBase {
   }
 
   public Hotel getFirstHotel() {
-    Hotel hotel = resultToHotel(getAllResults().get(0));
+    Hotel hotel = resultToHotel(firstHotelItem);
     return hotel;
   }
 
