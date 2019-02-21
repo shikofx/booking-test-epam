@@ -66,11 +66,11 @@ public class ResultsPageHelper extends HelperBase {
 
 
   public List<WebElement> getAllResults() {
+
     if (isElementPresent(separator, 0)) {
       return resultsBeforSeparator;
-    } else {
-      return allResults;
     }
+    return allResults;
   }
 
   public Hotel getFirstHotel() {

@@ -3,6 +3,7 @@ package by.booking.pkt.application;
 import org.jetbrains.annotations.Nullable;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.ArrayList;
@@ -91,9 +92,13 @@ public class HelperBase {
 
   public boolean isElementPresent(WebElement e, int secondsToWait) {
     setImplicitlyWait(secondsToWait);
-    List<WebElement> elementList = new ArrayList<WebElement>();
-    elementList.add(e);
-    boolean isElementPresent = elementList.size() > 0;
+    boolean isElementPresent = false;
+//    List<WebElement> elementList = new ArrayList<WebElement>();
+//    elementList.add(e);
+    try {
+      isElementPresent = e.isEnabled();
+    } catch (NoSuchElementException exeption){
+    }
     setImplicitlyWait(implicitlyWait);
     return isElementPresent;
 
