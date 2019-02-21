@@ -3,11 +3,8 @@ package by.booking.pkt.application;
 import org.jetbrains.annotations.Nullable;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,10 +17,11 @@ public class HelperBase {
   protected WebDriverWait wait;
 
   public HelperBase(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
+    PageFactory.initElements(webDriver, this);
     this.webDriver = webDriver;
     this.wait = wait;
     this.implicitlyWait = implicitlyWait;
-    PageFactory.initElements(webDriver, this);
+
   }
 
   public HelperBase refreshPage() {
@@ -31,21 +29,15 @@ public class HelperBase {
     return this;
   }
 
-  public void displayDropDown(By whatClick, By whatWait, int secondsToWait) {
-    wait.until(visibilityOfElementLocated(whatClick));
-    for (int i = 0; i < 3; i++) {
-      if (!isElementPresent(whatWait, secondsToWait) || !isElementDisplayed(whatWait))
-        webDriver.findElement(whatClick).click();
-      else break;
-    }
-  }
-
   public HelperBase displayDropDown(WebElement whatClick, WebElement whatWait, int secondsToWait) {
-    wait.until(visibilityOf(whatClick));
-    whatClick.click();
-      if (!whatWait.isDisplayed()) {
-        whatClick.click();
-      }
+    boolean isClickable = whatClick.isDisplayed();
+    boolean whatW = isElementPresent(whatWait, 1);
+    if (isClickable && !whatW) {
+      whatClick.click();
+      wait.until(visibilityOf(whatWait));
+    } else if (!whatWait.isDisplayed()) {
+      whatClick.click();
+    }
     return this;
   }
 
@@ -53,7 +45,6 @@ public class HelperBase {
     wait.until((WebDriver d) -> {
       if (toWait.isDisplayed()) {
         toClick.click();
-        wait.until(not(visibilityOf(toWait)));
       } else {
         return true;
       }
@@ -92,16 +83,15 @@ public class HelperBase {
 
   public boolean isElementPresent(WebElement e, int secondsToWait) {
     setImplicitlyWait(secondsToWait);
-    boolean isElementPresent = false;
-//    List<WebElement> elementList = new ArrayList<WebElement>();
-//    elementList.add(e);
+    boolean isPresent = false;
     try {
-      isElementPresent = e.isEnabled();
-    } catch (NoSuchElementException exeption){
+      e.getTagName();
+      isPresent = true;
+    } catch (NullPointerException exeptNull) {
+    } catch (NoSuchElementException exeptNoSuch) {
     }
     setImplicitlyWait(implicitlyWait);
-    return isElementPresent;
-
+    return isPresent;
   }
 
   private void setImplicitlyWait(int secondsToWait) {

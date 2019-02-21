@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.List;
 
 public class FilterBoxHelper extends HelperBase {
+  public static final String REGEX_NIGHTS = "\\d+";
   private int minBudget = 0;
   private int maxBudget = 0;
 
@@ -25,10 +26,6 @@ public class FilterBoxHelper extends HelperBase {
 
   @FindBy(css = "div.sb-dates__los")
   private WebElement nigtsCountField;
-
-  public int getNigtsCount() {
-    return Integer.parseInt(textByPatternNoSpace("\\d+", nigtsCountField.getText()));
-  }
 
   public boolean selectStars(int stars) {
     By starsLocator = By.cssSelector("a[data-id^=class-" + stars);
@@ -46,12 +43,13 @@ public class FilterBoxHelper extends HelperBase {
   }
 
   @Nullable
-  public FilterBoxHelper selectBudget(int min, int max) {
+  public boolean selectBudget(int min, int max) {
     List<WebElement> all = allBudgets;
     minBudget = 0;
     maxBudget = 0;
     WebElement previous;
     WebElement current;
+    boolean isSelected = false;
     for (int i = 0; i < all.size() && maxBudget == 0; i++) {
       current = all.get(i);
       if (i > 0) {
@@ -64,7 +62,7 @@ public class FilterBoxHelper extends HelperBase {
         if (max <= budgetValue(current))
           maxBudget = budgetValue(current);
         if (min < budgetValue(current)) {
-          selectBudget(current);
+          isSelected = selectBudget(current);
           all = allBudgets;
         }
       } else if (i == (all.size() - 1)) {
@@ -74,29 +72,38 @@ public class FilterBoxHelper extends HelperBase {
             minBudget = budgetValue(previous);
           }
           maxBudget = Integer.MAX_VALUE / 100;
-          selectBudget(current);
+          isSelected = selectBudget(current);
         }
       }
     }
-    return this;
+    return isSelected;
   }
 
   private int budgetValue(WebElement element) {
     return Integer.parseInt(element.getAttribute("data-value"));
   }
 
-  private void selectBudget(WebElement e) {
+  private boolean selectBudget(WebElement e) {
+    boolean isSelected = false;
     if (!e.findElement(By.cssSelector("input")).isSelected()) {
       e.click();
+      if (e.findElement(By.cssSelector("input")).isSelected())
+        isSelected = true;
       refreshPage();
     }
+    return isSelected;
   }
 
-  public int getMax() {
-    return maxBudget;
+  public int getMaxTotalPrice() {
+    return getNigtsCount() * maxBudget;
   }
 
-  public int getMin() {
-    return minBudget;
+  public int getMinTptalPrice() {
+    return getNigtsCount() * minBudget;
   }
+
+  public int getNigtsCount() {
+    return Integer.parseInt(textByPatternNoSpace(REGEX_NIGHTS, nigtsCountField.getText()));
+  }
+
 }

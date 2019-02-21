@@ -12,8 +12,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
-
 
 public class ResultsPageHelper extends HelperBase {
 
@@ -32,7 +30,7 @@ public class ResultsPageHelper extends HelperBase {
   private WebElement separator;
 
   @FindBy(xpath = "//*/div[contains(@class,'sr_separator')]/preceding-sibling::div[contains(@class,'sr_item')]")
-  private List<WebElement> resultsBeforSeparator;
+  private List<WebElement> allResultsBeforSeparator;
 
   @FindBy(css = "div.sr_item")
   private List<WebElement> allResults;
@@ -46,7 +44,7 @@ public class ResultsPageHelper extends HelperBase {
   @FindBy(css = "#sortbar_dropdown_options")
   private WebElement additionalSortsPanel;
 
-  @FindBy(css = "li.sort_distance_from_search a")
+  @FindBy(css = "li.sort_distance_from_search")
   private WebElement initSortByDistance;
 
   @FindBy(css = "li.sort_price")
@@ -69,9 +67,8 @@ public class ResultsPageHelper extends HelperBase {
 
 
   public List<WebElement> getAllResults() {
-
     if (isElementPresent(separator, 0)) {
-      return resultsBeforSeparator;
+      return allResultsBeforSeparator;
     }
     return allResults;
   }
@@ -83,31 +80,32 @@ public class ResultsPageHelper extends HelperBase {
 
   public List<Hotel> availableHotels() {
     List<Hotel> hotels = new ArrayList<Hotel>();
-    List<WebElement> availableList = getOnlyAvailable();
-    for (WebElement e : availableList) {
+    for (WebElement e : getOnlyAvailable()) {
       hotels.add(resultToHotel(e));
     }
     return hotels;
   }
 
-  private Hotel resultToHotel(WebElement e) {
+  private Hotel resultToHotel(WebElement item) {
     Hotel hotel = new Hotel().
-            withID(getID(e)).
-            withName(getHotelName(e)).
-            withDistance(distanceToDest(e)).
-            withStars(getStarsCount(e)).
-            withTotalPrice(totalPrice(e));
+            withID(getID(item)).
+            withName(getHotelName(item)).
+            withDistance(distanceToDest(item)).
+            withStars(getStarsCount(item)).
+            withTotalPrice(totalPrice(item));
     return hotel;
   }
 
   public String getID(WebElement item) {
+    String id = item.getAttribute("data-hotelid");
     return item.getAttribute("data-hotelid");
+
   }
 
   public double distanceToDest(WebElement item) {
     double distance = 0;
     By distanceBy = By.cssSelector("span.distfromdest");
-    if (isElementPresent(item, distanceBy, 0)) {
+    if (isElementPresent(item, distanceBy, 1)) {
       distance = Double.parseDouble(textByPatternNoSpace(REGEX_DISTANCE_VALUE,
               item.findElement(distanceBy).getText()).replace(',', '.'));
       String measure = textByPatternNoSpace(REGEX_DISTANCE_MEASURE,
@@ -143,9 +141,10 @@ public class ResultsPageHelper extends HelperBase {
     return totalPrice;
   }
 
-  public String getHotelName(WebElement hotel) {
+  public String getHotelName(WebElement item) {
     By hotelNameBy = By.cssSelector("span.sr-hotel__name");
-    return (hotel.findElement(hotelNameBy).getText());
+    String name = item.findElement(hotelNameBy).getText();
+    return (name);
   }
 
   public List<WebElement> getOnlyAvailable() {
@@ -159,17 +158,16 @@ public class ResultsPageHelper extends HelperBase {
     return availableResults;
   }
 
-  public void initSortByPrice() {
+  public ResultsPageHelper initSortByPrice() {
     initSortByPrice.click();
-    refreshPage();
+    return this;
   }
 
 
-  public void initSortByDistance() {
+  public ResultsPageHelper initSortByDistance() {
     displayDropDown(additionalSortsButton, additionalSortsPanel, 5);
-    if (isElementPresentAndVisible(initSortByDistance))
-      initSortByDistance.click();
-    refreshPage();
+    initSortByDistance.findElement(By.cssSelector("a")).click();
+    return this;
   }
 
 }

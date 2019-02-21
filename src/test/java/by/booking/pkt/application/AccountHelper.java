@@ -8,6 +8,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfAllElementsLocatedBy;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
 
 public class AccountHelper extends HelperBase {
@@ -20,7 +21,7 @@ public class AccountHelper extends HelperBase {
   @FindBy(css = "#current_account span[class=user_name_block]")
   private WebElement initCurrentAccountMenu;
 
-  @FindBy(css = ".profile-navigationMenu")
+  @FindBy(css = ".profile-menu")
   private WebElement navigationMenu;
 
   @FindBy(css = "div[class*=wishlists]")
@@ -61,9 +62,9 @@ public class AccountHelper extends HelperBase {
     return this;
   }
 
-  public AccountHelper wishlists() {
+  public void wishlists() {
     navigationMenu().toWishlists.click();
-    return this;
+    wait.until(presenceOfAllElementsLocatedBy(By.cssSelector(".listview__title")));
   }
 
   public void logout() {

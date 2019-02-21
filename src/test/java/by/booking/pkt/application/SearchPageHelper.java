@@ -6,11 +6,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
-import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
 
 public class SearchPageHelper extends HelperBase {
   public SearchPageHelper(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
@@ -47,14 +43,13 @@ public class SearchPageHelper extends HelperBase {
   @FindBy(css = "label#xp__guests__toggle")
   public WebElement initGuestsPanel;
 
-  @FindBy(css = "div.focussable")
+  @FindBy(css = "div.xp__guests__inputs")
   public WebElement guestsPanel;
 
   public SearchPageHelper searchFor(SearchData searchData) {
     setCurrency(searchData.currency()).
             setPlace(searchData.whereGo()).
             setDates(searchData.inDate(), searchData.outDate()).
-            initGuestsPanel().
             setRooms(searchData.roomsCount()).
             setAdults(searchData.adultsCount()).
             setChildren(searchData.childrenCount()).
@@ -62,9 +57,10 @@ public class SearchPageHelper extends HelperBase {
     return this;
   }
 
-  private SearchPageHelper initGuestsPanel() {
-    displayDropDown(initGuestsPanel, guestsPanel, 5);
-    return this;
+  private void initGuestsPanel() {
+    if (guestsPanel.getAttribute("className").contains("hidden")) {
+      initGuestsPanel.click();
+    }
   }
 
   private SearchPageHelper initSearch() {
@@ -74,9 +70,7 @@ public class SearchPageHelper extends HelperBase {
 
   private SearchPageHelper setCurrency(String currency) {
     if (!selectedCurrency.getAttribute("value").equals(currency)) {
-   //   wait.until((WebDriver d)->{return currencyPanel.isEnabled();});
-     // displayDropDown(By.cssSelector("[data-id=currency_selector]"), By.cssSelector("#current_currency_foldout"), 15);
-      displayDropDown(currencySelectButton, currencyPanel, 15);
+      displayDropDown(currencySelectButton, currencyPanel, 5);
       webDriver.findElement(By.cssSelector("a[data-currency=" + currency + "]")).click();
     }
     return this;
@@ -122,6 +116,7 @@ public class SearchPageHelper extends HelperBase {
   }
 
   private void setCount(String id, int count) {
+    initGuestsPanel();
     int actualCount = -1;
     By minusBy = By.cssSelector("#" + id + "~button[class*=subtract-button]");
     By plusBy = By.cssSelector("#" + id + "~button[class*=add-button]");

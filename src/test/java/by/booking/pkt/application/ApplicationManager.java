@@ -18,8 +18,6 @@ public class ApplicationManager {
   private ResultsPageHelper resultsPageHelper;
   private HotelPageHelper hotelPageHelper;
   private WishlistsPageHelper wishlistsPageHelper;
-
-
   private FilterBoxHelper filterBoxHelper;
 
 
@@ -27,6 +25,7 @@ public class ApplicationManager {
     webDriver = new ChromeDriver();
     setImplicitlyWait(implicitlyWait);
     wait = new WebDriverWait(webDriver, 30);
+
     accountHelper = new AccountHelper(webDriver, wait, implicitlyWait);
     searchPageHelper = new SearchPageHelper(webDriver, wait, implicitlyWait);
     resultsPageHelper = new ResultsPageHelper(webDriver, wait, implicitlyWait);

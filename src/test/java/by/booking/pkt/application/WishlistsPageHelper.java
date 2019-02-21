@@ -2,7 +2,10 @@ package by.booking.pkt.application;
 
 import by.booking.pkt.model.Hotel;
 import by.booking.pkt.model.Wishlist;
-import org.openqa.selenium.*;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -10,8 +13,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-
-import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
 public class WishlistsPageHelper extends HelperBase {
 
@@ -53,6 +54,7 @@ public class WishlistsPageHelper extends HelperBase {
   private WebElement wishlistHeader;
 
   @FindBy(css = ".bui-carousel__item")
+
   private List<WebElement> hotelsInWishlist;
   public Wishlist createNewWithName(String listName) throws InterruptedException {
     List<Wishlist> beforeList = getWishlists();
@@ -64,14 +66,14 @@ public class WishlistsPageHelper extends HelperBase {
     });
     List<Wishlist> afterList = getWishlists();
     if(afterList.size()==(beforeList.size()+1)){
-      Comparator<? super Wishlist> byId = (wl1, wl2)->Integer.compare(wl1.getId(),wl2.getId());
+      Comparator<? super Wishlist> byId = Comparator.comparingInt(Wishlist::getId);
       return afterList.stream().max(byId).get();
     } else {
       return null;
     }
   }
 
-  public WishlistsPageHelper deleteWishlist(Wishlist list) throws InterruptedException {
+  public WishlistsPageHelper deleteWishlist(Wishlist list) {
     displayDropDown(defaultWishlist, actualWishlistPanel, 5);
     By removeButtonBy = By.cssSelector("span.listmap__remove_list");
     Alert alertDeleteList = alertAfterClick(elementFromWishlist(list).findElement(removeButtonBy));
@@ -98,7 +100,8 @@ public class WishlistsPageHelper extends HelperBase {
   }
 
   public List<Wishlist> getWishlists() {
-    refreshWislists();
+    displayDropDown(defaultWishlist, actualWishlistPanel, 5);
+    hideDropdown(defaultWishlist, actualWishlistPanel);
     List<Wishlist> wishlists = new ArrayList<>();
     for(WebElement e:allWishlists){
       Wishlist wl=new Wishlist().

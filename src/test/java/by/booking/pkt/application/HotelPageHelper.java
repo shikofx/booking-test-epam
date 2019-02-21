@@ -2,7 +2,6 @@ package by.booking.pkt.application;
 
 import by.booking.pkt.model.Hotel;
 import by.booking.pkt.model.Wishlist;
-import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -36,7 +35,6 @@ public class HotelPageHelper extends HelperBase {
     displayDropDown(saveButton, wishlistsPanel, 5);
     List<WebElement> oldWishlists = wishlistsOnPanel;
     enterWishlistName(listName).submitCreating();
-    System.out.println(wishlistsOnPanel.size()+ "++++++"+oldWishlists);
     wait.until((WebDriver d)->{
             int wls = wishlistsOnPanel.size();
             return wls==(oldWishlists.size()+1);});

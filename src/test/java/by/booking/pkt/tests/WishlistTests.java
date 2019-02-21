@@ -34,8 +34,9 @@ public class WishlistTests extends TBase {
   public void testListSendLink(SearchData searchData) throws Exception {
     app.account().loginAs(searchData.userName(), searchData.userPassword());
     app.account().navigationMenu().wishlists();
-    Wishlist newWishlist = app.wishlists().createNewWithName(searchData.getWishlistName());
-    app.windows().refreshPage();
+    Wishlist newWishlist = app.wishlists().
+            createNewWithName(searchData.getWishlistName());
+    app.wishlists().refreshPage();
     app.wishlists().setAsDefault(newWishlist);
     String urlToSend = app.wishlists().sendUrl();
     app.windows().goTo(urlToSend);

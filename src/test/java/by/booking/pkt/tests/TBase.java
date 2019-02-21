@@ -2,7 +2,10 @@ package by.booking.pkt.tests;
 
 import by.booking.pkt.application.ApplicationManager;
 import org.testng.ITestResult;
-import org.testng.annotations.*;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeSuite;
 
 public class TBase {
 
@@ -16,7 +19,7 @@ public class TBase {
 
   @AfterSuite(alwaysRun = true)
   public void tearDown() throws Exception {
-    app.stop();
+    //app.stop();
   }
 
   @BeforeMethod(alwaysRun = true)
@@ -26,7 +29,7 @@ public class TBase {
 
   @AfterMethod(alwaysRun = true)
   public void clearCookies(ITestResult result) {
-    app.clear();
+    //app.clear();
 //    if (!result.isSuccess()) {
 //      System.out.println("Screenshot after failure of: " + result.getName() + " in test " + result.getTestName());
 //    }

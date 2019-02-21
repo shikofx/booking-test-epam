@@ -10,6 +10,9 @@ import org.testng.asserts.SoftAssert;
 
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 public class FilterResultsTests extends TBase {
 
   @Test(enabled = true, groups = {"positive", "smoke", "filter"},
@@ -17,16 +20,13 @@ public class FilterResultsTests extends TBase {
   @DataSourceFileAnnotation("src\\test\\resources\\search-positive.data")
   public void testFilterByBudget(SearchData searchData) {
     app.searchPage().searchFor(searchData);
-    app.filters().selectBudget(searchData.minBudget(), searchData.maxBudget());
-    int maxBudget = app.filters().getMax();
-    int minBudget = app.filters().getMin();
-    Assertion assertion = new Assertion();
-    assertion.assertNotEquals(maxBudget, 0, "Filter by budget has not selected!");
-    int nightsCount = app.filters().getNigtsCount();
-    int maxTotalPrice = nightsCount * maxBudget;
-    int minTotalPrice = nightsCount * minBudget;
+    boolean isSelectedBudget = app.filters().selectBudget(searchData.minBudget(), searchData.maxBudget());
+    assertThat("There is no selected budget!", isSelectedBudget, equalTo(true));
+    int maxTotalPrice = app.filters().getMaxTotalPrice();
+    int minTotalPrice = app.filters().getMinTptalPrice();
     SoftAssert softAssert = new SoftAssert();
     List<Hotel> hotels = app.results().availableHotels();
+//    assetThat(hotels, everyItem());
     for (Hotel h : hotels) {
       softAssert.assertTrue(h.currentPrice() <= maxTotalPrice,
               "Budget " + maxTotalPrice + " less than total price " + h.currentPrice() + " for " + h.getName());
