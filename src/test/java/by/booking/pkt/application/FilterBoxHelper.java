@@ -103,7 +103,6 @@ public class FilterBoxHelper extends HelperBase {
   }
 
   public int getNigtsCount() {
-    return Integer.parseInt(textByPatternNoSpace(REGEX_NIGHTS, nigtsCountField.getText()));
+    return Integer.parseInt(textByPatternWithout(REGEX_NIGHTS, "\\s", nigtsCountField.getText()));
   }
-
 }

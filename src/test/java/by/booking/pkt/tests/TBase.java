@@ -19,7 +19,7 @@ public class TBase {
 
   @AfterSuite(alwaysRun = true)
   public void tearDown() throws Exception {
-    //app.stop();
+    app.stop();
   }
 
   @BeforeMethod(alwaysRun = true)
@@ -29,7 +29,7 @@ public class TBase {
 
   @AfterMethod(alwaysRun = true)
   public void clearCookies(ITestResult result) {
-    //app.clear();
+    app.clear();
 //    if (!result.isSuccess()) {
 //      System.out.println("Screenshot after failure of: " + result.getName() + " in test " + result.getTestName());
 //    }

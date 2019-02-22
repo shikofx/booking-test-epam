@@ -12,135 +12,126 @@ import java.util.regex.Pattern;
 import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
 public class HelperBase {
-  protected int implicitlyWait;
-  protected WebDriver webDriver;
-  protected WebDriverWait wait;
+   protected int implicitlyWait;
+   protected WebDriver webDriver;
+   protected WebDriverWait wait;
 
-  public HelperBase(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
-    PageFactory.initElements(webDriver, this);
-    this.webDriver = webDriver;
-    this.wait = wait;
-    this.implicitlyWait = implicitlyWait;
+   public HelperBase(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
+      PageFactory.initElements(webDriver, this);
+      this.webDriver = webDriver;
+      this.wait = wait;
+      this.implicitlyWait = implicitlyWait;
 
-  }
+   }
 
-  public HelperBase refreshPage() {
-    webDriver.navigate().refresh();
-    return this;
-  }
+   public HelperBase refreshPage() {
+      webDriver.navigate().refresh();
+      return this;
+   }
 
-  public HelperBase displayDropDown(WebElement whatClick, WebElement whatWait, int secondsToWait) {
-    boolean isClickable = whatClick.isDisplayed();
-    boolean whatW = isElementPresent(whatWait, 1);
-    if (isClickable && !whatW) {
-      whatClick.click();
-      wait.until(visibilityOf(whatWait));
-    } else if (!whatWait.isDisplayed()) {
-      whatClick.click();
-    }
-    return this;
-  }
-
-  protected HelperBase hideDropdown(WebElement toClick, WebElement toWait) {
-    wait.until((WebDriver d) -> {
-      if (toWait.isDisplayed()) {
-        toClick.click();
-      } else {
-        return true;
+   public HelperBase displayDropDown(WebElement whatClick, WebElement whatWait, int secondsToWait) {
+      boolean isClickable = whatClick.isDisplayed();
+      boolean whatW = isElementPresent(whatWait, 1);
+      if (isClickable && !whatW) {
+         whatClick.click();
+         wait.until(visibilityOf(whatWait));
+      } else if (!whatWait.isDisplayed()) {
+         whatClick.click();
       }
-      return false;
-    });
-    return this;
-  }
+      return this;
+   }
 
-  @Nullable
-  public String textByPatternNoSpace(String regex, String inString) {
-    return getTextByPattern(regex, inString).replaceAll("\\s", "");
-  }
+   protected HelperBase hideDropdown(WebElement whatClick, WebElement whatWait) {
+      wait.until((WebDriver d) -> {
+         if (whatWait.isDisplayed()) {
+            whatClick.click();
+         } else {
+            return true;
+         }
+         return false;
+      });
+      return this;
+   }
+   @Nullable
+   public String textByPattern(String regex, String text) {
+      Pattern pattern = Pattern.compile(regex);
+      Matcher matcher = pattern.matcher(text);
+      String result = null;
+      while (matcher.find()) {
+         result = text.substring(matcher.start(), matcher.end());
+      }
+      return result;
+   }
 
-  @Nullable
-  public String getTextByPattern(String regex, String string) {
-    Pattern pattern = Pattern.compile(regex);
-    Matcher matcher = pattern.matcher(string);
-    String result = null;
-    while (matcher.find()) {
-      result = string.substring(matcher.start(), matcher.end());
-    }
-    return result;
-  }
-
-  private boolean isElementDisplayed(By whatWait) {
-    return webDriver.findElement(whatWait).isDisplayed();
-  }
-
-  public boolean isElementPresent(By locator, int secondsToWait) {
-    setImplicitlyWait(secondsToWait);
-    boolean isElementPresent = webDriver.findElements(locator).size() > 0;
-    setImplicitlyWait(implicitlyWait);
-    return isElementPresent;
-
-  }
-
-  public boolean isElementPresent(WebElement e, int secondsToWait) {
-    setImplicitlyWait(secondsToWait);
-    boolean isPresent = false;
-    try {
-      e.getTagName();
-      isPresent = true;
-    } catch (NullPointerException exeptNull) {
-    } catch (NoSuchElementException exeptNoSuch) {
-    }
-    setImplicitlyWait(implicitlyWait);
-    return isPresent;
-  }
-
-  private void setImplicitlyWait(int secondsToWait) {
-    webDriver.manage().timeouts().implicitlyWait(secondsToWait, TimeUnit.SECONDS);
-  }
+   public String textByPatternWithout(String pattern, String withoutRegex, String text) {
+      return textByPattern(pattern, text).replaceAll(withoutRegex, "");
+   }
 
 
-  public boolean isElementPresent(WebElement inElement, By locator, int secondsToWait) {
-    int oldWait = implicitlyWait;
-    setImplicitlyWait(secondsToWait);
-    boolean isElementPresent = inElement.findElements(locator).size() > 0;
-    setImplicitlyWait(oldWait);
-    return isElementPresent;
-  }
 
-  public boolean isElementPresentAndVisible(WebElement e) {
-    return wait.until((WebDriver d) -> {
-      return e.isEnabled() && e.isDisplayed();
-    });
-  }
+   private boolean isElementDisplayed(By whatWait) {
+      return webDriver.findElement(whatWait).isDisplayed();
+   }
 
-  protected void inputText(WebElement where, String text) {
-    where.click();
-    where.clear();
-    where.sendKeys(text);
-  }
+   public boolean isElementPresent(By locator) {
+      return webDriver.findElements(locator).size() > 0;
+   }
 
-  private Alert alertAfterClick(By toClick) {
-    wait.until(visibilityOfElementLocated(toClick));
-    return wait.until((WebDriver d) -> {
-      d.findElement(toClick).click();
+   public boolean isElementPresent(WebElement inElement, By locator) {
+      return inElement.findElements(locator).size() > 0;
+   }
+
+   public boolean isElementPresent(WebElement element, int secondsToWait) {
+      setImplicitlyWait(secondsToWait);
+      boolean isPresent = false;
       try {
-        return d.switchTo().alert();
-      } catch (NoAlertPresentException e) {
-        return null;
+         element.getTagName();
+         isPresent = true;
+      } catch (NullPointerException exeptNull) {
+      } catch (NoSuchElementException exeptNoSuch) {
       }
-    });
-  }
+      setImplicitlyWait(implicitlyWait);
+      return isPresent;
+   }
 
-  protected Alert alertAfterClick(WebElement toClick) {
-    wait.until(visibilityOfAllElements(toClick));
-    return wait.until((WebDriver d) -> {
-      toClick.click();
-      try {
-        return d.switchTo().alert();
-      } catch (NoAlertPresentException e) {
-        return null;
-      }
-    });
-  }
+   public boolean isElementPresentAndVisible(WebElement e) {
+      return wait.until((WebDriver d) -> {
+         return e.isEnabled() && e.isDisplayed();
+      });
+   }
+
+   private void setImplicitlyWait(int secondsToWait) {
+      webDriver.manage().timeouts().implicitlyWait(secondsToWait, TimeUnit.SECONDS);
+   }
+
+   protected void inputText(WebElement input, String text) {
+      input.click();
+      input.clear();
+      input.sendKeys(text);
+   }
+
+   private Alert alertAfterClick(By whatClick) {
+      wait.until(visibilityOfElementLocated(whatClick));
+      return wait.until((WebDriver d) -> {
+         d.findElement(whatClick).click();
+         try {
+            return d.switchTo().alert();
+         } catch (NoAlertPresentException e) {
+            return null;
+         }
+      });
+   }
+
+   protected Alert alertAfterClick(WebElement whatClick) {
+      wait.until(visibilityOfAllElements(whatClick));
+      return wait.until((WebDriver d) -> {
+         whatClick.click();
+         try {
+            return d.switchTo().alert();
+         } catch (NoAlertPresentException e) {
+            return null;
+         }
+      });
+   }
 
 }

@@ -120,7 +120,7 @@ public class WishlistsPageHelper extends HelperBase {
 
   private String getWishlistName(WebElement e) {
     By wishlistNameBy = By.cssSelector("span.listmap__list_name");
-    return getTextByPattern(REGEX_WISHLIST_NAME, e.findElement(wishlistNameBy).getAttribute("textContent"));
+    return textByPattern(REGEX_WISHLIST_NAME, e.findElement(wishlistNameBy).getAttribute("textContent"));
   }
 
   private int getWishlistId(WebElement e) {
