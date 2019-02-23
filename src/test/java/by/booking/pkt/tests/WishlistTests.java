@@ -16,14 +16,14 @@ public class WishlistTests extends TBase {
   public void testListCreate(SearchData searchData) throws InterruptedException {
     app.account().loginAs(searchData.userName(), searchData.userPassword());
     app.account().navigationMenu().wishlists();
-    Wishlist newWishlist = app.wishlists().createNewWithName(searchData.getWishlistName());
+    Wishlist newWishlist = app.wishlists().createNewWithName(searchData.wishlistName());
     String defaultListName = app.wishlists().defaultList();
     app.wishlists().deleteWishlist(newWishlist);
     app.account().logout();
     Assertion assertion = new Assertion();
     assertion.assertNotEquals(newWishlist, null, "Wishlist create failed!");
-    assertion.assertEquals(newWishlist.getName(), searchData.getWishlistName(), "Name of new list is not valid!");
-    assertion.assertEquals(defaultListName, searchData.getWishlistName(), "Name of default list is not '" + searchData.getWishlistName() + "'!");
+    assertion.assertEquals(newWishlist.getName(), searchData.wishlistName(), "Name of new list is not valid!");
+    assertion.assertEquals(defaultListName, searchData.wishlistName(), "Name of default list is not '" + searchData.wishlistName() + "'!");
 
 
   }
@@ -35,7 +35,7 @@ public class WishlistTests extends TBase {
     app.account().loginAs(searchData.userName(), searchData.userPassword());
     app.account().navigationMenu().wishlists();
     Wishlist newWishlist = app.wishlists().
-            createNewWithName(searchData.getWishlistName());
+            createNewWithName(searchData.wishlistName());
     app.wishlists().refreshPage();
     app.wishlists().setAsDefault(newWishlist);
     String urlToSend = app.wishlists().sendUrl();

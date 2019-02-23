@@ -34,7 +34,7 @@ public class HotelTests extends TBaseMethods {
     SoftAssert softAssert = new SoftAssert();
     softAssert.assertNotEquals(hotelWindow, null, "Hotel info doesn't open in new window!");
 
-    String newListName = searchData.getWishlistName();
+    String newListName = searchData.wishlistName();
     Wishlist newWishlist = app.hotel().createWishlist(newListName, first);
     softAssert.assertNotEquals(newWishlist, null, "New wishlist creating failed!");
     app.hotel().goToWishlist(newWishlist);

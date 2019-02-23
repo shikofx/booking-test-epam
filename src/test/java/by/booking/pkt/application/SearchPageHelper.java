@@ -48,7 +48,7 @@ public class SearchPageHelper extends HelperBase {
 
   public SearchPageHelper searchFor(SearchData searchData) {
     setCurrency(searchData.currency()).
-            setPlace(searchData.whereGo()).
+            setPlace(searchData.placeTo()).
             setDates(searchData.inDate(), searchData.outDate()).
             setRooms(searchData.roomsCount()).
             setAdults(searchData.adultsCount()).

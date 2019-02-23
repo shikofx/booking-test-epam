@@ -108,7 +108,7 @@ public class SearchData {
     return currency;
   }
 
-  public String whereGo() {
+  public String placeTo() {
     return place;
   }
 
@@ -144,7 +144,7 @@ public class SearchData {
     return stars;
   }
 
-  public String getWishlistName() {
+  public String wishlistName() {
     return wishlistName;
   }
 }

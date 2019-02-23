@@ -1,1 +1,5 @@
-pkt.autotests@gmail.com,0123456789,RUB,Нью-Йорк,2019-03-24,2019-04-03,2,3,1,30000,200000,4,to New York
+pkt.autotests@gmail.com,0123456789,RUB,New York,2019-03-01,2019-04-01,2,1,0,2000,4000,1,to New York 1
+pkt.autotests@gmail.com,0123456789,RUB,New York,2019-03-02,2019-04-02,2,1,0,4000,8000,2,to New York 2
+pkt.autotests@gmail.com,0123456789,RUB,New York,2019-03-03,2019-04-03,2,1,0,6000,12000,3,to New York 3
+pkt.autotests@gmail.com,0123456789,RUB,New York,2019-03-04,2019-04-04,2,1,0,8000,16000,4,to New York 4
+pkt.autotests@gmail.com,0123456789,RUB,New York,2019-03-05,2019-04-05,2,1,0,10000,20000,5,to New York 5
