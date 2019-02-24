@@ -11,6 +11,20 @@ public class SearchData {
   private int adultsCount;
   private int childrenCount;
   private int minBudget;
+
+  @Override
+  public String toString() {
+    return "SearchData{" +
+            "place='" + place + '\'' +
+            ", roomsCount=" + roomsCount +
+            ", adultsCount=" + adultsCount +
+            ", childrenCount=" + childrenCount +
+            ", minBudget=" + minBudget +
+            ", maxBudget=" + maxBudget +
+            ", stars=" + stars +
+            '}';
+  }
+
   private int maxBudget;
   private int stars;
   private String wishlistName;

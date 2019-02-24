@@ -82,9 +82,7 @@ public class ResultsPageHelper extends HelperBase {
       List<Hotel> hotels = new ArrayList<Hotel>();
       int i = 0;
       for (WebElement e : getOnlyAvailable()) {
-         if (getHotelName(e).contains("Iberostar 70 Park Avenue")) {
-            hotels.add(resultToHotel(e));
-         }
+         hotels.add(resultToHotel(e));
       }
       return hotels;
    }
