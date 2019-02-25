@@ -13,23 +13,23 @@ public class TBase {
 
   @BeforeSuite(alwaysRun = true)
   public void setUp() throws Exception {
-  //  app.init(30);
+    app.init(30);
 
   }
 
   @AfterSuite(alwaysRun = true)
   public void tearDown() throws Exception {
-    //app.stop();
+    app.stop();
   }
 
   @BeforeMethod(alwaysRun = true)
   public void goToBooking() throws Exception {
-    //app.windows().goTo("https://booking.com");
+    app.windows().goTo("https://booking.com");
   }
 
   @AfterMethod(alwaysRun = true)
   public void clearCookies(ITestResult result) {
-   .. app.clear();
+    app.clear();
 //    if (!result.isSuccess()) {
 //      System.out.println("Screenshot after failure of: " + result.getName() + " in test " + result.getTestName());
 //    }

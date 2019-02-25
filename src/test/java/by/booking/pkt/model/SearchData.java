@@ -1,33 +1,45 @@
 package by.booking.pkt.model;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+
+@XStreamAlias("Search")
 public class SearchData {
   private String username;
   private String password;
+  @XStreamAsAttribute
   private String currency;
   private String place;
   private String inDate;
   private String outDate;
-  private int roomsCount;
-  private int adultsCount;
-  private int childrenCount;
-  private int minBudget;
+  @XStreamAsAttribute
+  private int rooms;
+  @XStreamAsAttribute
+  private int adults;
+  @XStreamAsAttribute
+  private int children;
+  @XStreamAsAttribute
+  private int budgetMin;
+  @XStreamAsAttribute
+  private int budgetMax;
+  @XStreamAsAttribute
+  private int stars;
+  private String wishlistName;
 
   @Override
   public String toString() {
     return "SearchData{" +
             "place='" + place + '\'' +
-            ", roomsCount=" + roomsCount +
-            ", adultsCount=" + adultsCount +
-            ", childrenCount=" + childrenCount +
-            ", minBudget=" + minBudget +
-            ", maxBudget=" + maxBudget +
+            ", rooms=" + rooms +
+            ", adults=" + adults +
+            ", children=" + children +
+            ", budgetMin=" + budgetMin +
+            ", budgetMax=" + budgetMax +
             ", stars=" + stars +
             '}';
   }
 
-  private int maxBudget;
-  private int stars;
-  private String wishlistName;
+
 
   public SearchData() {
     username = "";
@@ -36,11 +48,11 @@ public class SearchData {
     place = "";
     inDate = "";
     outDate = "";
-    roomsCount = 1;
-    adultsCount = 1;
-    childrenCount = 0;
-    minBudget = 0;
-    maxBudget = 0;
+    rooms = 1;
+    adults = 1;
+    children = 0;
+    budgetMin = 0;
+    budgetMax = 0;
     stars = 0;
   }
 
@@ -76,27 +88,27 @@ public class SearchData {
   }
 
   public SearchData withRooms(int roomsCount) {
-    this.roomsCount = roomsCount;
+    this.rooms = roomsCount;
     return this;
   }
 
   public SearchData withAdults(int adultsCount) {
-    this.adultsCount = adultsCount;
+    this.adults = adultsCount;
     return this;
   }
 
   public SearchData withChildren(int childrenCount) {
-    this.childrenCount = childrenCount;
+    this.children = childrenCount;
     return this;
   }
 
   public SearchData withMinBudget(int budget) {
-    this.minBudget = budget;
+    this.budgetMin = budget;
     return this;
   }
 
   public SearchData withMaxBudget(int budget) {
-    this.maxBudget = budget;
+    this.budgetMax = budget;
     return this;
   }
 
@@ -135,23 +147,23 @@ public class SearchData {
   }
 
   public int roomsCount() {
-    return roomsCount;
+    return rooms;
   }
 
   public int adultsCount() {
-    return adultsCount;
+    return adults;
   }
 
   public int childrenCount() {
-    return childrenCount;
+    return children;
   }
 
   public int maxBudget() {
-    return maxBudget;
+    return budgetMax;
   }
 
   public int minBudget() {
-    return minBudget;
+    return budgetMin;
   }
 
   public int stars() {
