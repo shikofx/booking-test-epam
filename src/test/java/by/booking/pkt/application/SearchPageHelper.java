@@ -1,6 +1,6 @@
 package by.booking.pkt.application;
 
-import by.booking.pkt.model.SearchData;
+import by.booking.pkt.model.TestsData;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -46,13 +46,13 @@ public class SearchPageHelper extends HelperBase {
   @FindBy(css = "div.xp__guests__inputs")
   public WebElement guestsPanel;
 
-  public SearchPageHelper searchFor(SearchData searchData) {
-    setCurrency(searchData.currency()).
-            setPlace(searchData.placeTo()).
-            setDates(searchData.inDate(), searchData.outDate()).
-            setRooms(searchData.roomsCount()).
-            setAdults(searchData.adultsCount()).
-            setChildren(searchData.childrenCount()).
+   public SearchPageHelper searchFor(TestsData testsData) {
+      setCurrency(testsData.currency()).
+              setPlace(testsData.placeTo()).
+              setDates(testsData.inDate(), testsData.outDate()).
+              setRooms(testsData.roomsCount()).
+              setAdults(testsData.adultsCount()).
+              setChildren(testsData.childrenCount()).
             initSearch();
     return this;
   }

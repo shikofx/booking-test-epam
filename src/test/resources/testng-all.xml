@@ -1,9 +1,9 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="Suit1" verbose="1">
+<suite name="BookingTests" verbose="1">
     <!--Running full packages-->
-    <test name="Test1">
+    <test name="AllTests">
         <packages>
-            <package name="ru.pkt.booking.tests"/>
+            <package name="by.booking.pkt.tests"/>
         </packages>
     </test>
 </suite>

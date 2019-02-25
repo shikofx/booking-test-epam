@@ -1,24 +1,25 @@
-package by.booking.pkt.tests;
+package by.booking.pkt.tests.hotel;
 
 import by.booking.pkt.data.DataSourceFileAnnotation;
 import by.booking.pkt.data.FileDataProvider;
-import by.booking.pkt.model.SearchData;
+import by.booking.pkt.model.TestsData;
+import by.booking.pkt.tests.TBaseMethods;
 import org.testng.annotations.Test;
 
-public class HotelTests extends TBaseMethods {
+public class HotelToWishlistTests extends TBaseMethods {
 
 
-  @Test(enabled = true, groups = {"positive", "smoke", "sort"},
-          dataProviderClass = FileDataProvider.class, dataProvider = "searchDataFromJSON")
-  @DataSourceFileAnnotation("src\\test\\resources\\search-positive.json")
-  public void testaddHotelToNewList(SearchData searchData) {
-//    app.account().loginAs(searchData.userName(), searchData.userPassword());
-//    app.searchPage().searchFor(searchData);
+   @Test(enabled = true, groups = {"positive", "hotel"},
+           dataProviderClass = FileDataProvider.class, dataProvider = "testDataFromJSON")
+   @DataSourceFileAnnotation("src\\test\\resources\\data-for-hotel-positive.json")
+   public void testaddHotelToNewList(TestsData testsData) {
+//    app.account().loginAs(testsData.userName(), testsData.userPassword());
+//    app.searchPage().searchFor(testsData);
 //
 //    String resultsWindow = app.windows().handle();
 //    Set<String> oldWindows = app.windows().all();
 //
-//    Hotel first = app.results().getFirstHotel();
+//    HotelToWishlistTests first = app.results().getFirstHotel();
 //    app.results().goToHotelPage(first);
 //
 //    String hotelWindow = app.windows().getNew(oldWindows);
@@ -26,9 +27,9 @@ public class HotelTests extends TBaseMethods {
 //    oldWindows = app.windows().all();
 //
 //    SoftAssert softAssert = new SoftAssert();
-//    softAssert.assertNotEquals(hotelWindow, null, "Hotel info doesn't open in new window!");
+//    softAssert.assertNotEquals(hotelWindow, null, "HotelToWishlistTests info doesn't open in new window!");
 //
-//    String newListName = searchData.wishlistName();
+//    String newListName = testsData.wishlistName();
 //    Wishlist newWishlist = app.hotel().createWishlist(newListName, first);
 //    softAssert.assertNotEquals(newWishlist, null, "New wishlist creating failed!");
 //    app.hotel().goToWishlist(newWishlist);
@@ -42,7 +43,7 @@ public class HotelTests extends TBaseMethods {
 //
 //    Assertion assertion = new Assertion();
 //    assertion.assertTrue(app.wishlists().findWishlist(newWishlist), "There is no such wishlist!");
-//    Hotel hotel = app.wishlists().hotelsInList().get(0);
+//    HotelToWishlistTests hotel = app.wishlists().hotelsInList().get(0);
 //    assertion.assertTrue(hotel.equals(newWishlist.getHotelList().get(0)), "There is no suh hotel in wishlist");
 //    softAssert.assertAll();
 

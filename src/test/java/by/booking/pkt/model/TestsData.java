@@ -4,7 +4,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
 @XStreamAlias("Search")
-public class SearchData {
+public class TestsData {
   private String username;
   private String password;
   @XStreamAsAttribute
@@ -20,104 +20,121 @@ public class SearchData {
   private int children;
   @XStreamAsAttribute
   private int budgetMin;
+
+   @Override
+   public String toString() {
+      String testString = "";
+      if (currency.length() > 0)
+         testString += "currency='" + currency + "\'; ";
+      if (place.length() > 0)
+         testString += "place='" + place + "\'; ";
+      if (inDate.length() > 0)
+         testString += "inDate='" + inDate + "\'; ";
+      if (outDate.length() > 0)
+         testString += "outDate='" + outDate + "\'; ";
+      if (rooms > 0)
+         testString += "rooms='" + rooms + "\'; ";
+      if (adults > 0)
+         testString += "adults='" + adults + "\'; ";
+      if (children > 0)
+         testString += "children='" + children + "\'; ";
+      if (budgetMin > 0)
+         testString += "budgetMin='" + budgetMin + "\'; ";
+      if (budgetMax > 0)
+         testString += "budgetMax='" + budgetMax + "\'; ";
+      if (stars > 0)
+         testString += "stars='" + stars + "\'; ";
+      if (wishlistName.length() > 0)
+         testString += "wishlistName='" + wishlistName + '\'';
+      return "TestsData{" +
+              testString + '}';
+   }
+
   @XStreamAsAttribute
   private int budgetMax;
   @XStreamAsAttribute
   private int stars;
   private String wishlistName;
 
-  @Override
-  public String toString() {
-    return "SearchData{" +
-            "place='" + place + '\'' +
-            ", rooms=" + rooms +
-            ", adults=" + adults +
-            ", children=" + children +
-            ", budgetMin=" + budgetMin +
-            ", budgetMax=" + budgetMax +
-            ", stars=" + stars +
-            '}';
-  }
 
-
-
-  public SearchData() {
+   public TestsData() {
     username = "";
     password = "";
     currency = "";
     place = "";
     inDate = "";
     outDate = "";
-    rooms = 1;
-    adults = 1;
+      rooms = 0;
+      adults = 0;
     children = 0;
     budgetMin = 0;
     budgetMax = 0;
     stars = 0;
+      wishlistName = "";
   }
 
-  public SearchData withUsername(String username) {
+   public TestsData withUsername(String username) {
     this.username = username;
     return this;
   }
 
 
-  public SearchData withPassword(String password) {
+   public TestsData withPassword(String password) {
     this.password = password;
     return this;
   }
 
-  public SearchData withCurrency(String currency) {
+   public TestsData withCurrency(String currency) {
     this.currency = currency;
     return this;
   }
 
-  public SearchData withPlace(String place) {
+   public TestsData withPlace(String place) {
     this.place = place;
     return this;
   }
 
-  public SearchData withInDate(String inDate) {
+   public TestsData withInDate(String inDate) {
     this.inDate = inDate;
     return this;
   }
 
-  public SearchData withOutDate(String outDate) {
+   public TestsData withOutDate(String outDate) {
     this.outDate = outDate;
     return this;
   }
 
-  public SearchData withRooms(int roomsCount) {
+   public TestsData withRooms(int roomsCount) {
     this.rooms = roomsCount;
     return this;
   }
 
-  public SearchData withAdults(int adultsCount) {
+   public TestsData withAdults(int adultsCount) {
     this.adults = adultsCount;
     return this;
   }
 
-  public SearchData withChildren(int childrenCount) {
+   public TestsData withChildren(int childrenCount) {
     this.children = childrenCount;
     return this;
   }
 
-  public SearchData withMinBudget(int budget) {
+   public TestsData withMinBudget(int budget) {
     this.budgetMin = budget;
     return this;
   }
 
-  public SearchData withMaxBudget(int budget) {
+   public TestsData withMaxBudget(int budget) {
     this.budgetMax = budget;
     return this;
   }
 
-  public SearchData withStars(int stars) {
+   public TestsData withStars(int stars) {
     this.stars = stars;
     return this;
   }
 
-  public SearchData withWishlist(String wishlistName) {
+   public TestsData withWishlist(String wishlistName) {
     this.wishlistName = wishlistName;
     return this;
   }

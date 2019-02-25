@@ -1,0 +1,20 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="BookingTests" verbose="1">
+   <!--Running full packages-->
+   <test name="Wishlists">
+      <classes>
+         <class name="by.booking.pkt.tests.profile.WishlistsTests"/>
+      </classes>
+   </test>
+   <test name="Hotel">
+      <classes>
+         <class name="by.booking.pkt.tests.hotel.HotelToWishlistTests"/>
+      </classes>
+   </test>
+   <test name="Search">
+      <classes>
+         <class name="by.booking.pkt.tests.search.ResultsFilterTests"/>
+         <class name="by.booking.pkt.tests.search.ResultsSortTests"/>
+      </classes>
+   </test>
+</suite>

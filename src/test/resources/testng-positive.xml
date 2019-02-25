@@ -1,0 +1,17 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="BookingTests" verbose="1">
+   <test name="Positive">
+      <groups>
+         <run>
+            <include name="positive"/>
+         </run>
+      </groups>
+      <classes>
+         <class name="by.booking.pkt.tests.search.ResultsFilterTests"/>
+         <class name="by.booking.pkt.tests.search.ResultsSortTests"/>
+         <class name="by.booking.pkt.tests.hotel.HotelToWishlistTests"/>
+         <class name="by.booking.pkt.tests.profile.WishlistsTests"/>
+      </classes>
+   </test>
+
+</suite>

@@ -1,0 +1,9 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="BookingTests" verbose="1">
+   <!--Running full packages-->
+   <test name="Wishlists">
+      <packages>
+         <package name="by.booking.pkt.tests.profile"/>
+      </packages>
+   </test>
+</suite>
