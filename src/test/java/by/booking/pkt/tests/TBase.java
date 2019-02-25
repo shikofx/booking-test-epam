@@ -1,6 +1,7 @@
 package by.booking.pkt.tests;
 
 import by.booking.pkt.application.ApplicationManager;
+import org.openqa.selenium.remote.BrowserType;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
@@ -9,7 +10,8 @@ import org.testng.annotations.BeforeSuite;
 
 public class TBase {
 
-  protected static final ApplicationManager app = new ApplicationManager();
+  protected static final ApplicationManager app =
+          new ApplicationManager(System.getProperty("browser", BrowserType.CHROME));
 
   @BeforeSuite(alwaysRun = true)
   public void setUp() throws Exception {
@@ -24,7 +26,7 @@ public class TBase {
 
   @BeforeMethod(alwaysRun = true)
   public void goToBooking() throws Exception {
-    app.windows().goTo("https://booking.com");
+    app.goToBooking();
   }
 
   @AfterMethod(alwaysRun = true)

@@ -8,6 +8,8 @@
    <artifactId>epam_booking</artifactId>
    <version>1.0-SNAPSHOT</version>
 
+   <properties/>
+
    <repositories>
       <repository>
          <id>dcm4che repository</id>
