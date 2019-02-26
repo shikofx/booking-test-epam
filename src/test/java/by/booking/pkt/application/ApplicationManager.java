@@ -1,124 +1,113 @@
 package by.booking.pkt.application;
 
+import by.booking.pkt.utils.PropertyLoader;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.edge.EdgeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.ie.InternetExplorerDriver;
-import org.openqa.selenium.opera.OperaDriver;
-import org.openqa.selenium.remote.BrowserType;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import ru.stqa.selenium.factory.WebDriverPool;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.Properties;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 public class ApplicationManager {
-  protected WebDriver webDriver;
-  protected WebDriverWait wait;
 
+   protected static Capabilities capabilities;
+   protected static String baseUrl;
+   protected static String gridHubUrl;
+   protected static String username;
+   protected static String password;
 
-  private int implicitlyWait;
-  private AccountHelper accountHelper;
-  private WindowHelper windowHelper;
-  private SearchPageHelper searchPageHelper;
-  private ResultsPageHelper resultsPageHelper;
-  private HotelPageHelper hotelPageHelper;
-  private WishlistsPageHelper wishlistsPageHelper;
-  private FilterBoxHelper filterBoxHelper;
-  private String browser;
-  private final Properties properties;
+   protected WebDriver webDriver;
+   protected WebDriverWait wait;
 
-  public ApplicationManager(String browser) {
-    this.browser = browser;
-    properties = new Properties();
+   private int implicitlyWait;
+   private AccountHelper accountHelper;
+   private WindowHelper windowHelper;
+   private SearchPageHelper searchPageHelper;
+   private ResultsPageHelper resultsPageHelper;
+   private HotelPageHelper hotelPageHelper;
+   private WishlistsPageHelper wishlistsPageHelper;
+   private FilterBoxHelper filterBoxHelper;
+   private String browser;
 
-  }
+   public void init(int implicitlyWait) throws IOException {
+      baseUrl = PropertyLoader.loadProperty("site.url");
+      gridHubUrl = PropertyLoader.loadProperty("grid.url");
+      capabilities = PropertyLoader.loadCapabilities();
+      if (gridHubUrl != null) {
+         webDriver = WebDriverPool.DEFAULT.getDriver(new URL(gridHubUrl), capabilities);
+      } else {
+         webDriver = WebDriverPool.DEFAULT.getDriver(capabilities);
+      }
+      username = PropertyLoader.loadProperty("account.username");
+      password = PropertyLoader.loadProperty("account.password");
 
-  public void init(int implicitlyWait) throws IOException {
-    String target = (System.getProperty("target", "booking"));
-    properties.load(new FileReader(new File(String.format("/src/test/resources/%s.properties", target))));
+      setImplicitlyWait(implicitlyWait);
 
-    if (browser.equals(BrowserType.EDGE))
-      webDriver = new EdgeDriver();
-    else if (browser.equals(BrowserType.FIREFOX))
-      webDriver = new FirefoxDriver();
-    else if (browser.equals(BrowserType.IE))
-      webDriver = new InternetExplorerDriver();
-    else if (browser.equals(BrowserType.OPERA_BLINK))
-      webDriver = new OperaDriver();
-    else if (browser.equals(BrowserType.CHROME))
-      webDriver = new ChromeDriver();
+      wait = new WebDriverWait(webDriver, 30);
 
-    setImplicitlyWait(implicitlyWait);
+      accountHelper = new AccountHelper(webDriver, wait, implicitlyWait);
+      searchPageHelper = new SearchPageHelper(webDriver, wait, implicitlyWait);
+      resultsPageHelper = new ResultsPageHelper(webDriver, wait, implicitlyWait);
+      filterBoxHelper = new FilterBoxHelper(webDriver, wait, implicitlyWait);
+      hotelPageHelper = new HotelPageHelper(webDriver, wait, implicitlyWait);
+      windowHelper = new WindowHelper(webDriver, wait, implicitlyWait);
+      wishlistsPageHelper = new WishlistsPageHelper(webDriver, wait, implicitlyWait);
 
-    wait = new WebDriverWait(webDriver, 30);
+      windowHelper.maximazeWindow();
+   }
 
-    accountHelper = new AccountHelper(webDriver, wait, implicitlyWait);
-    searchPageHelper = new SearchPageHelper(webDriver, wait, implicitlyWait);
-    resultsPageHelper = new ResultsPageHelper(webDriver, wait, implicitlyWait);
-    filterBoxHelper = new FilterBoxHelper(webDriver, wait, implicitlyWait);
-    hotelPageHelper = new HotelPageHelper(webDriver, wait, implicitlyWait);
-    windowHelper = new WindowHelper(webDriver, wait, implicitlyWait);
-    wishlistsPageHelper = new WishlistsPageHelper(webDriver, wait, implicitlyWait);
+   public void goToBooking() {
+      webDriver.get(baseUrl);
+   }
 
-    windowHelper.maximazeWindow();
-  }
+   public void login() {
+      accountHelper.loginAs(username, password);
+   }
 
-  public void goToBooking() {
-    webDriver.get(properties.getProperty("baseUrl"));
-  }
+   public void stop() {
+      WebDriverPool.DEFAULT.dismissAll();
+   }
 
-  public void login() {
-    accountHelper.loginAs(properties.getProperty("userName"), properties.getProperty("userPassword"));
-  }
+   public void clear() {
+      webDriver.manage().deleteAllCookies();
+   }
 
-  public void stop() {
-    // webDriver.quit();
+   public int getImplicitlyWait() {
+      return implicitlyWait;
+   }
 
-  }
+   public void setImplicitlyWait(int implicitlyWait) {
+      webDriver.manage().timeouts().implicitlyWait(implicitlyWait, TimeUnit.SECONDS);
+      this.implicitlyWait = implicitlyWait;
+   }
 
-  public void clear() {
-    webDriver.manage().deleteAllCookies();
-  }
+   public AccountHelper account() {
+      return accountHelper;
+   }
 
+   public WindowHelper windows() {
+      return windowHelper;
+   }
 
-  public int getImplicitlyWait() {
-    return implicitlyWait;
-  }
+   public SearchPageHelper searchPage() {
+      return searchPageHelper;
+   }
 
-  public void setImplicitlyWait(int implicitlyWait) {
-    webDriver.manage().timeouts().implicitlyWait(implicitlyWait, TimeUnit.SECONDS);
-    this.implicitlyWait = implicitlyWait;
-  }
+   public ResultsPageHelper results() {
+      return resultsPageHelper;
+   }
 
-  public AccountHelper account() {
-    return accountHelper;
-  }
+   public HotelPageHelper hotel() {
+      return hotelPageHelper;
+   }
 
-  public WindowHelper windows() {
-    return windowHelper;
-  }
+   public WishlistsPageHelper wishlists() {
+      return wishlistsPageHelper;
+   }
 
-  public SearchPageHelper searchPage() {
-    return searchPageHelper;
-  }
-
-  public ResultsPageHelper results() {
-    return resultsPageHelper;
-  }
-
-  public HotelPageHelper hotel() {
-    return hotelPageHelper;
-  }
-
-  public WishlistsPageHelper wishlists() {
-    return wishlistsPageHelper;
-  }
-
-  public FilterBoxHelper filters() {
-    return filterBoxHelper;
-  }
+   public FilterBoxHelper filters() {
+      return filterBoxHelper;
+   }
 }

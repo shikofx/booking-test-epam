@@ -1,6 +1,5 @@
 package by.booking.pkt.application;
 
-import org.jetbrains.annotations.Nullable;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -42,7 +41,6 @@ public class FilterBoxHelper extends HelperBase {
     }
   }
 
-  @Nullable
   public boolean selectBudget(int min, int max) {
     List<WebElement> all = allBudgets;
     minBudget = 0;

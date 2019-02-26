@@ -1,0 +1,62 @@
+[
+  {
+    "username": "",
+    "password": "",
+    "currency": "RUB",
+    "place": "New York",
+    "inDate": "2019-03-05",
+    "outDate": "2019-04-01",
+    "rooms": 2,
+    "adults": 1,
+    "children": 0,
+    "budgetMin": 2000,
+    "budgetMax": 4000,
+    "stars": 1,
+    "wishlistName": ""
+  },
+  {
+    "username": "",
+    "password": "",
+    "currency": "RUB",
+    "place": "New York",
+    "inDate": "2019-03-06",
+    "outDate": "2019-04-02",
+    "rooms": 2,
+    "adults": 2,
+    "children": 1,
+    "budgetMin": 4000,
+    "budgetMax": 8000,
+    "stars": 2,
+    "wishlistName": ""
+  },
+  {
+    "username": "",
+    "password": "",
+    "currency": "RUB",
+    "place": "New York",
+    "inDate": "2019-03-07",
+    "outDate": "2019-04-03",
+    "rooms": 2,
+    "adults": 3,
+    "children": 2,
+    "budgetMin": 6000,
+    "budgetMax": 12000,
+    "stars": 3,
+    "wishlistName": ""
+  },
+  {
+    "username": "",
+    "password": "",
+    "currency": "RUB",
+    "place": "New York",
+    "inDate": "2019-03-08",
+    "outDate": "2019-04-04",
+    "rooms": 2,
+    "adults": 4,
+    "children": 3,
+    "budgetMin": 8000,
+    "budgetMax": 16000,
+    "stars": 4,
+    "wishlistName": ""
+  }
+]

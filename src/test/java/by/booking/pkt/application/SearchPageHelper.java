@@ -1,7 +1,6 @@
 package by.booking.pkt.application;
 
 import by.booking.pkt.model.TestsData;
-import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -93,7 +92,7 @@ public class SearchPageHelper extends HelperBase {
     return this;
   }
 
-  @NotNull
+  //  @NotNull
   private String firstDate(String checkInDate) {
     String[] firstMonthArray = checkInDate.split("-");
     firstMonthArray[2] = "01";

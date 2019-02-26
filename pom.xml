@@ -8,7 +8,6 @@
    <artifactId>epam_booking</artifactId>
    <version>1.0-SNAPSHOT</version>
 
-   <properties/>
 
    <repositories>
       <repository>
@@ -18,31 +17,34 @@
    </repositories>
 
    <dependencies>
+      <!--testng-->
       <dependency>
          <groupId>org.testng</groupId>
          <artifactId>testng</artifactId>
          <version>6.14.3</version>
       </dependency>
 
+      <!--selenium-java-->
       <dependency>
          <groupId>org.seleniumhq.selenium</groupId>
          <artifactId>selenium-java</artifactId>
          <version>3.141.59</version>
       </dependency>
 
-      <!-- https://mvnrepository.com/artifact/com.thoughtworks.xstream/xstream -->
+      <!--selenium-server-->
       <dependency>
-         <groupId>com.thoughtworks.xstream</groupId>
-         <artifactId>xstream</artifactId>
-         <version>1.4.11.1</version>
+         <groupId>org.seleniumhq.selenium</groupId>
+         <artifactId>selenium-server</artifactId>
+         <version>3.141.59</version>
       </dependency>
 
-      <!--WebDriver factory libruary launching-->
+      <!--WebDriver factory-->
       <dependency>
          <groupId>ru.stqa.selenium</groupId>
          <artifactId>webdriver-factory</artifactId>
          <version>4.3</version>
       </dependency>
+
 
       <dependency>
          <groupId>org.slf4j</groupId>
@@ -58,7 +60,28 @@
          <scope>test</scope>
       </dependency>
 
-      <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+      <!--htmlunit driver-->
+      <dependency>
+         <groupId>org.seleniumhq.selenium</groupId>
+         <artifactId>selenium-htmlunit-driver</artifactId>
+         <version>2.52.0</version>
+      </dependency>
+
+      <!--phantomjs driver-->
+      <dependency>
+         <groupId>com.codeborne</groupId>
+         <artifactId>phantomjsdriver</artifactId>
+         <version>1.4.4</version>
+      </dependency>
+
+      <!--XML files libruary-->
+      <dependency>
+         <groupId>com.thoughtworks.xstream</groupId>
+         <artifactId>xstream</artifactId>
+         <version>1.4.11.1</version>
+      </dependency>
+
+      <!--JSON files libruary-->
       <dependency>
          <groupId>com.google.code.gson</groupId>
          <artifactId>gson</artifactId>
@@ -71,15 +94,23 @@
          <artifactId>xuggle-xuggler</artifactId>
          <version>5.4</version>
       </dependency>
-      <dependency>
-         <groupId>org.jetbrains</groupId>
-         <artifactId>annotations-java5</artifactId>
-         <version>16.0.3</version>
-         <scope>compile</scope>
-      </dependency>
    </dependencies>
 
    <build>
+      <resources>
+         <resource>
+            <directory>src/main/resources</directory>
+            <filtering>true</filtering>
+         </resource>
+      </resources>
+
+      <testResources>
+         <testResource>
+            <directory>src/test/resources</directory>
+            <filtering>true</filtering>
+         </testResource>
+      </testResources>
+
       <plugins>
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
@@ -102,12 +133,12 @@
             <artifactId>maven-surefire-plugin</artifactId>
             <version>3.0.0-M2</version>
             <configuration>
-               <!--<includes>-->
-               <!--<include>TestSuit.java</include>-->
-               <!--</includes>-->
                <suiteXmlFiles>
-                  <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
+                  <suiteXmlFile>src/test/resources/testng-all.xml</suiteXmlFile>
                </suiteXmlFiles>
+               <systemPropertyVariables>
+                  <application.properties>/application-booking.properties</application.properties>
+               </systemPropertyVariables>
             </configuration>
          </plugin>
 
@@ -121,12 +152,14 @@
 
    <reporting>
       <plugins>
+         <!--project report-->
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-project-info-reports-plugin</artifactId>
             <version>3.0.0</version>
          </plugin>
 
+         <!--surefire report-->
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-report-plugin</artifactId>
@@ -136,4 +169,236 @@
       </plugins>
    </reporting>
 
+   <profiles>
+      <!--accounts-->
+      <profile>
+         <id>pkt</id>
+         <properties>
+            <account.username>pkt.autotests@gmail.com</account.username>
+            <account.password>0123456789</account.password>
+         </properties>
+         <activation>
+            <activeByDefault>true</activeByDefault>
+         </activation>
+      </profile>
+
+      <profile>
+         <id>user1</id>
+         <properties>
+            <account.username>user1</account.username>
+            <account.password>user1</account.password>
+         </properties>
+      </profile>
+
+      <!-- browsers -->
+      <profile>
+         <id>chrome</id>
+         <properties>
+            <capabilities>/browser-chrome.capabilities</capabilities>
+         </properties>
+         <activation>
+            <activeByDefault>true</activeByDefault>
+         </activation>
+      </profile>
+
+      <profile>
+         <id>firefox</id>
+         <properties>
+            <capabilities>/browser-firefox.capabilities</capabilities>
+         </properties>
+      </profile>
+
+      <profile>
+         <id>ie</id>
+         <properties>
+            <capabilities>/browser-ie.capabilities</capabilities>
+         </properties>
+      </profile>
+
+      <profile>
+         <id>opera</id>
+         <properties>
+            <capabilities>/browser-opera.capabilities</capabilities>
+         </properties>
+      </profile>
+
+      <profile>
+         <id>safari</id>
+         <properties>
+            <capabilities>/browser-safari.capabilities</capabilities>
+         </properties>
+      </profile>
+
+      <profile>
+         <id>phantomjs</id>
+         <properties>
+            <capabilities>/browser-phantomjs.capabilities</capabilities>
+         </properties>
+      </profile>
+
+      <profile>
+         <id>htmlunit</id>
+         <properties>
+            <capabilities>/browser-htmlunit.capabilities</capabilities>
+         </properties>
+      </profile>
+
+      <!-- environments -->
+      <profile>
+         <id>devhost</id>
+         <properties>
+            <site.url>https://booking.com/</site.url>
+         </properties>
+         <activation>
+            <activeByDefault>true</activeByDefault>
+         </activation>
+      </profile>
+
+      <profile>
+         <id>localhost</id>
+         <properties>
+            <site.url>http://localhost/</site.url>
+         </properties>
+      </profile>
+
+      <!-- grid -->
+      <profile>
+         <id>nogrid</id>
+         <properties>
+            <grid.url></grid.url>
+         </properties>
+         <activation>
+            <activeByDefault>true</activeByDefault>
+         </activation>
+      </profile>
+      <profile>
+         <id>grid</id>
+         <properties>
+            <grid.url>http://localhost:4444/wd/hub/</grid.url>
+         </properties>
+      </profile>
+
+      <!--test-sets-->
+      <profile>
+         <id>alltests</id>
+         <build>
+            <plugins>
+               <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-surefire-plugin</artifactId>
+                  <configuration>
+                     <suiteXmlFiles>
+                        <suiteXmlFile>src/test/resources/testng-all.xml</suiteXmlFile>
+                     </suiteXmlFiles>
+                  </configuration>
+               </plugin>
+            </plugins>
+         </build>
+      </profile>
+
+      <profile>
+         <id>alltests</id>
+         <build>
+            <plugins>
+               <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-surefire-plugin</artifactId>
+                  <configuration>
+                     <suiteXmlFiles>
+                        <suiteXmlFile>src/test/resources/testng-all.xml</suiteXmlFile>
+                     </suiteXmlFiles>
+                  </configuration>
+               </plugin>
+            </plugins>
+         </build>
+         <activation>
+            <activeByDefault>true</activeByDefault>
+         </activation>
+      </profile>
+
+      <profile>
+         <id>hotel</id>
+         <build>
+            <plugins>
+               <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-surefire-plugin</artifactId>
+                  <configuration>
+                     <suiteXmlFiles>
+                        <suiteXmlFile>src/test/resources/testng-hotel.xml</suiteXmlFile>
+                     </suiteXmlFiles>
+                  </configuration>
+               </plugin>
+            </plugins>
+         </build>
+      </profile>
+
+      <profile>
+         <id>search</id>
+         <build>
+            <plugins>
+               <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-surefire-plugin</artifactId>
+                  <configuration>
+                     <suiteXmlFiles>
+                        <suiteXmlFile>src/test/resources/testng-search.xml</suiteXmlFile>
+                     </suiteXmlFiles>
+                  </configuration>
+               </plugin>
+            </plugins>
+         </build>
+      </profile>
+
+      <profile>
+         <id>profile</id>
+         <build>
+            <plugins>
+               <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-surefire-plugin</artifactId>
+                  <configuration>
+                     <suiteXmlFiles>
+                        <suiteXmlFile>src/test/resources/testng-profile.xml</suiteXmlFile>
+                     </suiteXmlFiles>
+                  </configuration>
+               </plugin>
+            </plugins>
+         </build>
+      </profile>
+
+      <profile>
+         <id>positive</id>
+         <build>
+            <plugins>
+               <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-surefire-plugin</artifactId>
+                  <configuration>
+                     <suiteXmlFiles>
+                        <suiteXmlFile>src/test/resources/testng-positive.xml</suiteXmlFile>
+                     </suiteXmlFiles>
+                  </configuration>
+               </plugin>
+            </plugins>
+         </build>
+      </profile>
+
+      <profile>
+         <id>smoke</id>
+         <build>
+            <plugins>
+               <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-surefire-plugin</artifactId>
+                  <configuration>
+                     <suiteXmlFiles>
+                        <suiteXmlFile>src/test/resources/testng-smoke.xml</suiteXmlFile>
+                     </suiteXmlFiles>
+                  </configuration>
+               </plugin>
+            </plugins>
+         </build>
+      </profile>
+   </profiles>
 </project>

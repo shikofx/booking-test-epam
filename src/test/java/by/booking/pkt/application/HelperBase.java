@@ -1,6 +1,5 @@
 package by.booking.pkt.application;
 
-import org.jetbrains.annotations.Nullable;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -52,7 +51,7 @@ public class HelperBase {
       });
       return this;
    }
-   @Nullable
+
    public String textByPattern(String regex, String text) {
       Pattern pattern = Pattern.compile(regex);
       Matcher matcher = pattern.matcher(text);
