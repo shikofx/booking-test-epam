@@ -4,21 +4,25 @@ import by.booking.pkt.data.DataSourceFileAnnotation;
 import by.booking.pkt.data.FileDataProvider;
 import by.booking.pkt.model.TestsData;
 import by.booking.pkt.tests.TBase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 public class WishlistsTests extends TBase {
 
+  Logger logger = LoggerFactory.getLogger(WishlistsTests.class);
 
-   @BeforeClass
-   public void goToWishlists() {
+  @BeforeClass
+  public void goToWishlists() {
 
-   }
+  }
 
-   @Test(enabled = true, groups = {"positive", "smoke"},
-           dataProviderClass = FileDataProvider.class, dataProvider = "testDataFromJSON")
-   @DataSourceFileAnnotation("src\\test\\resources\\data-for-wishlist-positive.json")
-   public void testListCreate(TestsData testsData) throws InterruptedException {
+  @Test(enabled = true, groups = {"positive", "smoke"},
+          dataProviderClass = FileDataProvider.class, dataProvider = "testDataFromJSON")
+  @DataSourceFileAnnotation("src\\test\\resources\\data-for-wishlist-positive.json")
+  public void testListCreate(TestsData testsData) throws InterruptedException {
+    logger.info("Start test testAddHotelToNewList");
 //
 //    Wishlist newWishlist = app.wishlists().createNewWithName(testsData.wishlistName());
 //    String defaultListName = app.wishlists().defaultList();
@@ -28,14 +32,15 @@ public class WishlistsTests extends TBase {
 //    assertion.assertNotEquals(newWishlist, null, "Wishlist create failed!");
 //    assertion.assertEquals(newWishlist.getName(), testsData.wishlistName(), "Name of new list is not valid!");
 //    assertion.assertEquals(defaultListName, testsData.wishlistName(), "Name of default list is not '" + testsData.wishlistName() + "'!");
+    logger.info("Start test testAddHotelToNewList");
 
+  }
 
-   }
-
-   @Test(enabled = true, groups = {"positive"},
-           dataProviderClass = FileDataProvider.class, dataProvider = "testDataFromJSON")
-   @DataSourceFileAnnotation("src\\test\\resources\\data-for-wishlist-positive.json")
-   public void testListSendLink(TestsData testsData) throws Exception {
+  @Test(enabled = true, groups = {"positive"},
+          dataProviderClass = FileDataProvider.class, dataProvider = "testDataFromJSON")
+  @DataSourceFileAnnotation("src\\test\\resources\\data-for-wishlist-positive.json")
+  public void testListSendLink(TestsData testsData) throws Exception {
+    logger.info("Start test testAddHotelToNewList");
 //    app.account().loginAs(testsData.userName(), testsData.userPassword());
 //    app.account().navigationMenu().wishlists();
 //    Wishlist newWishlist = app.wishlists().
@@ -50,5 +55,6 @@ public class WishlistsTests extends TBase {
 //    app.account().logout();
 //    Assertion assertion = new Assertion();
 //    assertion.assertEquals(newWishlist.getName(), sendedListName, "Name of list is not valid!");
-   }
+    logger.info("Start test testAddHotelToNewList");
+  }
 }

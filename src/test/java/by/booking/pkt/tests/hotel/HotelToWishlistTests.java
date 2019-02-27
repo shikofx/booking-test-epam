@@ -4,15 +4,19 @@ import by.booking.pkt.data.DataSourceFileAnnotation;
 import by.booking.pkt.data.FileDataProvider;
 import by.booking.pkt.model.TestsData;
 import by.booking.pkt.tests.TBaseMethods;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
 
 public class HotelToWishlistTests extends TBaseMethods {
 
+  Logger logger = LoggerFactory.getLogger(HotelToWishlistTests.class);
 
-   @Test(enabled = true, groups = {"positive", "hotel"},
-           dataProviderClass = FileDataProvider.class, dataProvider = "testDataFromJSON")
-   @DataSourceFileAnnotation("src\\test\\resources\\data-for-hotel-positive.json")
-   public void testaddHotelToNewList(TestsData testsData) {
+  @Test(enabled = true, groups = {"positive", "hotel"},
+          dataProviderClass = FileDataProvider.class, dataProvider = "testDataFromJSON")
+  @DataSourceFileAnnotation("src\\test\\resources\\data-for-hotel-positive.json")
+  public void testAddHotelToNewList(TestsData testsData) {
+    logger.info("Start test testAddHotelToNewList");
 //    app.account().loginAs(testsData.userName(), testsData.userPassword());
 //    app.searchPage().searchFor(testsData);
 //
@@ -52,5 +56,6 @@ public class HotelToWishlistTests extends TBaseMethods {
 //    app.windows().switchTo(hotelWindow);
 //    app.windows().close();
 //    app.windows().switchTo(resultsWindow);
+    logger.info("Stop test testAddHotelToNewList");
   }
 }

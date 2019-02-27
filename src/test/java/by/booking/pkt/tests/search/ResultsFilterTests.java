@@ -4,14 +4,19 @@ import by.booking.pkt.data.DataSourceFileAnnotation;
 import by.booking.pkt.data.FileDataProvider;
 import by.booking.pkt.model.TestsData;
 import by.booking.pkt.tests.TBase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
 
 public class ResultsFilterTests extends TBase {
+
+  Logger logger = LoggerFactory.getLogger(ResultsFilterTests.class);
 
   @Test(enabled = true, groups = {"positive"},
           dataProviderClass = FileDataProvider.class, dataProvider = "testDataFromJSON")
   @DataSourceFileAnnotation("src\\test\\resources\\data-for-search-positive.json")
   public void testFilterByBudget(TestsData testsData) {
+    logger.info("Start test testAddHotelToNewList");
   /*  app.searchPage().searchFor(testsData);
     boolean isSelectBudget = app.filters().selectBudget(testsData.minBudget(), testsData.maxBudget());
     assertThat("There is no selected budget!", isSelectBudget, equalTo(true));
@@ -29,6 +34,7 @@ public class ResultsFilterTests extends TBase {
               "Budget " + minTotalPrice + " more than total price " + h.currentPrice() + " for " + h.getName());
     }
     softAssert.assertAll();*/
+    logger.info("Start test testAddHotelToNewList");
 
   }
 
@@ -36,6 +42,7 @@ public class ResultsFilterTests extends TBase {
           dataProviderClass = FileDataProvider.class, dataProvider = "testDataFromJSON")
   @DataSourceFileAnnotation("src\\test\\resources\\data-for-search-positive.json")
   public void testFilterByStars(TestsData testsData) {
+    logger.info("Start test testAddHotelToNewList");
 //    app.searchPage().searchFor(testsData);
 //    Assertion assertion = new Assertion();
 //    assertion.assertTrue(app.filters().selectStars(testsData.stars()), "Count of stars has not selected!");
@@ -46,5 +53,6 @@ public class ResultsFilterTests extends TBase {
 //    }
 //    softAssert.assertAll();
 //
+    logger.info("Start test testAddHotelToNewList");
   }
 }

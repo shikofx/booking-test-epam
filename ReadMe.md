@@ -1,20 +1,60 @@
-# epam_test_task
-Test task from EPAM
-Задача: Реализовать 7 автотестов для предложенной предметной области с использованием связки Java+WebDriver+TestNG+PageObject. В результате должен получиться maven проект, содержащий:
-- соответствующие тесты
-- объекты
-- сопутствующие утилитарные классы
+#To launch tests use commands:
+###mvn test 
+tests with default profiles
+###mvn test -P chrome, booking, nogrid, pkt, hotel
+launching tests for hotel page on "https://booking.com/ in Google Chrome without Grid Hub whith account "pkt"
 
-Предоставить возможность запуска набора тестов средствами TestNG и Maven. 
+#Profile groups:
+##1. Browser profiles
+      chrome - Google Chrome as default
+      firefox - Mozilla FireFox
+      ie - Internet Explorer
+      opera - Opera
+      safari - Safari
+      phantomjs - PhantomJS Browser (without UI)
+      htmlunit - HtmlUnit
 
-Также необходимо учитывать общие требования к построению тестовых фреймворков.
+##2. Environment profiles
+      booking - https://booking.com/  as default
+      localhost - doesn't work (only for example)
 
-Использовать PageObject дизайн с аннотациями @FindBy и PageFactory.initElements(). 
+##3. Grid launcher profiles
+      nogrid - No use
+      grid - using hub URL: http://localhost:4444/wd/hub/
 
-Приветствуется (но не обязательно) использование RemoteWebDriver и Selenium Grid. 
-
-Исходный код проекта (проект целиком) должен быть залит в публичный репозиторий на Github/BitBucket и быть самодостаточным – т.е. при клонировании проектного репозитория давать возможность беспроблемного запуска тестов на новой рабочей станции, на которой уже есть необходимые системные переменные среды (JAVA_HOME, webdriver.chrome.driver и т.д.). 
-
-Ссылку на репозиторий нужно прислать ответом на это письмо. 
-
-Приложение/предметная область: https://www.booking.com/ . Тестовые сценарии необходимо придумать самостоятельно, ориентируясь на фичи специфичные для booking.com. Хороший сценарий - "я могу найти как минимум 3 доступных номера в гостинице в минске на двоих на ближайший уикэнд.". Плохой сценарий - тест логина/логаута.
+##4. Accounts profiles
+      pkt - username = pkt.autotests@gmail.com
+            password = 0123456789
+      user1 - doesn't work (only for example)
+            username = user1
+            password = user1
+##5. Tests profiles
+      alltests - All test items
+      
+      hotel    
+               testAddHotelToNewList
+               
+      search   
+               testFilterByBudget
+               testFilterByStars
+               testSortByDistance
+               testSortByPrice
+               
+      profile  
+               testListCreate   
+               testListSendLink
+                
+      positive 
+               testAddHotelToNewList 
+               testListCreate   
+               testListSendLink
+               testFilterByBudget
+               testFilterByStars
+               testSortByDistance
+               testSortByPrice
+               
+      smoke    
+               testListSendLink 
+               testListCreate
+               testFilterByStars
+               testSortByPrice

@@ -4,9 +4,14 @@ import by.booking.pkt.data.DataSourceFileAnnotation;
 import by.booking.pkt.data.FileDataProvider;
 import by.booking.pkt.model.TestsData;
 import by.booking.pkt.tests.TBase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
 
 public class ResultsSortTests extends TBase {
+
+  Logger logger = LoggerFactory.getLogger(ResultsSortTests.class);
+
   @Test(enabled = true, groups = {"positive"},
           dataProviderClass = FileDataProvider.class, dataProvider = "testDataFromJSON")
   @DataSourceFileAnnotation("src\\test\\resources\\data-for-search-positive.json")
