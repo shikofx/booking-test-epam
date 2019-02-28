@@ -14,9 +14,8 @@ public class ResultsFilterTests extends TBase {
 
   @Test(enabled = true, groups = {"positive"},
           dataProviderClass = FileDataProvider.class, dataProvider = "testDataFromJSON")
-  @DataSourceFileAnnotation("src\\test\\resources\\data-for-search-positive.json")
-  public void testFilterByBudget(TestsData testsData) {
-    logger.info("Start test testAddHotelToNewList");
+  @DataSourceFileAnnotation("src/test/resources/data-for-search-positive.json")
+  public void filterByBudget(TestsData testsData) {
   /*  app.searchPage().searchFor(testsData);
     boolean isSelectBudget = app.filters().selectBudget(testsData.minBudget(), testsData.maxBudget());
     assertThat("There is no selected budget!", isSelectBudget, equalTo(true));
@@ -34,15 +33,13 @@ public class ResultsFilterTests extends TBase {
               "Budget " + minTotalPrice + " more than total price " + h.currentPrice() + " for " + h.getName());
     }
     softAssert.assertAll();*/
-    logger.info("Start test testAddHotelToNewList");
 
   }
 
   @Test(enabled = true, groups = {"positive", "smoke"},
           dataProviderClass = FileDataProvider.class, dataProvider = "testDataFromJSON")
-  @DataSourceFileAnnotation("src\\test\\resources\\data-for-search-positive.json")
-  public void testFilterByStars(TestsData testsData) {
-    logger.info("Start test testAddHotelToNewList");
+  @DataSourceFileAnnotation("src/test/resources/data-for-search-positive.json")
+  public void filterByStars(TestsData testsData) {
 //    app.searchPage().searchFor(testsData);
 //    Assertion assertion = new Assertion();
 //    assertion.assertTrue(app.filters().selectStars(testsData.stars()), "Count of stars has not selected!");
@@ -53,6 +50,5 @@ public class ResultsFilterTests extends TBase {
 //    }
 //    softAssert.assertAll();
 //
-    logger.info("Start test testAddHotelToNewList");
   }
 }

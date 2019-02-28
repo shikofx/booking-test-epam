@@ -1,0 +1,119 @@
+<component name="ProjectCodeStyleConfiguration">
+  <code_scheme name="Project" version="173">
+    <option name="AUTODETECT_INDENTS" value="false" />
+    <option name="OTHER_INDENT_OPTIONS">
+      <value>
+        <option name="TAB_SIZE" value="3" />
+      </value>
+    </option>
+    <Properties>
+      <option name="SPACES_AROUND_KEY_VALUE_DELIMITER" value="true" />
+      <option name="KEEP_BLANK_LINES" value="true" />
+    </Properties>
+    <codeStyleSettings language="CSS">
+      <indentOptions>
+        <option name="INDENT_SIZE" value="3" />
+        <option name="TAB_SIZE" value="3" />
+      </indentOptions>
+    </codeStyleSettings>
+    <codeStyleSettings language="GSP">
+      <indentOptions>
+        <option name="INDENT_SIZE" value="3" />
+        <option name="TAB_SIZE" value="3" />
+      </indentOptions>
+    </codeStyleSettings>
+    <codeStyleSettings language="Gherkin">
+      <indentOptions>
+        <option name="TAB_SIZE" value="3" />
+      </indentOptions>
+    </codeStyleSettings>
+    <codeStyleSettings language="Groovy">
+      <indentOptions>
+        <option name="INDENT_SIZE" value="3" />
+        <option name="TAB_SIZE" value="3" />
+      </indentOptions>
+    </codeStyleSettings>
+    <codeStyleSettings language="HTML">
+      <indentOptions>
+        <option name="INDENT_SIZE" value="3" />
+        <option name="TAB_SIZE" value="3" />
+      </indentOptions>
+    </codeStyleSettings>
+    <codeStyleSettings language="Haml">
+      <indentOptions>
+        <option name="TAB_SIZE" value="3" />
+      </indentOptions>
+    </codeStyleSettings>
+    <codeStyleSettings language="JAVA">
+      <indentOptions>
+        <option name="INDENT_SIZE" value="3" />
+        <option name="TAB_SIZE" value="3" />
+      </indentOptions>
+    </codeStyleSettings>
+    <codeStyleSettings language="JSON">
+      <indentOptions>
+        <option name="TAB_SIZE" value="3" />
+      </indentOptions>
+    </codeStyleSettings>
+    <codeStyleSettings language="JSP">
+      <indentOptions>
+        <option name="INDENT_SIZE" value="3" />
+        <option name="TAB_SIZE" value="3" />
+      </indentOptions>
+    </codeStyleSettings>
+    <codeStyleSettings language="JSPX">
+      <indentOptions>
+        <option name="INDENT_SIZE" value="3" />
+        <option name="TAB_SIZE" value="3" />
+      </indentOptions>
+    </codeStyleSettings>
+    <codeStyleSettings language="JavaScript">
+      <indentOptions>
+        <option name="INDENT_SIZE" value="3" />
+        <option name="TAB_SIZE" value="3" />
+      </indentOptions>
+    </codeStyleSettings>
+    <codeStyleSettings language="Properties">
+      <option name="ALIGN_GROUP_FIELD_DECLARATIONS" value="true" />
+    </codeStyleSettings>
+    <codeStyleSettings language="SASS">
+      <indentOptions>
+        <option name="TAB_SIZE" value="3" />
+      </indentOptions>
+    </codeStyleSettings>
+    <codeStyleSettings language="SCSS">
+      <indentOptions>
+        <option name="TAB_SIZE" value="3" />
+      </indentOptions>
+    </codeStyleSettings>
+    <codeStyleSettings language="Stylus">
+      <indentOptions>
+        <option name="TAB_SIZE" value="3" />
+      </indentOptions>
+    </codeStyleSettings>
+    <codeStyleSettings language="TypeScript">
+      <indentOptions>
+        <option name="INDENT_SIZE" value="3" />
+        <option name="TAB_SIZE" value="3" />
+      </indentOptions>
+    </codeStyleSettings>
+    <codeStyleSettings language="VTL">
+      <indentOptions>
+        <option name="INDENT_SIZE" value="3" />
+        <option name="TAB_SIZE" value="3" />
+      </indentOptions>
+    </codeStyleSettings>
+    <codeStyleSettings language="XML">
+      <indentOptions>
+        <option name="INDENT_SIZE" value="3" />
+        <option name="TAB_SIZE" value="3" />
+      </indentOptions>
+    </codeStyleSettings>
+    <codeStyleSettings language="kotlin">
+      <indentOptions>
+        <option name="INDENT_SIZE" value="3" />
+        <option name="TAB_SIZE" value="3" />
+      </indentOptions>
+    </codeStyleSettings>
+  </code_scheme>
+</component>

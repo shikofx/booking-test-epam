@@ -11,8 +11,5 @@
         <module name="epam_test_task" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="epam_test_task" target="8" />
-    </bytecodeTargetLevel>
   </component>
 </project>

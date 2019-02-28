@@ -9,11 +9,11 @@ import java.util.Properties;
 
 public class PropertyLoader {
 
-   private static final String DEFAULT_PROPERTIES = "/application-default.properties";
+   private static final String DEBUG_PROPERTIES = "/application-debug.properties";
    private static final String CURRENT_PROPERTIES = "/application.properties";
 
    public static Capabilities loadCapabilities() throws IOException {
-      return loadCapabilities(System.getProperty(CURRENT_PROPERTIES, DEFAULT_PROPERTIES));
+      return loadCapabilities(System.getProperty(CURRENT_PROPERTIES, DEBUG_PROPERTIES));
    }
 
    public static Capabilities loadCapabilities(String fromResource) throws IOException {
@@ -40,7 +40,8 @@ public class PropertyLoader {
    }
 
    public static String loadProperty(String name) throws IOException {
-      return loadProperty(name, System.getProperty(CURRENT_PROPERTIES, DEFAULT_PROPERTIES));
+      String s = System.getProperty(CURRENT_PROPERTIES);
+      return loadProperty(name, System.getProperty(CURRENT_PROPERTIES, DEBUG_PROPERTIES));
    }
 
    public static String loadProperty(String name, String fromResource) throws IOException {

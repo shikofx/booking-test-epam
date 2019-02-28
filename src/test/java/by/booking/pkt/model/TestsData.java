@@ -5,8 +5,6 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
 @XStreamAlias("Search")
 public class TestsData {
-  private String username;
-  private String password;
   @XStreamAsAttribute
   private String currency;
   private String place;
@@ -58,8 +56,6 @@ public class TestsData {
 
 
    public TestsData() {
-    username = "";
-    password = "";
     currency = "";
     place = "";
     inDate = "";
@@ -73,16 +69,6 @@ public class TestsData {
       wishlistName = "";
   }
 
-   public TestsData withUsername(String username) {
-    this.username = username;
-    return this;
-  }
-
-
-   public TestsData withPassword(String password) {
-    this.password = password;
-    return this;
-  }
 
    public TestsData withCurrency(String currency) {
     this.currency = currency;
@@ -137,14 +123,6 @@ public class TestsData {
    public TestsData withWishlist(String wishlistName) {
     this.wishlistName = wishlistName;
     return this;
-  }
-
-  public String userName() {
-    return username;
-  }
-
-  public String userPassword() {
-    return password;
   }
 
   public String currency() {

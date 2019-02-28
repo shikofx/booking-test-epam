@@ -2,33 +2,31 @@ package by.booking.pkt.tests.hotel;
 
 import by.booking.pkt.data.DataSourceFileAnnotation;
 import by.booking.pkt.data.FileDataProvider;
+import by.booking.pkt.model.Hotel;
 import by.booking.pkt.model.TestsData;
-import by.booking.pkt.tests.TBaseMethods;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import by.booking.pkt.tests.TBase;
+import by.booking.pkt.tests.TBaseWithLogin;
 import org.testng.annotations.Test;
 
-public class HotelToWishlistTests extends TBaseMethods {
+import java.util.Set;
 
-  Logger logger = LoggerFactory.getLogger(HotelToWishlistTests.class);
+public class HotelToWishlistTests extends TBaseWithLogin {
 
-  @Test(enabled = true, groups = {"positive", "hotel"},
-          dataProviderClass = FileDataProvider.class, dataProvider = "testDataFromJSON")
-  @DataSourceFileAnnotation("src\\test\\resources\\data-for-hotel-positive.json")
-  public void testAddHotelToNewList(TestsData testsData) {
-    logger.info("Start test testAddHotelToNewList");
-//    app.account().loginAs(testsData.userName(), testsData.userPassword());
-//    app.searchPage().searchFor(testsData);
-//
-//    String resultsWindow = app.windows().handle();
-//    Set<String> oldWindows = app.windows().all();
-//
-//    HotelToWishlistTests first = app.results().getFirstHotel();
-//    app.results().goToHotelPage(first);
-//
-//    String hotelWindow = app.windows().getNew(oldWindows);
-//    app.windows().switchTo(hotelWindow);
-//    oldWindows = app.windows().all();
+   @Test(enabled = true, groups = {"positive", "hotel"},
+           dataProviderClass = FileDataProvider.class, dataProvider = "testDataFromJSON")
+   @DataSourceFileAnnotation("src/test/resources/data-for-hotel-positive.json")
+   public void addHotelToNewList(TestsData testsData) {
+      app.searchPage().searchFor(testsData);
+
+      String resultsWindow = app.windows().handle();
+      Set<String> oldWindows = app.windows().all();
+
+      Hotel first = app.results().getFirstHotel();
+      app.results().goToHotelPage(first);
+
+      String hotelWindow = app.windows().getNew(oldWindows);
+      app.windows().switchTo(hotelWindow);
+      oldWindows = app.windows().all();
 //
 //    SoftAssert softAssert = new SoftAssert();
 //    softAssert.assertNotEquals(hotelWindow, null, "HotelToWishlistTests info doesn't open in new window!");
@@ -56,6 +54,5 @@ public class HotelToWishlistTests extends TBaseMethods {
 //    app.windows().switchTo(hotelWindow);
 //    app.windows().close();
 //    app.windows().switchTo(resultsWindow);
-    logger.info("Stop test testAddHotelToNewList");
-  }
+   }
 }

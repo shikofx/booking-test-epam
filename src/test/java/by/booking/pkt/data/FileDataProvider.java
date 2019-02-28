@@ -60,19 +60,17 @@ public class FileDataProvider {
             while (nextLine != null) {
                String[] parameters = nextLine.split(";");
                testData.add(new Object[]{new TestsData().
-                       withUsername(parameters[0]).
-                       withPassword(parameters[1]).
-                       withCurrency(parameters[2]).
-                       withPlace(parameters[3]).
-                       withInDate(parameters[4]).
-                       withOutDate(parameters[5]).
-                       withRooms(Integer.parseInt(parameters[6])).
-                       withAdults(Integer.parseInt(parameters[7])).
-                       withChildren(Integer.parseInt(parameters[8])).
-                       withMinBudget(Integer.parseInt(parameters[9])).
-                       withMaxBudget(Integer.parseInt(parameters[10])).
-                       withStars(Integer.parseInt(parameters[11])).
-                       withWishlist(parameters[12])});
+                       withCurrency(parameters[0]).
+                       withPlace(parameters[1]).
+                       withInDate(parameters[2]).
+                       withOutDate(parameters[3]).
+                       withRooms(Integer.parseInt(parameters[4])).
+                       withAdults(Integer.parseInt(parameters[5])).
+                       withChildren(Integer.parseInt(parameters[6])).
+                       withMinBudget(Integer.parseInt(parameters[7])).
+                       withMaxBudget(Integer.parseInt(parameters[8])).
+                       withStars(Integer.parseInt(parameters[9])).
+                       withWishlist(parameters[10])});
                nextLine = reader.readLine();
             }
          }

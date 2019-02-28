@@ -14,8 +14,8 @@ public class ResultsSortTests extends TBase {
 
   @Test(enabled = true, groups = {"positive"},
           dataProviderClass = FileDataProvider.class, dataProvider = "testDataFromJSON")
-  @DataSourceFileAnnotation("src\\test\\resources\\data-for-search-positive.json")
-  public void testSortByDistance(TestsData testsData) throws InterruptedException {
+  @DataSourceFileAnnotation("src/test/resources/data-for-search-positive.json")
+  public void sortByDistance(TestsData testsData) throws InterruptedException {
 //    app.searchPage().searchFor(testsData);
 //    app.results().initSortByDistance().refreshPage();
 //    List<HotelToWishlistTests> availableHotels = app.results().availableHotels();
@@ -34,8 +34,8 @@ public class ResultsSortTests extends TBase {
 
   @Test(enabled = true, groups = {"positive", "smoke"},
           dataProviderClass = FileDataProvider.class, dataProvider = "testDataFromJSON")
-  @DataSourceFileAnnotation("src\\test\\resources\\data-for-search-positive.json")
-  public void testSortByPrice(TestsData testsData) throws InterruptedException {
+  @DataSourceFileAnnotation("src/test/resources/data-for-search-positive.json")
+  public void sortByPrice(TestsData testsData) throws InterruptedException {
 //    app.searchPage().searchFor(testsData);
 //    app.results().initSortByPrice().refreshPage();
 //    List<HotelToWishlistTests> availableHotels = app.results().availableHotels();

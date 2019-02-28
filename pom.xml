@@ -8,6 +8,9 @@
    <artifactId>epam_booking</artifactId>
    <version>1.0-SNAPSHOT</version>
 
+   <properties>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+   </properties>
 
    <repositories>
       <repository>
@@ -43,21 +46,6 @@
          <groupId>ru.stqa.selenium</groupId>
          <artifactId>webdriver-factory</artifactId>
          <version>4.3</version>
-      </dependency>
-
-
-      <dependency>
-         <groupId>org.slf4j</groupId>
-         <artifactId>slf4j-api</artifactId>
-         <version>1.7.25</version>
-      </dependency>
-
-      <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12 -->
-      <dependency>
-         <groupId>org.slf4j</groupId>
-         <artifactId>slf4j-log4j12</artifactId>
-         <version>1.7.25</version>
-         <scope>test</scope>
       </dependency>
 
       <!--htmlunit driver-->
@@ -102,6 +90,19 @@
          <artifactId>xuggle-xuggler</artifactId>
          <version>5.4</version>
       </dependency>
+
+      <!--<dependency>-->
+         <!--<groupId>org.slf4j</groupId>-->
+         <!--<artifactId>slf4j-api</artifactId>-->
+         <!--<version>1.7.25</version>-->
+      <!--</dependency>-->
+
+      <!--<dependency>-->
+         <!--<groupId>org.slf4j</groupId>-->
+         <!--<artifactId>slf4j-log4j12</artifactId>-->
+         <!--<version>1.7.26</version>-->
+         <!--<scope>test</scope>-->
+      <!--</dependency>-->
    </dependencies>
 
    <build>
@@ -288,7 +289,6 @@
       </profile>
 
       <!--test-sets-->
-
       <profile>
          <id>alltests</id>
          <build>

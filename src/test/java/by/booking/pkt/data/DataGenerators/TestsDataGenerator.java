@@ -15,7 +15,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchDataGenerator {
+public class TestsDataGenerator {
 
    @Parameter(names = "-pl", description = "Place for travel")
    public String place;
@@ -23,13 +23,16 @@ public class SearchDataGenerator {
    @Parameter(names = "-c", description = "Search data items count")
    public int count;
 
-   @Parameter(names = "-fn", description = "Data file path")
+   @Parameter(names = "-fn", description = "Data file name: 'data-for-search'")
    public String fileName;
 
    @Parameter(names = "-ff", description = "Data file path")
    public String fileFormat;
 
-   @Parameter(names = "-t", description = "What test: s: search\nw: wishlists\nh: hotel")
+   @Parameter(names = "-t", description = "For what do you need these data: " +
+           "\ns: for testing of search page" +
+           "\nw: for testing of wishlists page" +
+           "\nh: for testing of hotel page")
    public String whatTest;
 
    public String path = "src/test/resources/";
@@ -37,7 +40,7 @@ public class SearchDataGenerator {
    public String password = "0123456789";
 
    public static void main(String[] args) throws IOException {
-      SearchDataGenerator generator = new SearchDataGenerator();
+      TestsDataGenerator generator = new TestsDataGenerator();
       JCommander jCommander = new JCommander(generator);
       try {
          jCommander.parse(args);
@@ -108,9 +111,10 @@ public class SearchDataGenerator {
       List<TestsData> testsData = new ArrayList<TestsData>();
       for (int i = 1; i <= count; i++) {
          testsData.add(new TestsData().
-                 withUsername(username).
-                 withPassword(password).
                  withPlace(place.replaceAll("_", " ")).
+                 withCurrency("RUB").
+                 withInDate("2019-03-0" + (i + 4)).
+                 withOutDate("2019-04-0" + i).
                  withWishlist("to " + place + " " + i));
       }
       return testsData;
@@ -120,9 +124,8 @@ public class SearchDataGenerator {
       List<TestsData> testsData = new ArrayList<TestsData>();
       for (int i = 1; i <= count; i++) {
          testsData.add(new TestsData().
-                 withUsername(username).
-                 withPassword(password).
-                 withWishlist("Wishlist " + i));
+                 withPlace(place.replaceAll("_", " ")).
+                 withWishlist("to " + place + " " + i));
       }
       return testsData;
    }

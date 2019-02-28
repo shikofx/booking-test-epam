@@ -1,8 +1,10 @@
 package by.booking.pkt.utils;
 
+import ch.qos.logback.classic.BasicConfigurator;
+import ch.qos.logback.classic.LoggerContext;
 import com.xuggle.mediatool.IMediaWriter;
 import com.xuggle.mediatool.ToolFactory;
-import org.apache.log4j.BasicConfigurator;
+//import org.apache.log4j.BasicConfigurator;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -26,7 +28,9 @@ public class VideoMaker {
   }
 
   public VideoMaker(File outputFile) {
-    BasicConfigurator.configure();
+//    BasicConfigurator.configure();
+     BasicConfigurator basicConfigurator = new BasicConfigurator();
+     basicConfigurator.configure(new LoggerContext());
     this.outputFile = outputFile;
   }
 

@@ -1,1 +1,2 @@
 browserName=firefox
+nativeEvent=false

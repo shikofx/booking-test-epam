@@ -35,7 +35,7 @@ public class ApplicationManager {
       baseUrl = PropertyLoader.loadProperty("site.url");
       gridHubUrl = PropertyLoader.loadProperty("grid.url");
       capabilities = PropertyLoader.loadCapabilities();
-      if (gridHubUrl != null) {
+      if (gridHubUrl != null && !gridHubUrl.equals("")) {
          webDriver = WebDriverPool.DEFAULT.getDriver(new URL(gridHubUrl), capabilities);
       } else {
          webDriver = WebDriverPool.DEFAULT.getDriver(capabilities);
@@ -58,7 +58,7 @@ public class ApplicationManager {
       windowHelper.maximazeWindow();
    }
 
-   public void goToBooking() {
+   public void toBaseUrl() {
       webDriver.get(baseUrl);
    }
 
@@ -71,7 +71,7 @@ public class ApplicationManager {
    }
 
    public void clear() {
-      webDriver.manage().deleteAllCookies();
+//      webDriver.manage().deleteAllCookies();
    }
 
    public int getImplicitlyWait() {
