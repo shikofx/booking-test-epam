@@ -17,27 +17,25 @@ import java.util.List;
 
 public class TestsDataGenerator {
 
-   @Parameter(names = "-pl", description = "Place for travel")
+   @Parameter(names = "-pl", description = "Place where travel")
    public String place;
 
-   @Parameter(names = "-c", description = "Search data items count")
+   @Parameter(names = "-c", description = "Count of test data")
    public int count;
 
    @Parameter(names = "-fn", description = "Data file name: 'data-for-search'")
    public String fileName;
 
-   @Parameter(names = "-ff", description = "Data file path")
+   @Parameter(names = "-ff", description = "Data file format")
    public String fileFormat;
 
    @Parameter(names = "-t", description = "For what do you need these data: " +
-           "\ns: for testing of search page" +
-           "\nw: for testing of wishlists page" +
-           "\nh: for testing of hotel page")
+           "\n's': for testing of search page" +
+           "\n'w': for testing of wishlists page" +
+           "\n'h': for testing of hotel page")
    public String whatTest;
 
-   public String path = "src/test/resources/";
-   public String username = "pkt.autotests@gmail.com";
-   public String password = "0123456789";
+   public final String filePath = "src/test/resources/";
 
    public static void main(String[] args) throws IOException {
       TestsDataGenerator generator = new TestsDataGenerator();
@@ -52,7 +50,7 @@ public class TestsDataGenerator {
    }
 
    private void run() throws IOException {
-      String file = path + fileName + "." + fileFormat;
+      String file = filePath + fileName + "." + fileFormat;
       if (count > 5) {
          throw new ExceptionInInitializerError("Error count: Count more than 5!");
       }
