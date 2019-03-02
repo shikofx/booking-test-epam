@@ -1,5 +1,8 @@
 package by.booking.pkt.application;
 
+import by.booking.pkt.model.Hotel;
+import by.booking.pkt.model.TestData;
+import by.booking.pkt.model.Wishlist;
 import by.booking.pkt.utils.PropertyLoader;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
@@ -8,6 +11,7 @@ import ru.stqa.selenium.factory.WebDriverPool;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class ApplicationManager {
@@ -71,7 +75,7 @@ public class ApplicationManager {
    }
 
    public void clear() {
-//      webDriver.manage().deleteAllCookies();
+      webDriver.manage().deleteAllCookies();
    }
 
    public int getImplicitlyWait() {
@@ -109,5 +113,20 @@ public class ApplicationManager {
 
    public FilterBoxHelper filters() {
       return filterBoxHelper;
+   }
+
+   public Hotel goToFirstHotelPage(TestData testData) {
+      searchPage().searchFor(testData);
+      Set<String> oldWindows = windows().all();
+      Hotel hotel = results().getFirstHotel();
+      results().goToHotelPage(hotel);
+      windows().switchToNew(oldWindows);
+      return hotel;
+   }
+
+   public void goToWishlist(Wishlist wlist) {
+      Set<String> oldWindows = windows().all();
+      hotel().goToWishlist(wlist);
+      windows().switchToNew(oldWindows);
    }
 }

@@ -1,17 +1,15 @@
 [
   {
-    "username": "pkt.autotests@gmail.com",
-    "password": "0123456789",
-    "currency": "",
-    "place": "New York",
-    "inDate": "",
-    "outDate": "",
+    "currency": "RUB",
+    "place": "Minsk",
+    "inDate": "2019-03-05",
+    "outDate": "2019-04-01",
     "rooms": 0,
     "adults": 0,
     "children": 0,
     "budgetMin": 0,
     "budgetMax": 0,
     "stars": 0,
-    "wishlistName": "to New_York 1"
+    "wishlistName": "to Minsk 1"
   }
 ]

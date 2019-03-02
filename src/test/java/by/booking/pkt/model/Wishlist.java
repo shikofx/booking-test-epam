@@ -17,7 +17,7 @@ public class Wishlist {
     return this;
   }
 
-  public String getName() {
+   public String name() {
     return name;
   }
 

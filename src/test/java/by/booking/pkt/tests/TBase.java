@@ -18,7 +18,7 @@ public class TBase {
 
    @BeforeSuite(alwaysRun = true)
    public void setUp() throws Exception {
-      app.init(30);
+      app.init(10);
 
    }
 
@@ -30,6 +30,11 @@ public class TBase {
    @BeforeClass(enabled = true)
    public void goToMainPage() {
       app.toBaseUrl();
+   }
+
+   @AfterClass(enabled = true)
+   public void clearCokies() {
+      app.clear();
    }
 
    @BeforeMethod(alwaysRun = true)
@@ -48,25 +53,6 @@ public class TBase {
          logger.info("SUCCESS:   test " + m.getName()
                  + " from " + m.getDeclaringClass()+'\n');
       }
-   }
-
-//   @AfterMethod(alwaysRun = true)
-//   public void clearCookies(ITestResult result) {
-//      app.clear();
-////
-//   }
-
-
-//   @BeforeMethod(alwaysRun = true)
-//   public void goToMainPage() throws Exception {
-//   }
-
-   @AfterMethod(alwaysRun = true)
-   public void clearCookies(ITestResult result) {
-      app.clear();
-//    if (!result.isSuccess()) {
-//      System.out.println("Screenshot after failure of: " + result.getName() + " in test " + result.getTestName());
-//    }
    }
 }
 

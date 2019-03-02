@@ -8,7 +8,7 @@
    </test>
    <test name="Hotel">
       <classes>
-         <class name="by.booking.pkt.tests.hotel.HotelToWishlistTests"/>
+         <class name="by.booking.pkt.tests.hotel.HotelTests"/>
       </classes>
    </test>
    <test name="Search">

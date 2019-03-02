@@ -76,9 +76,17 @@ public class HelperBase {
       return webDriver.findElements(locator).size() > 0;
    }
 
+   public boolean isElementPresentNoWait(WebElement inElement, By locator) {
+      setImplicitlyWait(0);
+      boolean isPresent = inElement.findElements(locator).size() > 0;
+      setImplicitlyWait(implicitlyWait);
+      return isPresent;
+   }
+
    public boolean isElementPresent(WebElement inElement, By locator) {
       return inElement.findElements(locator).size() > 0;
    }
+
 
    public boolean isElementPresent(WebElement element, int secondsToWait) {
       setImplicitlyWait(secondsToWait);

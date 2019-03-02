@@ -1,6 +1,6 @@
 package by.booking.pkt.data;
 
-import by.booking.pkt.model.TestsData;
+import by.booking.pkt.model.TestData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.thoughtworks.xstream.XStream;
@@ -20,34 +20,34 @@ public class FileDataProvider {
 
    @DataProvider
    public static Iterator<Object[]> testDataFromJSON(Method m) throws IOException {
-      List<TestsData> testsData = new ArrayList<TestsData>();
+      List<TestData> testData = new ArrayList<TestData>();
       if (m.isAnnotationPresent(DataSourceFileAnnotation.class)) {
          DataSourceFileAnnotation dataSource = m.getAnnotation(DataSourceFileAnnotation.class);
          Gson gson = new Gson();
          try (BufferedReader reader = new BufferedReader(new FileReader(new File(dataSource.value())))) {
-            testsData = gson.fromJson(reader, new TypeToken<List<TestsData>>() {
+            testData = gson.fromJson(reader, new TypeToken<List<TestData>>() {
             }.getType());
          }
       } else {
          throw new Error("There is no @DataSourceFileAnnotation on method " + m);
       }
-      return testsData.stream().map((s) -> new Object[]{s}).collect(Collectors.toList()).iterator();
+      return testData.stream().map((s) -> new Object[]{s}).collect(Collectors.toList()).iterator();
    }
 
    @DataProvider
    public static Iterator<Object[]> testDataFromXML(Method m) throws IOException {
-      List<TestsData> testsData = new ArrayList<TestsData>();
+      List<TestData> testData = new ArrayList<TestData>();
       if (m.isAnnotationPresent(DataSourceFileAnnotation.class)) {
          DataSourceFileAnnotation dataSource = m.getAnnotation(DataSourceFileAnnotation.class);
          XStream xStream = new XStream();
-         xStream.processAnnotations(TestsData.class);
+         xStream.processAnnotations(TestData.class);
          try (BufferedReader reader = new BufferedReader(new FileReader(new File(dataSource.value())))) {
-            testsData = (List<TestsData>) xStream.fromXML(reader);
+            testData = (List<TestData>) xStream.fromXML(reader);
          }
       } else {
          throw new Error("There is no @DataSourceFileAnnotation on method " + m);
       }
-      return testsData.stream().map((s) -> new Object[]{s}).collect(Collectors.toList()).iterator();
+      return testData.stream().map((s) -> new Object[]{s}).collect(Collectors.toList()).iterator();
    }
 
    @DataProvider
@@ -59,7 +59,7 @@ public class FileDataProvider {
             String nextLine = reader.readLine();
             while (nextLine != null) {
                String[] parameters = nextLine.split(";");
-               testData.add(new Object[]{new TestsData().
+               testData.add(new Object[]{new TestData().
                        withCurrency(parameters[0]).
                        withPlace(parameters[1]).
                        withInDate(parameters[2]).
