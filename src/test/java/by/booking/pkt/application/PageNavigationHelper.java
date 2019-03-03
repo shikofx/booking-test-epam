@@ -6,10 +6,10 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Set;
 
-public class WindowHelper extends HelperBase {
+public class PageNavigationHelper extends HelperBase {
 
 
-   public WindowHelper(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
+   public PageNavigationHelper(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
       super(webDriver, wait, implicitlyWait);
       PageFactory.initElements(webDriver, this);
    }
@@ -41,7 +41,7 @@ public class WindowHelper extends HelperBase {
       webDriver.switchTo().window(getNew(oldWondowSet));
    }
 
-   public void close() {
+   public void closeCurrent() {
       webDriver.close();
    }
 
@@ -49,7 +49,7 @@ public class WindowHelper extends HelperBase {
       return webDriver.getWindowHandles();
    }
 
-   public String handle() {
+   public String getCurrent() {
       return webDriver.getWindowHandle();
    }
 
@@ -63,5 +63,11 @@ public class WindowHelper extends HelperBase {
          webDriver.switchTo().window(s);
          webDriver.close();
       }
+   }
+
+   public PageNavigationHelper close(String wishlistWindowHandle) {
+      switchTo(wishlistWindowHandle);
+      closeCurrent();
+      return this;
    }
 }

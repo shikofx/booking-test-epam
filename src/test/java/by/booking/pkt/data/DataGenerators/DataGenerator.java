@@ -23,7 +23,7 @@ public class DataGenerator {
    @Parameter(names = "-c", description = "Count of test data")
    public int count;
 
-   @Parameter(names = "-fn", description = "Data file name: 'data-for-search'")
+   @Parameter(names = "-fn", description = "Data file getName: 'data-for-search'")
    public String fileName;
 
    @Parameter(names = "-ff", description = "Data file format")

@@ -85,6 +85,7 @@ public class SearchPageHelper extends HelperBase {
       while (!firstDayOfMonthMonth.equals(firstDate.getAttribute("data-date"))) {
          nextMonth.click();
       }
+
       webDriver.findElement(By.cssSelector("div.bui-calendar td[data-date='" + checkInDate + "']")).click();
       webDriver.findElement(By.cssSelector("div.bui-calendar td[data-date='" + checkOutDate + "']")).click();
       initCalendar.click();

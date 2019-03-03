@@ -20,16 +20,16 @@ public class HotelPageHelper extends HelperBase {
       PageFactory.initElements(webDriver, this);
    }
 
-   @FindBy(css = "#hotel-goToWishlistsPage input[type=text]")
+   @FindBy(css = "#hotel-wishlists input[type=text]")
    private WebElement newListInput;
 
    @FindBy(css = "#wrap-hotelpage-top .js-wl-dropdown-handle")
    private WebElement saveButton;
 
-   @FindBy(css = "#hotel-goToWishlistsPage")
+   @FindBy(css = "#hotel-wishlists")
    private WebElement wishlistsPanel;
 
-   @FindBy(css = "#hotel-goToWishlistsPage label.js-wl-dropdown-item")
+   @FindBy(css = "#hotel-wishlists label.js-wl-dropdown-item")
    private List<WebElement> wishlistsOnPanel;
 
    private WebElement newWishlist;
@@ -37,7 +37,7 @@ public class HotelPageHelper extends HelperBase {
    public HotelPageHelper createWishlist(Wishlist wishlist) {
       displayDropDown(saveButton, wishlistsPanel, 5);
       final List<Wishlist> oldWishlists = webToWishlits();
-      enterWishlistName(wishlist.name()).submitCreating();
+      enterWishlistName(wishlist.getName()).submitCreating();
       wait.until((WebDriver d) -> (wishlistsOnPanel.size() > oldWishlists.size()));
       List<Wishlist> newWishlists = webToWishlits();
       unselectAllElements(oldWishlists);

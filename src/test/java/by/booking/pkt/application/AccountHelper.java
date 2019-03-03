@@ -23,7 +23,7 @@ public class AccountHelper extends HelperBase {
    @FindBy(css = ".profile-menu")
    private WebElement navigationMenu;
 
-   @FindBy(css = "div[class*=goToWishlistsPage]")
+   @FindBy(css = "div[class*=wishlists]")
    private WebElement toWishlists;
 
    @FindBy(css = "input[name=logout]+input")
@@ -56,19 +56,19 @@ public class AccountHelper extends HelperBase {
    @FindBy(css = "form[target=log_tar] [type=submit]")
    private WebElement submitInForm;
 
-   public AccountHelper navigationMenu() {
+   public AccountHelper profileMenu() {
       displayDropDown(initCurrentAccountMenu, navigationMenu, 5);
       return this;
    }
 
    public void goToWishlistsPage() {
-      navigationMenu().toWishlists.click();
+      profileMenu().toWishlists.click();
       wait.until(presenceOfAllElementsLocatedBy(By.cssSelector(".listview__title")));
    }
 
    public void logout() {
       if (isElementPresent(initCurrentAccountMenu, 5))
-         navigationMenu().logout.click();
+         profileMenu().logout.click();
    }
 
 
@@ -77,7 +77,8 @@ public class AccountHelper extends HelperBase {
       boolean isDevidedForm = isDevidedForm();
       logInButton.click();
       if (isDevidedForm) {
-         isElementPresentAndVisible(usernameOnPage);
+         wait.until((WebDriver d) -> usernameOnPage.getTagName());
+         wait.until(visibilityOf(usernameOnPage));
          inputText(usernameOnPage, username);
          submitOnPage.click();
          isElementPresentAndVisible(passwordOnPage);

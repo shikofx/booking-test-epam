@@ -11,7 +11,6 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class WishlistsPageHelper extends HelperBase {
@@ -57,20 +56,20 @@ public class WishlistsPageHelper extends HelperBase {
    private List<WebElement> hotelsInWishlist;
 
    public Wishlist createNewWithName(String listName) throws InterruptedException {
-      List<Wishlist> beforeList = getWishlists();
+      List<Wishlist> beforeList = getAllWishlists();
       Alert alertCreateList = alertAfterClick(createButton);
       alertCreateList.sendKeys(listName);
       alertCreateList.accept();
-      wait.until((WebDriver d) -> {
-         return dropdownListHeader.getText().equals(listName);
-      });
-      List<Wishlist> afterList = getWishlists();
+      wait.until((WebDriver d) -> dropdownListHeader.getText().equals(listName));
+      List<Wishlist> afterList = getAllWishlists();
       if (afterList.size() == (beforeList.size() + 1)) {
-         Comparator<? super Wishlist> byId = Comparator.comparingInt(Wishlist::getId);
-         return afterList.stream().max(byId).get();
-      } else {
-         return null;
+         afterList.removeAll(beforeList);
+         Wishlist newList = afterList.get(0);
+         if (newList.getName().equals(listName))
+            return newList;
       }
+      return null;
+
    }
 
    public WishlistsPageHelper deleteWishlist(Wishlist list) {
@@ -109,7 +108,7 @@ public class WishlistsPageHelper extends HelperBase {
       hideDropdown(defaultWishlist, actualWishlistPanel);
    }
 
-   public List<Wishlist> getWishlists() {
+   public List<Wishlist> getAllWishlists() {
       displayDropDown(defaultWishlist, actualWishlistPanel, 5);
       hideDropdown(defaultWishlist, actualWishlistPanel);
       List<Wishlist> wishlists = new ArrayList<>();
@@ -139,7 +138,7 @@ public class WishlistsPageHelper extends HelperBase {
       return id;
    }
 
-   public String sendUrl() {
+   public String getUrlToSend() {
       isElementPresentAndVisible(shareWishlistButton);
       displayDropDown(shareWishlistButton, shareWishlistPanel, 5);
       String url = shareURLInput.getAttribute("defaultValue");
@@ -152,7 +151,7 @@ public class WishlistsPageHelper extends HelperBase {
    }
 
    public String sendedListName() {
-      wait.until((WebDriver d) -> wishlistHeader);
+      wait.until((WebDriver d) -> wishlistHeader.getTagName());
       return wishlistHeader.getText();
    }
 
@@ -171,7 +170,7 @@ public class WishlistsPageHelper extends HelperBase {
    }
 
    public boolean findWishlist(Wishlist newWishlist) {
-      for (Wishlist wl : getWishlists()) {
+      for (Wishlist wl : getAllWishlists()) {
          if (wl.equals(newWishlist))
             return true;
       }

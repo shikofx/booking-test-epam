@@ -85,6 +85,7 @@ public class FilterBoxHelper extends HelperBase {
     boolean isSelected = false;
     if (!e.findElement(By.cssSelector("input")).isSelected()) {
       e.click();
+       wait.until((WebDriver d) -> e.findElement(By.cssSelector("input")));
       if (e.findElement(By.cssSelector("input")).isSelected())
         isSelected = true;
       refreshPage();

@@ -23,17 +23,22 @@ public class HelperBase {
 
    }
 
-   public HelperBase refreshPage() {
+   public void clearBrowserData() {
+      webDriver.manage().deleteAllCookies();
+   }
+
+   public void refreshPage() {
       webDriver.navigate().refresh();
-      return this;
    }
 
    public HelperBase displayDropDown(WebElement whatClick, WebElement whatWait, int secondsToWait) {
+      wait.until(elementToBeClickable(whatClick));
+      wait.until((WebDriver d) -> whatClick.getTagName());
       boolean isClickable = whatClick.isDisplayed();
       boolean whatW = isElementPresent(whatWait, 1);
       if (isClickable && !whatW) {
          whatClick.click();
-         wait.until(visibilityOf(whatWait));
+         wait.until(visibilityOf(whatWait));//!!!!!!!!!!!!!!!!!!!!!
       } else if (!whatWait.isDisplayed()) {
          whatClick.click();
       }
@@ -65,7 +70,6 @@ public class HelperBase {
    public String textByPatternWithout(String pattern, String withoutRegex, String text) {
       return textByPattern(pattern, text).replaceAll(withoutRegex, "");
    }
-
 
 
    private boolean isElementDisplayed(By whatWait) {
@@ -102,9 +106,11 @@ public class HelperBase {
    }
 
    public boolean isElementPresentAndVisible(WebElement e) {
-      return wait.until((WebDriver d) -> {
-         return e.isEnabled() && e.isDisplayed();
-      });
+      wait.until((WebDriver d) -> e.getTagName());
+      if (isElementPresent(e, 0) && e.isDisplayed()) {
+         return true;
+      }
+      return false;
    }
 
    private void setImplicitlyWait(int secondsToWait) {
@@ -112,6 +118,7 @@ public class HelperBase {
    }
 
    protected void inputText(WebElement input, String text) {
+      wait.until(elementToBeClickable(input));
       input.click();
       input.clear();
       input.sendKeys(text);

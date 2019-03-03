@@ -161,6 +161,7 @@ public class ResultsPageHelper extends HelperBase {
 
    public ResultsPageHelper initSortByPrice() {
       initSortByPrice.click();
+      refreshPage();
       return this;
    }
 
@@ -168,6 +169,7 @@ public class ResultsPageHelper extends HelperBase {
    public ResultsPageHelper initSortByDistance() {
       displayDropDown(additionalSortsButton, additionalSortsPanel, 5);
       initSortByDistance.findElement(By.cssSelector("a")).click();
+      refreshPage();
       return this;
    }
 

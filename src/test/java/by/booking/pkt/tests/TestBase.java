@@ -4,17 +4,20 @@ import by.booking.pkt.application.ApplicationManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.ITestResult;
-import org.testng.annotations.*;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeSuite;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
-public class TBase {
+public class TestBase {
 
    protected static final ApplicationManager app =
            new ApplicationManager();
 
-   public static Logger logger = LoggerFactory.getLogger(TBase.class);
+   public static Logger logger = LoggerFactory.getLogger(TestBase.class);
 
    @BeforeSuite(alwaysRun = true)
    public void setUp() throws Exception {
@@ -24,34 +27,27 @@ public class TBase {
 
    @AfterSuite(alwaysRun = true)
    public void tearDown() throws Exception {
-      app.stop();
-   }
-
-   @BeforeClass(enabled = true)
-   public void goToMainPage() {
-      app.toBaseUrl();
-   }
-
-   @AfterClass(enabled = true)
-   public void clearCokies() {
-      app.clear();
+      app.deinit();
    }
 
    @BeforeMethod(alwaysRun = true)
-   public void startLogging(Method m, Object[] p) {
+   public void startTest(Method m, Object[] p) {
       logger.info("START:     test " + m.getName()
               + " with parameters {" + Arrays.asList(p) + '}'
               + " from " + m.getDeclaringClass());
+      app.goToMainPage();
    }
 
-   @AfterMethod(alwaysRun = true)
-   public void stopLogging(ITestResult result, Method m) {
+   @AfterMethod(enabled = true)
+   public void finishTest(ITestResult result, Method m) {
+      app.account().logout();
+      app.pageNavigation().clearBrowserData();
       if (!result.isSuccess()) {
          logger.info("FAILED:    test " + m.getName()
-                 + " from " + m.getDeclaringClass()+'\n');
+                 + " from " + m.getDeclaringClass() + '\n');
       } else {
          logger.info("SUCCESS:   test " + m.getName()
-                 + " from " + m.getDeclaringClass()+'\n');
+                 + " from " + m.getDeclaringClass() + '\n');
       }
    }
 }

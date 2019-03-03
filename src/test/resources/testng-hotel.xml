@@ -1,9 +1,9 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="BookingTests" verbose="1">
+<suite name="Hotel" verbose="1">
    <!--Running full packages-->
-   <test name="Hotel">
-      <packages>
-         <package name="by.booking.pkt.tests.hotel"/>
-      </packages>
+   <test name="Add to wishlist">
+      <classes>
+         <class name="by.booking.pkt.tests.hotel.AddToWishlist"/>
+      </classes>
    </test>
 </suite>
