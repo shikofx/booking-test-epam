@@ -6,7 +6,8 @@ public class TestBaseWithLogin extends TestBase {
 
    @BeforeMethod(alwaysRun = true)
    public void loginUser(){
-      app.login();
+
+//      app.login();
    }
 }
 

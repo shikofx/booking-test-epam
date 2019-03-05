@@ -30,9 +30,9 @@ public class DataGenerator {
    public String fileFormat;
 
    @Parameter(names = "-t", description = "For what do you need these data: " +
-           "\n       's': for testing of search page" +
-           "\n       'w': for testing of goToWishlistsPage page" +
-           "\n       'h': for testing of hotel page")
+           "\n       'search': for testing of search page" +
+           "\n       'wishlist': for testing of goToWishlistsPage page" +
+           "\n       'hotel': for testing of hotel page")
    public String whatTest;
 
    public final String filePath = "src/test/resources/";
@@ -65,11 +65,11 @@ public class DataGenerator {
    private void saveAsJSON(String whatTest, File file) throws IOException {
       Gson gson = new GsonBuilder().setPrettyPrinting().create();
       List<TestData> testData = new ArrayList<TestData>();
-      if (whatTest.equals("s"))
+      if (whatTest.equals("search"))
          testData = generateSearchData(count);
-      else if (whatTest.equals("h"))
+      else if (whatTest.equals("hotel"))
          testData = generateHotelData(count);
-      else if (whatTest.equals("w"))
+      else if (whatTest.equals("wishlist"))
          testData = generateWishlists(count);
       String jsonString = gson.toJson(testData);
       try (Writer writer = new FileWriter(file)) {

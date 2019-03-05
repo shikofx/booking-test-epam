@@ -1,19 +1,22 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="BookingTests" verbose="1">
     <!--Running full packages-->
-   <test name="Search">
-      <packages>
-         <package name="by.booking.pkt.tests.search"/>
-      </packages>
-   </test>
-   <test name="Profile">
-      <packages>
-         <package name="by.booking.pkt.tests.profile"/>
-      </packages>
-   </test>
    <test name="Hotel">
-      <packages>
-         <package name="by.booking.pkt.tests.hotel"/>
-      </packages>
+      <classes>
+         <class name="by.booking.pkt.tests.hotel.AddToWishlist"/>
+      </classes>
+   </test>
+
+   <test name="Profile">
+      <classes>
+         <class name="by.booking.pkt.tests.profile.WishlistsTests"/>
+      </classes>
+   </test>
+
+   <test name="Search">
+      <classes>
+         <class name="by.booking.pkt.tests.search.ResultsFilterTests"/>
+         <class name="by.booking.pkt.tests.search.ResultsSortTests"/>
+      </classes>
    </test>
 </suite>

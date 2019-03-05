@@ -1,5 +1,5 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="BookingTests" verbose="1">
+<suite name="SearchTests" verbose="1">
    <!--Running full packages-->
    <test name="Filter">
       <classes>
