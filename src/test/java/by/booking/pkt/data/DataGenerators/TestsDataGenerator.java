@@ -54,7 +54,7 @@ public class TestsDataGenerator {
       if (count > 5) {
          throw new ExceptionInInitializerError("Error count: Count more than 5!");
       }
-      if (fileFormat.equals("xml"))
+       if (fileFormat.equals("xml"))
          saveAsXML(whatTest, new File(file));
       else if (fileFormat.equals("json"))
          saveAsJSON(whatTest, new File(file));
