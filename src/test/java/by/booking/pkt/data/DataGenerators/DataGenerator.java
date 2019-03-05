@@ -1,6 +1,6 @@
 package by.booking.pkt.data.DataGenerators;
 
-import by.booking.pkt.model.TestsData;
+import by.booking.pkt.model.TestData;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
@@ -15,7 +15,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestsDataGenerator {
+public class DataGenerator {
 
    @Parameter(names = "-pl", description = "Place where travel")
    public String place;
@@ -23,22 +23,22 @@ public class TestsDataGenerator {
    @Parameter(names = "-c", description = "Count of test data")
    public int count;
 
-   @Parameter(names = "-fn", description = "Data file name: 'data-for-search'")
+   @Parameter(names = "-fn", description = "Data file getName: 'data-for-search'")
    public String fileName;
 
    @Parameter(names = "-ff", description = "Data file format")
    public String fileFormat;
 
    @Parameter(names = "-t", description = "For what do you need these data: " +
-           "\n's': for testing of search page" +
-           "\n'w': for testing of wishlists page" +
-           "\n'h': for testing of hotel page")
+           "\n       's': for testing of search page" +
+           "\n       'w': for testing of goToWishlistsPage page" +
+           "\n       'h': for testing of hotel page")
    public String whatTest;
 
    public final String filePath = "src/test/resources/";
 
    public static void main(String[] args) throws IOException {
-      TestsDataGenerator generator = new TestsDataGenerator();
+      DataGenerator generator = new DataGenerator();
       JCommander jCommander = new JCommander(generator);
       try {
          jCommander.parse(args);
@@ -64,33 +64,33 @@ public class TestsDataGenerator {
 
    private void saveAsJSON(String whatTest, File file) throws IOException {
       Gson gson = new GsonBuilder().setPrettyPrinting().create();
-      List<TestsData> testsData = new ArrayList<TestsData>();
+      List<TestData> testData = new ArrayList<TestData>();
       if (whatTest.equals("s"))
-         testsData = generateSearchData(count);
+         testData = generateSearchData(count);
       else if (whatTest.equals("h"))
-         testsData = generateHotelData(count);
+         testData = generateHotelData(count);
       else if (whatTest.equals("w"))
-         testsData = generateWishlists(count);
-      String jsonString = gson.toJson(testsData);
+         testData = generateWishlists(count);
+      String jsonString = gson.toJson(testData);
       try (Writer writer = new FileWriter(file)) {
          writer.write(jsonString);
       }
    }
 
    private void saveAsXML(String whatTest, File file) throws IOException {
-      List<TestsData> testData = generateSearchData(count);
+      List<TestData> testData = generateSearchData(count);
       XStream xStream = new XStream();
-      xStream.processAnnotations(TestsData.class);
+      xStream.processAnnotations(TestData.class);
       String xmlString = xStream.toXML(testData);
       try (Writer writer = new FileWriter(file)) {
          writer.write(xmlString);
       }
    }
 
-   private List<TestsData> generateSearchData(int count) {
-      List<TestsData> testsData = new ArrayList<TestsData>();
+   private List<TestData> generateSearchData(int count) {
+      List<TestData> testData = new ArrayList<TestData>();
       for (int i = 1; i <= count; i++) {
-         testsData.add(new TestsData().
+         testData.add(new TestData().
                  withCurrency("RUB").
                  withPlace(place.replaceAll("_", " ")).
                  withInDate("2019-03-0" + (i + 4)).
@@ -102,29 +102,29 @@ public class TestsDataGenerator {
                  withMaxBudget(i * 4000).
                  withStars(i));
       }
-      return testsData;
+      return testData;
    }
 
-   private List<TestsData> generateHotelData(int count) {
-      List<TestsData> testsData = new ArrayList<TestsData>();
+   private List<TestData> generateHotelData(int count) {
+      List<TestData> testData = new ArrayList<TestData>();
       for (int i = 1; i <= count; i++) {
-         testsData.add(new TestsData().
+         testData.add(new TestData().
                  withPlace(place.replaceAll("_", " ")).
                  withCurrency("RUB").
                  withInDate("2019-03-0" + (i + 4)).
                  withOutDate("2019-04-0" + i).
                  withWishlist("to " + place + " " + i));
       }
-      return testsData;
+      return testData;
    }
 
-   private List<TestsData> generateWishlists(int count) {
-      List<TestsData> testsData = new ArrayList<TestsData>();
+   private List<TestData> generateWishlists(int count) {
+      List<TestData> testData = new ArrayList<TestData>();
       for (int i = 1; i <= count; i++) {
-         testsData.add(new TestsData().
+         testData.add(new TestData().
                  withPlace(place.replaceAll("_", " ")).
                  withWishlist("to " + place + " " + i));
       }
-      return testsData;
+      return testData;
    }
 }

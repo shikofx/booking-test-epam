@@ -23,7 +23,7 @@ public class ApplicationManager {
 
    private int implicitlyWait;
    private AccountHelper accountHelper;
-   private WindowHelper windowHelper;
+   private PageNavigationHelper pageNavigationHelper;
    private SearchPageHelper searchPageHelper;
    private ResultsPageHelper resultsPageHelper;
    private HotelPageHelper hotelPageHelper;
@@ -42,36 +42,28 @@ public class ApplicationManager {
       }
       username = PropertyLoader.loadProperty("account.username");
       password = PropertyLoader.loadProperty("account.password");
-
       setImplicitlyWait(implicitlyWait);
-
       wait = new WebDriverWait(webDriver, 30);
-
       accountHelper = new AccountHelper(webDriver, wait, implicitlyWait);
       searchPageHelper = new SearchPageHelper(webDriver, wait, implicitlyWait);
       resultsPageHelper = new ResultsPageHelper(webDriver, wait, implicitlyWait);
       filterBoxHelper = new FilterBoxHelper(webDriver, wait, implicitlyWait);
       hotelPageHelper = new HotelPageHelper(webDriver, wait, implicitlyWait);
-      windowHelper = new WindowHelper(webDriver, wait, implicitlyWait);
+      pageNavigationHelper = new PageNavigationHelper(webDriver, wait, implicitlyWait);
       wishlistsPageHelper = new WishlistsPageHelper(webDriver, wait, implicitlyWait);
-
-      windowHelper.maximazeWindow();
+      pageNavigation().maximazeWindow();
    }
 
-   public void toBaseUrl() {
-      webDriver.get(baseUrl);
+   public void goToMainPage() {
+      pageNavigation().goTo(baseUrl);
    }
 
    public void login() {
-      accountHelper.loginAs(username, password);
+      account().loginAs(username, password);
    }
 
-   public void stop() {
+   public void deinit() {
       WebDriverPool.DEFAULT.dismissAll();
-   }
-
-   public void clear() {
-//      webDriver.manage().deleteAllCookies();
    }
 
    public int getImplicitlyWait() {
@@ -87,23 +79,23 @@ public class ApplicationManager {
       return accountHelper;
    }
 
-   public WindowHelper windows() {
-      return windowHelper;
+   public PageNavigationHelper pageNavigation() {
+      return pageNavigationHelper;
    }
 
    public SearchPageHelper searchPage() {
       return searchPageHelper;
    }
 
-   public ResultsPageHelper results() {
+   public ResultsPageHelper resultsPage() {
       return resultsPageHelper;
    }
 
-   public HotelPageHelper hotel() {
+   public HotelPageHelper hotelPage() {
       return hotelPageHelper;
    }
 
-   public WishlistsPageHelper wishlists() {
+   public WishlistsPageHelper wishlistsPage() {
       return wishlistsPageHelper;
    }
 

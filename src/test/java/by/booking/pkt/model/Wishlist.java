@@ -17,7 +17,7 @@ public class Wishlist {
     return this;
   }
 
-  public String getName() {
+   public String getName() {
     return name;
   }
 
@@ -54,7 +54,7 @@ public class Wishlist {
   public String toString() {
     return "Wishlist{" +
             "id='" + id + '\'' +
-            ", name='" + name + '\'' +
+            ", getName='" + name + '\'' +
             '}';
   }
 

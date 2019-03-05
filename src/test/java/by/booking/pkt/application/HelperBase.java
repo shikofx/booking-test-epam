@@ -23,17 +23,22 @@ public class HelperBase {
 
    }
 
-   public HelperBase refreshPage() {
+   public void clearBrowserData() {
+      webDriver.manage().deleteAllCookies();
+   }
+
+   public void refreshPage() {
       webDriver.navigate().refresh();
-      return this;
    }
 
    public HelperBase displayDropDown(WebElement whatClick, WebElement whatWait, int secondsToWait) {
+      wait.until(elementToBeClickable(whatClick));
+      wait.until((WebDriver d) -> whatClick.getTagName());
       boolean isClickable = whatClick.isDisplayed();
       boolean whatW = isElementPresent(whatWait, 1);
       if (isClickable && !whatW) {
          whatClick.click();
-         wait.until(visibilityOf(whatWait));
+         wait.until(visibilityOf(whatWait));//!!!!!!!!!!!!!!!!!!!!!
       } else if (!whatWait.isDisplayed()) {
          whatClick.click();
       }
@@ -67,7 +72,6 @@ public class HelperBase {
    }
 
 
-
    private boolean isElementDisplayed(By whatWait) {
       return webDriver.findElement(whatWait).isDisplayed();
    }
@@ -76,9 +80,17 @@ public class HelperBase {
       return webDriver.findElements(locator).size() > 0;
    }
 
+   public boolean isElementPresentNoWait(WebElement inElement, By locator) {
+      setImplicitlyWait(0);
+      boolean isPresent = inElement.findElements(locator).size() > 0;
+      setImplicitlyWait(implicitlyWait);
+      return isPresent;
+   }
+
    public boolean isElementPresent(WebElement inElement, By locator) {
       return inElement.findElements(locator).size() > 0;
    }
+
 
    public boolean isElementPresent(WebElement element, int secondsToWait) {
       setImplicitlyWait(secondsToWait);
@@ -94,9 +106,11 @@ public class HelperBase {
    }
 
    public boolean isElementPresentAndVisible(WebElement e) {
-      return wait.until((WebDriver d) -> {
-         return e.isEnabled() && e.isDisplayed();
-      });
+      wait.until((WebDriver d) -> e.getTagName());
+      if (isElementPresent(e, 0) && e.isDisplayed()) {
+         return true;
+      }
+      return false;
    }
 
    private void setImplicitlyWait(int secondsToWait) {
@@ -104,6 +118,7 @@ public class HelperBase {
    }
 
    protected void inputText(WebElement input, String text) {
+      wait.until(elementToBeClickable(input));
       input.click();
       input.clear();
       input.sendKeys(text);

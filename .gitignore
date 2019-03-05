@@ -91,3 +91,5 @@ hs_err_pid*
 target/
 .idea/vcs.xml
 *.exe
+.idea/encodings.xml
+tests_recorded.uml

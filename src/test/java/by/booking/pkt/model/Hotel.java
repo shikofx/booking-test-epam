@@ -72,9 +72,9 @@ public class Hotel {
 
   @Override
   public String toString() {
-     return "HotelToWishlistTests{" +
+     return "Hotel{" +
             "id='" + id + '\'' +
-            ", name='" + name + '\'' +
+             ", getName='" + name + '\'' +
             '}';
   }
 }

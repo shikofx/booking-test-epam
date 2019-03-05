@@ -99,14 +99,14 @@ public class ResultsPageHelper extends HelperBase {
 
    public String getID(WebElement item) {
       String id = item.getAttribute("data-hotelid");
-      return item.getAttribute("data-hotelid");
+      return id;
 
    }
 
    public double distanceToDest(WebElement item) {
       double distance = 0;
       By distanceBy = By.cssSelector("span.distfromdest");
-      if (isElementPresent(item, distanceBy)) {
+      if (isElementPresentNoWait(item, distanceBy)) {
          distance = Double.parseDouble(textByPatternWithout(REGEX_DISTANCE_VALUE, "\\s",
                item.findElement(distanceBy).getText()).replace(',', '.'));
          String measure = textByPatternWithout(REGEX_DISTANCE_MEASURE, "\\s",
@@ -121,7 +121,7 @@ public class ResultsPageHelper extends HelperBase {
    public int getStarsCount(WebElement item) {
       int actualStars = 0;
       By starsBy = By.cssSelector("svg[class*=stars]");
-      if (this.isElementPresent(item, starsBy)) {
+      if (this.isElementPresentNoWait(item, starsBy)) {
          actualStars = Integer.parseInt(textByPatternWithout(REGEX_STARS_COUNT, "\\s",
                item.findElement(starsBy).getAttribute("class")));
       }
@@ -131,15 +131,16 @@ public class ResultsPageHelper extends HelperBase {
    public int getTotalPrice(WebElement item) {
       By priceInDivBy = By.cssSelector("div.totalPrice");
       By priceInStrongBy = By.cssSelector("strong.price");
-      if (isElementPresent(item, priceInStrongBy)) {
+      if (isElementPresentNoWait(item, priceInStrongBy)) {
          return Integer.parseInt(textByPatternWithout(REGEX_PRICE,
                "[\\D]", item.findElement(priceInStrongBy).getText()));
-      } else if (isElementPresent(item, priceInDivBy)) {
+      } else if (isElementPresentNoWait(item, priceInDivBy)) {
          return Integer.parseInt(textByPatternWithout(REGEX_PRICE_WITHOUT_STRONG,
                "[\\D]", item.findElement(priceInDivBy).getAttribute("outerText")));
       }
       return 0;
    }
+
 
    public String getHotelName(WebElement item) {
       By hotelNameBy = By.cssSelector("span.sr-hotel__name");
@@ -160,6 +161,7 @@ public class ResultsPageHelper extends HelperBase {
 
    public ResultsPageHelper initSortByPrice() {
       initSortByPrice.click();
+      refreshPage();
       return this;
    }
 
@@ -167,6 +169,7 @@ public class ResultsPageHelper extends HelperBase {
    public ResultsPageHelper initSortByDistance() {
       displayDropDown(additionalSortsButton, additionalSortsPanel, 5);
       initSortByDistance.findElement(By.cssSelector("a")).click();
+      refreshPage();
       return this;
    }
 

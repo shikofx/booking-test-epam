@@ -4,7 +4,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
 @XStreamAlias("Search")
-public class TestsData {
+public class TestData {
   @XStreamAsAttribute
   private String currency;
   private String place;
@@ -44,7 +44,7 @@ public class TestsData {
          testString += "stars='" + stars + "\'; ";
       if (wishlistName.length() > 0)
          testString += "wishlistName='" + wishlistName + '\'';
-      return "TestsData{" +
+      return "TestData{" +
               testString + '}';
    }
 
@@ -55,7 +55,7 @@ public class TestsData {
   private String wishlistName;
 
 
-   public TestsData() {
+   public TestData() {
     currency = "";
     place = "";
     inDate = "";
@@ -70,57 +70,57 @@ public class TestsData {
   }
 
 
-   public TestsData withCurrency(String currency) {
+   public TestData withCurrency(String currency) {
     this.currency = currency;
     return this;
   }
 
-   public TestsData withPlace(String place) {
+   public TestData withPlace(String place) {
     this.place = place;
     return this;
   }
 
-   public TestsData withInDate(String inDate) {
+   public TestData withInDate(String inDate) {
     this.inDate = inDate;
     return this;
   }
 
-   public TestsData withOutDate(String outDate) {
+   public TestData withOutDate(String outDate) {
     this.outDate = outDate;
     return this;
   }
 
-   public TestsData withRooms(int roomsCount) {
+   public TestData withRooms(int roomsCount) {
     this.rooms = roomsCount;
     return this;
   }
 
-   public TestsData withAdults(int adultsCount) {
+   public TestData withAdults(int adultsCount) {
     this.adults = adultsCount;
     return this;
   }
 
-   public TestsData withChildren(int childrenCount) {
+   public TestData withChildren(int childrenCount) {
     this.children = childrenCount;
     return this;
   }
 
-   public TestsData withMinBudget(int budget) {
+   public TestData withMinBudget(int budget) {
     this.budgetMin = budget;
     return this;
   }
 
-   public TestsData withMaxBudget(int budget) {
+   public TestData withMaxBudget(int budget) {
     this.budgetMax = budget;
     return this;
   }
 
-   public TestsData withStars(int stars) {
+   public TestData withStars(int stars) {
     this.stars = stars;
     return this;
   }
 
-   public TestsData withWishlist(String wishlistName) {
+   public TestData withWishlist(String wishlistName) {
     this.wishlistName = wishlistName;
     return this;
   }
