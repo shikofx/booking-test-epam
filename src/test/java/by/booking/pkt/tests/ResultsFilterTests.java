@@ -15,7 +15,7 @@ import static org.hamcrest.Matchers.*;
 
 public class ResultsFilterTests extends TestBase {
 
-   @Test(enabled = true, groups = {"positive"},
+   @Test(enabled = true, groups = {"positive", "independent"},
            dataProviderClass = FileDataProvider.class, dataProvider = "testDataFromJSON")
    @DataSourceFileAnnotation("src/test/resources/data-for-search-positive.json")
    public void filterByBudget(TestData testData) {
@@ -32,7 +32,7 @@ public class ResultsFilterTests extends TestBase {
       assertThat(hotels, everyItem(hasProperty("totalPrice", lessThan(maxTotalPrice))));
    }
 
-   @Test(enabled = true, groups = {"positive", "smoke"},
+   @Test(enabled = true, groups = {"positive", "smoke", "independent"},
            dataProviderClass = FileDataProvider.class, dataProvider = "testDataFromJSON")
    @DataSourceFileAnnotation("src/test/resources/data-for-search-positive.json")
    public void filterByStars(TestData testData) {
