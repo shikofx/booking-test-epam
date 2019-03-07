@@ -1,4 +1,4 @@
-package by.booking.pkt.application;
+package by.booking.pkt.web;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

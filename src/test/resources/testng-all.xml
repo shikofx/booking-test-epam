@@ -1,22 +1,12 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="BookingTests" verbose="1">
     <!--Running full packages-->
-   <test name="Hotel">
+   <test name="All tests">
       <classes>
-         <class name="by.booking.pkt.tests.hotel.AddToWishlist"/>
-      </classes>
-   </test>
-
-   <test name="Profile">
-      <classes>
-         <class name="by.booking.pkt.tests.profile.WishlistsTests"/>
-      </classes>
-   </test>
-
-   <test name="Search">
-      <classes>
-         <class name="by.booking.pkt.tests.search.ResultsFilterTests"/>
-         <class name="by.booking.pkt.tests.search.ResultsSortTests"/>
+         <class name="by.booking.pkt.tests.HotelTests"/>
+         <class name="by.booking.pkt.tests.WishlistsTests"/>
+         <class name="by.booking.pkt.tests.ResultsFilterTests"/>
+         <class name="by.booking.pkt.tests.ResultsSortTests"/>
       </classes>
    </test>
 </suite>

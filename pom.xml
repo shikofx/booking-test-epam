@@ -185,6 +185,33 @@
 
    <profiles>
 
+      <!--platforms-->
+      <!--windows 7 default-->
+      <profile>
+         <id>win7</id>
+         <properties>
+            <platform.name>win7</platform.name>
+         </properties>
+         <activation>
+            <activeByDefault>true</activeByDefault>
+         </activation>
+      </profile>
+
+      <!--windows 10-->
+      <profile>
+         <id>win10</id>
+         <properties>
+            <platform.name>win10</platform.name>
+         </properties>
+      </profile>
+
+      <!--linux-->
+      <profile>
+         <id>linux</id>
+         <properties>
+            <platform.name>linux</platform.name>
+         </properties>
+      </profile>
       <!-- browsers -->
       <!--chrome default-->
       <profile>
@@ -248,7 +275,7 @@
       <!-- environments -->
       <!--booking-default-->
       <profile>
-         <id>booking</id>
+         <id>accomodations</id>
          <properties>
             <site.url>https://booking.com/</site.url>
          </properties>
@@ -257,11 +284,11 @@
          </activation>
       </profile>
 
-      <!--localhost-->
+      <!--airline-->
       <profile>
-         <id>localhost</id>
+         <id>airline</id>
          <properties>
-            <site.url>http://localhost/</site.url>
+            <site.url>https://booking.kayak.com</site.url>
          </properties>
       </profile>
 

@@ -3,12 +3,12 @@
    <!--Running full packages-->
    <test name="Filter">
       <classes>
-         <class name="by.booking.pkt.tests.search.ResultsFilterTests"/>
+         <class name="by.booking.pkt.tests.ResultsFilterTests"/>
       </classes>
    </test>
    <test name="Sort">
       <classes>
-         <class name="by.booking.pkt.tests.search.ResultsSortTests"/>
+         <class name="by.booking.pkt.tests.ResultsSortTests"/>
       </classes>
    </test>
 </suite>

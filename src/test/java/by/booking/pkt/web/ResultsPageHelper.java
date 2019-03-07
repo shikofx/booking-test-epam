@@ -1,5 +1,5 @@
 
-package by.booking.pkt.application;
+package by.booking.pkt.web;
 
 import by.booking.pkt.model.Hotel;
 import org.openqa.selenium.By;
@@ -29,13 +29,13 @@ public class ResultsPageHelper extends HelperBase {
    @FindBy(css = "div.sr_separator")
    private WebElement separator;
 
-   @FindBy(xpath = "//*/div[contains(@class,'sr_separator')]/preceding-sibling::div[contains(@class,'sr_item')]")
+   @FindBy(xpath = "//*/div[contains(@class,'sr_separator')]/preceding-sibling::div[@data-hotelid]")
    private List<WebElement> allResultsBeforSeparator;
 
-   @FindBy(css = "div.sr_item")
+   @FindBy(css = "[data-hotelid]")
    private List<WebElement> allResults;
 
-   @FindBy(css = "div.sr_item")
+   @FindBy(css = "[data-hotelid]")
    private WebElement firstHotelItem;
 
    @FindBy(css = "#sortbar_dropdown_button")
@@ -89,11 +89,11 @@ public class ResultsPageHelper extends HelperBase {
 
    private Hotel resultToHotel(WebElement item) {
       Hotel hotel = new Hotel().
-            withID(getID(item)).
-            withName(getHotelName(item)).
-            withDistance(distanceToDest(item)).
-            withStars(getStarsCount(item)).
-            withTotalPrice(getTotalPrice(item));
+              withID(getID(item)).
+              withName(getHotelName(item)).
+              withDistance(distanceToDest(item)).
+              withStars(getStarsCount(item)).
+              withTotalPrice(getTotalPrice(item));
       return hotel;
    }
 
@@ -108,9 +108,9 @@ public class ResultsPageHelper extends HelperBase {
       By distanceBy = By.cssSelector("span.distfromdest");
       if (isElementPresentNoWait(item, distanceBy)) {
          distance = Double.parseDouble(textByPatternWithout(REGEX_DISTANCE_VALUE, "\\s",
-               item.findElement(distanceBy).getText()).replace(',', '.'));
+                 item.findElement(distanceBy).getText()).replace(',', '.'));
          String measure = textByPatternWithout(REGEX_DISTANCE_MEASURE, "\\s",
-               item.findElement(distanceBy).getText());
+                 item.findElement(distanceBy).getText());
          if (measure.length() > 1) {
             distance = 1000 * distance;
          }
@@ -123,7 +123,7 @@ public class ResultsPageHelper extends HelperBase {
       By starsBy = By.cssSelector("svg[class*=stars]");
       if (this.isElementPresentNoWait(item, starsBy)) {
          actualStars = Integer.parseInt(textByPatternWithout(REGEX_STARS_COUNT, "\\s",
-               item.findElement(starsBy).getAttribute("class")));
+                 item.findElement(starsBy).getAttribute("class")));
       }
       return actualStars;
    }
@@ -133,10 +133,10 @@ public class ResultsPageHelper extends HelperBase {
       By priceInStrongBy = By.cssSelector("strong.price");
       if (isElementPresentNoWait(item, priceInStrongBy)) {
          return Integer.parseInt(textByPatternWithout(REGEX_PRICE,
-               "[\\D]", item.findElement(priceInStrongBy).getText()));
+                 "[\\D]", item.findElement(priceInStrongBy).getText()));
       } else if (isElementPresentNoWait(item, priceInDivBy)) {
          return Integer.parseInt(textByPatternWithout(REGEX_PRICE_WITHOUT_STRONG,
-               "[\\D]", item.findElement(priceInDivBy).getAttribute("outerText")));
+                 "[\\D]", item.findElement(priceInDivBy).getAttribute("outerText")));
       }
       return 0;
    }
@@ -173,4 +173,35 @@ public class ResultsPageHelper extends HelperBase {
       return this;
    }
 
+   public String checkSortByDistance(List<Hotel> hotels) {
+      String checker = "sorted";
+      for (int i = 1; i < hotels.size(); i++) {
+         String currentHotelName = hotels.get(i).getName();
+         double currentDistance = hotels.get(i).getDistance();
+         String previousHotelName = hotels.get(i - 1).getName();
+         double previousDistance = hotels.get(i - 1).getDistance();
+         if (currentDistance < previousDistance) {
+            checker = "The distance to '" + currentHotelName + "' <" + currentDistance +
+                    "> less than the distance to " + previousHotelName + " <" + previousDistance + '>';
+            return checker;
+         }
+      }
+      return checker;
+   }
+
+   public String checkSortByPrice(List<Hotel> hotels) {
+      String checker = "sorted";
+      for (int i = 1; i < hotels.size(); i++) {
+         String currentHotel = hotels.get(i).getName();
+         int currentPrice = hotels.get(i).getTotalPrice();
+         String previousHotel = hotels.get(i - 1).getName();
+         int previousPrice = hotels.get(i - 1).getTotalPrice();
+         if (currentPrice < previousPrice) {
+            checker = "The total price of '" + currentHotel + "' <" + currentPrice +
+                    "> less than total price of '" + previousHotel + "' <" + previousPrice + '>';
+            return checker;
+         }
+      }
+      return checker;
+   }
 }

@@ -1,4 +1,4 @@
-package by.booking.pkt.data.DataGenerators;
+package by.booking.pkt.utils.DataGenerators;
 
 import by.booking.pkt.model.TestData;
 import com.beust.jcommander.JCommander;
@@ -17,21 +17,21 @@ import java.util.List;
 
 public class DataGenerator {
 
-   @Parameter(names = "-pl", description = "Place where travel")
+   @Parameter(names = "-pl", description = "Place to travel (ex.: New_York)")
    public String place;
 
    @Parameter(names = "-c", description = "Count of test data")
    public int count;
 
-   @Parameter(names = "-fn", description = "Data file getName: 'data-for-search'")
+   @Parameter(names = "-fn", description = "Data file name (ex.: data-for-search)")
    public String fileName;
 
-   @Parameter(names = "-ff", description = "Data file format")
+   @Parameter(names = "-ff", description = "Data file format (xml, json)")
    public String fileFormat;
 
-   @Parameter(names = "-t", description = "For what do you need these data: " +
+   @Parameter(names = "-target", description = "For what do you need these data: " +
            "\n       'search': for testing of search page" +
-           "\n       'wishlist': for testing of goToWishlistsPage page" +
+           "\n       'wishlist': for testing of wishlists page" +
            "\n       'hotel': for testing of hotel page")
    public String whatTest;
 
@@ -52,7 +52,7 @@ public class DataGenerator {
    private void run() throws IOException {
       String file = filePath + fileName + "." + fileFormat;
       if (count > 5) {
-         throw new ExceptionInInitializerError("Error count: Count more than 5!");
+         throw new ExceptionInInitializerError("Error: Count more than 5!");
       }
        if (fileFormat.equals("xml"))
          saveAsXML(whatTest, new File(file));

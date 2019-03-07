@@ -3,7 +3,7 @@
    <!--Running full packages-->
    <test name="Add to wishlist">
       <classes>
-         <class name="by.booking.pkt.tests.hotel.AddToWishlist"/>
+         <class name="by.booking.pkt.tests.HotelTests"/>
       </classes>
    </test>
 </suite>

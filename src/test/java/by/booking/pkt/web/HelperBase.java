@@ -1,4 +1,4 @@
-package by.booking.pkt.application;
+package by.booking.pkt.web;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.PageFactory;
@@ -38,7 +38,7 @@ public class HelperBase {
       boolean whatW = isElementPresent(whatWait, 1);
       if (isClickable && !whatW) {
          whatClick.click();
-         wait.until(visibilityOf(whatWait));//!!!!!!!!!!!!!!!!!!!!!
+         //   wait.until(visibilityOf(whatWait));//!!!!!!!!!!!!!!!!!!!!!
       } else if (!whatWait.isDisplayed()) {
          whatClick.click();
       }

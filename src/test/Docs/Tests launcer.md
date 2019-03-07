@@ -1,8 +1,16 @@
 #To launch tests use commands:
-###mvn test 
-tests with default profiles
-###mvn test -P chrome, booking, nogrid, pkt, hotel
-launching tests for hotel page on "https://booking.com/ in Google Chrome without Grid Hub whith account "pkt"
+Tests with default profiles:
+
+    mvn test
+
+Tests for sets of tests (use only tests profiles):
+    
+    mvn test -P smoke
+    
+Tests for hotel page on https://booking.com/ in Google Chrome without Grid Hub whith account "pkt"
+    
+    mvn test -P chrome,booking,nogrid,pkt,hotel
+
 
 #Profile groups:
 ##1. Browser profiles

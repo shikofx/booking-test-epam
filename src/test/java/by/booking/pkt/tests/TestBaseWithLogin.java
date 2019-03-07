@@ -6,8 +6,7 @@ public class TestBaseWithLogin extends TestBase {
 
    @BeforeMethod(alwaysRun = true)
    public void loginUser(){
-
-//      app.login();
+      app.account().loginAs(app.appProperties().getUsername(), app.appProperties().getPassword());
    }
 }
 

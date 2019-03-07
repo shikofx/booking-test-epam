@@ -21,13 +21,13 @@ public class TestBase {
 
    @BeforeSuite(alwaysRun = true)
    public void setUp() throws Exception {
-//      app.init(10);
+      app.init(10);
 
    }
 
    @AfterSuite(alwaysRun = true)
-   public void tearDown() throws Exception {
-//      app.deinit();
+   public void tearDown() {
+      app.deinit();
    }
 
    @BeforeMethod(alwaysRun = true)
@@ -35,13 +35,13 @@ public class TestBase {
       logger.info("START:     test " + m.getName()
               + " with parameters {" + Arrays.asList(p) + '}'
               + " from " + m.getDeclaringClass());
-//      app.goToMainPage();
+      app.pageNavigation().goTo(app.appProperties().getBaseUrl());
    }
 
    @AfterMethod(enabled = true)
    public void finishTest(ITestResult result, Method m) {
-//      app.account().logout();
-//      app.pageNavigation().clearBrowserData();
+      app.account().logout();
+      app.pageNavigation().clearBrowserData();
       if (!result.isSuccess()) {
          logger.info("FAILED:    test " + m.getName()
                  + " from " + m.getDeclaringClass() + '\n');

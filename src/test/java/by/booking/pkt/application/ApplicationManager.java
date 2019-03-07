@@ -1,27 +1,17 @@
 package by.booking.pkt.application;
 
-import by.booking.pkt.utils.PropertyLoader;
-import org.openqa.selenium.Capabilities;
+import by.booking.pkt.web.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import ru.stqa.selenium.factory.WebDriverPool;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 public class ApplicationManager {
-
-   protected static Capabilities capabilities;
-   protected static String baseUrl;
-   protected static String gridHubUrl;
-   protected static String username;
-   protected static String password;
-
    protected WebDriver webDriver;
    protected WebDriverWait wait;
-
    private int implicitlyWait;
+
    private AccountHelper accountHelper;
    private PageNavigationHelper pageNavigationHelper;
    private SearchPageHelper searchPageHelper;
@@ -29,20 +19,16 @@ public class ApplicationManager {
    private HotelPageHelper hotelPageHelper;
    private WishlistsPageHelper wishlistsPageHelper;
    private FilterBoxHelper filterBoxHelper;
-   private String browser;
+   private ApplicationProperties appProperties;
 
    public void init(int implicitlyWait) throws IOException {
-      baseUrl = PropertyLoader.loadProperty("site.url");
-      gridHubUrl = PropertyLoader.loadProperty("grid.url");
-      capabilities = PropertyLoader.loadCapabilities();
-      if (gridHubUrl != null && !gridHubUrl.equals("")) {
-         webDriver = WebDriverPool.DEFAULT.getDriver(new URL(gridHubUrl), capabilities);
-      } else {
-         webDriver = WebDriverPool.DEFAULT.getDriver(capabilities);
-      }
-      username = PropertyLoader.loadProperty("account.username");
-      password = PropertyLoader.loadProperty("account.password");
-      setImplicitlyWait(implicitlyWait);
+      appProperties = new ApplicationProperties().initProperties();
+      webDriver = appProperties.getDriverWithProperties(
+              appProperties.getGridHub(),
+              appProperties.getPlatform(),
+              appProperties.getBrowser());
+
+      webDriver.manage().timeouts().implicitlyWait(implicitlyWait, TimeUnit.SECONDS);
       wait = new WebDriverWait(webDriver, 30);
       accountHelper = new AccountHelper(webDriver, wait, implicitlyWait);
       searchPageHelper = new SearchPageHelper(webDriver, wait, implicitlyWait);
@@ -51,28 +37,13 @@ public class ApplicationManager {
       hotelPageHelper = new HotelPageHelper(webDriver, wait, implicitlyWait);
       pageNavigationHelper = new PageNavigationHelper(webDriver, wait, implicitlyWait);
       wishlistsPageHelper = new WishlistsPageHelper(webDriver, wait, implicitlyWait);
+
       pageNavigation().maximazeWindow();
    }
 
-   public void goToMainPage() {
-      pageNavigation().goTo(baseUrl);
-   }
-
-   public void login() {
-      account().loginAs(username, password);
-   }
-
    public void deinit() {
-      WebDriverPool.DEFAULT.dismissAll();
-   }
-
-   public int getImplicitlyWait() {
-      return implicitlyWait;
-   }
-
-   public void setImplicitlyWait(int implicitlyWait) {
-      webDriver.manage().timeouts().implicitlyWait(implicitlyWait, TimeUnit.SECONDS);
-      this.implicitlyWait = implicitlyWait;
+      webDriver.quit();
+      webDriver = null;
    }
 
    public AccountHelper account() {
@@ -101,5 +72,9 @@ public class ApplicationManager {
 
    public FilterBoxHelper filters() {
       return filterBoxHelper;
+   }
+
+   public ApplicationProperties appProperties() {
+      return appProperties;
    }
 }

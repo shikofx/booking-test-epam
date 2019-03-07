@@ -3,7 +3,7 @@
    <!--Running full packages-->
    <test name="Profile">
       <classes>
-         <class name="by.booking.pkt.tests.profile.WishlistsTests"/>
+         <class name="by.booking.pkt.tests.WishlistsTests"/>
       </classes>
    </test>
 </suite>

@@ -1,4 +1,4 @@
-package by.booking.pkt.application;
+package by.booking.pkt.web;
 
 import by.booking.pkt.model.Hotel;
 import by.booking.pkt.model.Wishlist;
