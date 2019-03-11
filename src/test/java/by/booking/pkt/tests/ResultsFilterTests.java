@@ -19,7 +19,7 @@ public class ResultsFilterTests extends TestBase {
            dataProviderClass = FileDataProvider.class, dataProvider = "testDataFromJSON")
    @DataSourceFileAnnotation("src/test/resources/data-for-search-positive.json")
    public void filterByBudget(TestData testData) {
-      app.searchPage().searchFor(testData);
+      app.searchPage().search(testData);
 
       boolean budgetIsSelected = app.filters().selectBudget(testData.minBudget(), testData.maxBudget());
       assertThat("There is no selected budget!", budgetIsSelected, is(true));
@@ -28,20 +28,24 @@ public class ResultsFilterTests extends TestBase {
       int minTotalPrice = app.filters().getMinTptalPrice();
 
       List<Hotel> hotels = app.resultsPage().availableHotels();
-      assertThat(hotels, everyItem(hasProperty("totalPrice", greaterThan(minTotalPrice))));
-      assertThat(hotels, everyItem(hasProperty("totalPrice", lessThan(maxTotalPrice))));
+      assertThat(hotels,
+              everyItem(hasProperty("totalPrice", greaterThan(minTotalPrice))));
+
+      assertThat(hotels,
+              everyItem(hasProperty("totalPrice", lessThan(maxTotalPrice))));
    }
 
    @Test(enabled = true, groups = {"positive", "smoke", "independent"},
            dataProviderClass = FileDataProvider.class, dataProvider = "testDataFromJSON")
    @DataSourceFileAnnotation("src/test/resources/data-for-search-positive.json")
    public void filterByStars(TestData testData) {
-//      app.searchPage().searchFor(testData);
-//      boolean starsSelected = app.filters().selectStars(testData.stars());
-//
-//      assertThat("Count of stars has not selected!", starsSelected, is(true));
-//
-//      List<Hotel> hotels = app.resultsPage().availableHotels();
-//      assertThat(hotels, everyItem(hasProperty("stars", equalTo(testData.stars()))));
+      app.searchPage().search(testData);
+      boolean starsSelected = app.filters().selectStars(testData.stars());
+
+      assertThat("Count of stars has not selected!", starsSelected, is(true));
+
+      List<Hotel> hotels = app.resultsPage().availableHotels();
+      assertThat(hotels,
+              everyItem(hasProperty("stars", equalTo(testData.stars()))));
    }
 }

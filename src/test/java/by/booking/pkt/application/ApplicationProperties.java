@@ -27,81 +27,31 @@ public class ApplicationProperties {
    private static String platform;
    private static Capabilities browserCapabilities;
    private static String browserCapabilitiesFileName;
-   private static String baseUrl;
+   private static String mainPageUrl;
    private static String gridHubUrl;
    private static String username;
    private static String password;
 
-   public static String getPlatform() {
-      return platform;
-   }
-
-   public ApplicationProperties withPlatform(String platform) {
-      this.platform = platform;
-      return this;
-   }
-
-   public static Capabilities getBrowser() {
-      return browserCapabilities;
-   }
-
-   public ApplicationProperties withBrowserCapabilities(Capabilities capabilities) {
-      ApplicationProperties.browserCapabilities = capabilities;
-      return this;
-   }
-
-   public static String getBrowserCapabilitiesFileName() {
-      return browserCapabilitiesFileName;
-   }
-
-   public ApplicationProperties withCapabilitiesFileName(String capabilitiesFileName) {
-      ApplicationProperties.browserCapabilitiesFileName = capabilitiesFileName;
-      return this;
-   }
-
-   public static String getBaseUrl() {
-      return baseUrl;
-   }
-
-   public ApplicationProperties withBaseUrl(String baseUrl) {
-      ApplicationProperties.baseUrl = baseUrl;
-      return this;
-   }
-
-   public static String getGridHub() {
-      return gridHubUrl;
-   }
-
-   public ApplicationProperties withGridHubUrl(String gridHubUrl) {
-      ApplicationProperties.gridHubUrl = gridHubUrl;
-      return this;
+   public static String getMaimPageURL() {
+      return mainPageUrl;
    }
 
    public static String getUsername() {
       return username;
    }
 
-   public ApplicationProperties withUsername(String username) {
-      ApplicationProperties.username = username;
-      return this;
-   }
 
    public static String getPassword() {
       return password;
    }
 
-   public ApplicationProperties withPassword(String password) {
-      ApplicationProperties.password = password;
-      return this;
-   }
-
    public ApplicationProperties initProperties() throws IOException {
-      baseUrl = loadProperty("site.url", CURRENT_PROPERTIES, DEBUG_PROPERTIES);
+      mainPageUrl = loadProperty("site.url", CURRENT_PROPERTIES, DEBUG_PROPERTIES);
       gridHubUrl = loadProperty("grid.url", CURRENT_PROPERTIES, DEBUG_PROPERTIES);
       username = loadProperty("account.username", CURRENT_PROPERTIES, DEBUG_PROPERTIES);
       password = loadProperty("account.password", CURRENT_PROPERTIES, DEBUG_PROPERTIES);
-      String platform = loadProperty("platform.name", CURRENT_PROPERTIES, DEBUG_PROPERTIES);
-      String browserCapabilitiesFileName = loadProperty("browserCapabilities", CURRENT_PROPERTIES, DEBUG_PROPERTIES);
+      platform = loadProperty("platform.name", CURRENT_PROPERTIES, DEBUG_PROPERTIES);
+      browserCapabilitiesFileName = loadProperty("browserCapabilities", CURRENT_PROPERTIES, DEBUG_PROPERTIES);
       browserCapabilities = loadCapabilities(browserCapabilitiesFileName);
       return this;
    }
@@ -130,14 +80,14 @@ public class ApplicationProperties {
       return capabilities;
    }
 
-   public WebDriver getDriverWithProperties(String gridHub, String platform, Capabilities browserCap) throws MalformedURLException {
-      if (gridHub != null && !gridHub.equals("")) {
+   public WebDriver getDriver() throws MalformedURLException {
+      if (gridHubUrl != null && !gridHubUrl.equals("")) {
          DesiredCapabilities remoteCapabilities = new DesiredCapabilities();
-         remoteCapabilities.setBrowserName(browserCap.getBrowserName());
+         remoteCapabilities.setBrowserName(browserCapabilities.getBrowserName());
          remoteCapabilities.setPlatform(Platform.fromString(platform));
-         return new RemoteWebDriver(new URL(gridHub), remoteCapabilities);
+         return new RemoteWebDriver(new URL(gridHubUrl), remoteCapabilities);
       } else {
-         String browser = browserCap.getBrowserName();
+         String browser = browserCapabilities.getBrowserName();
          if (browser.equals(BrowserType.CHROME)) {
             return new ChromeDriver();
          } else if (browser.equals(BrowserType.FIREFOX)) {

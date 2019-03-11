@@ -7,10 +7,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-public class ApplicationManager {
+public class  ApplicationManager {
    protected WebDriver webDriver;
    protected WebDriverWait wait;
-   private int implicitlyWait;
 
    private AccountHelper accountHelper;
    private PageNavigationHelper pageNavigationHelper;
@@ -23,10 +22,7 @@ public class ApplicationManager {
 
    public void init(int implicitlyWait) throws IOException {
       appProperties = new ApplicationProperties().initProperties();
-      webDriver = appProperties.getDriverWithProperties(
-              appProperties.getGridHub(),
-              appProperties.getPlatform(),
-              appProperties.getBrowser());
+      webDriver = appProperties.getDriver();
 
       webDriver.manage().timeouts().implicitlyWait(implicitlyWait, TimeUnit.SECONDS);
       wait = new WebDriverWait(webDriver, 30);
@@ -38,7 +34,7 @@ public class ApplicationManager {
       pageNavigationHelper = new PageNavigationHelper(webDriver, wait, implicitlyWait);
       wishlistsPageHelper = new WishlistsPageHelper(webDriver, wait, implicitlyWait);
 
-      pageNavigation().maximazeWindow();
+      windowsNavigation().maximazeWindow();
    }
 
    public void deinit() {
@@ -50,7 +46,7 @@ public class ApplicationManager {
       return accountHelper;
    }
 
-   public PageNavigationHelper pageNavigation() {
+   public PageNavigationHelper windowsNavigation() {
       return pageNavigationHelper;
    }
 

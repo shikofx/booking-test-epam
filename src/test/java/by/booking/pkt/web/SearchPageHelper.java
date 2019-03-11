@@ -45,7 +45,7 @@ public class SearchPageHelper extends HelperBase {
    @FindBy(css = "div.xp__guests__inputs")
    public WebElement guestsPanel;
 
-   public void searchFor(TestData testData) {
+   public void search(TestData testData) {
       setCurrency(testData.currency()).
               setPlace(testData.placeTo()).
               setDates(testData.inDate(), testData.outDate()).

@@ -169,7 +169,7 @@ public class WishlistsPageHelper extends HelperBase {
       //Для тестового задания опустил считывание всех данных об отеле
    }
 
-   public boolean findWishlist(Wishlist newWishlist) {
+   public boolean isCreated(Wishlist newWishlist) {
       for (Wishlist wl : getAllWishlists()) {
          if (wl.equals(newWishlist))
             return true;

@@ -35,13 +35,13 @@ public class TestBase {
       logger.info("START:     test " + m.getName()
               + " with parameters {" + Arrays.asList(p) + '}'
               + " from " + m.getDeclaringClass());
-      app.pageNavigation().goTo(app.appProperties().getBaseUrl());
+      app.windowsNavigation().goTo(app.appProperties().getMaimPageURL());
    }
 
    @AfterMethod(enabled = true)
    public void finishTest(ITestResult result, Method m) {
       app.account().logout();
-      app.pageNavigation().clearBrowserData();
+      app.windowsNavigation().clearBrowserData();
       if (!result.isSuccess()) {
          logger.info("FAILED:    test " + m.getName()
                  + " from " + m.getDeclaringClass() + '\n');
