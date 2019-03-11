@@ -62,11 +62,7 @@ fabric.properties
 .idea/httpRequests
 ### Java template
 # Compiled class file
-*.class
-
 # Log file
-*.log
-
 # BlueJ files
 *.ctxt
 
@@ -87,9 +83,11 @@ hs_err_pid*
 
 .idea/.name
 .idea/misc.xml
-.idea/workspace.xml
 target/
 .idea/vcs.xml
 *.exe
 .idea/encodings.xml
 tests_recorded.uml
+/.idea/codeStyles/
+/.idea/inspectionProfiles/
+src/test/Docs/

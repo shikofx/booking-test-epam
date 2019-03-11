@@ -15,7 +15,7 @@ import java.util.List;
 
 public class WishlistsPageHelper extends HelperBase {
 
-   public static final String REGEX_WISHLIST_NAME = ".+(?=\\s)";
+   private static final String REGEX_WISHLIST_NAME = ".+(?=\\s)";
 
    public WishlistsPageHelper(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
       super(webDriver, wait, implicitlyWait);
@@ -55,7 +55,7 @@ public class WishlistsPageHelper extends HelperBase {
    @FindBy(css = ".bui-carousel__item")
    private List<WebElement> hotelsInWishlist;
 
-   public Wishlist createNewWithName(String listName) throws InterruptedException {
+   public Wishlist createNewWithName(String listName) {
       List<Wishlist> beforeList = getAllWishlists();
       Alert alertCreateList = alertAfterClick(createButton);
       alertCreateList.sendKeys(listName);
@@ -97,35 +97,20 @@ public class WishlistsPageHelper extends HelperBase {
    public boolean isSelectAsDefault(Wishlist wishlist) {
       displayDropDown(defaultWishlist, actualWishlistPanel, 5);
       WebElement list = wishlistToWeb(wishlist);
-      if (list.getAttribute("class").contains("selected"))
-         return true;
-      else
-         return false;
+      return list.getAttribute("class").contains("selected");
    }
 
-   private void refreshWislists() {
-      displayDropDown(defaultWishlist, actualWishlistPanel, 5);
-      hideDropdown(defaultWishlist, actualWishlistPanel);
-   }
-
-   public List<Wishlist> getAllWishlists() {
+   private List<Wishlist> getAllWishlists() {
       displayDropDown(defaultWishlist, actualWishlistPanel, 5);
       hideDropdown(defaultWishlist, actualWishlistPanel);
       List<Wishlist> wishlists = new ArrayList<>();
       for (WebElement e : allWishlists) {
          Wishlist wl = new Wishlist().
                  withId(getWishlistId(e)).
-                 withName(getWishlistName(e)).
-                 withHotels(getWishlistHotels(e));
+                 withName(getWishlistName(e));
          wishlists.add(wl);
       }
       return wishlists;
-   }
-
-   //NotRealized
-   private List<Hotel> getWishlistHotels(WebElement e) {
-      List<Hotel> hotels = new ArrayList<>();
-      return hotels;
    }
 
    private String getWishlistName(WebElement e) {
@@ -134,19 +119,17 @@ public class WishlistsPageHelper extends HelperBase {
    }
 
    private int getWishlistId(WebElement e) {
-      int id = Integer.parseInt(e.getAttribute("data-id"));
-      return id;
+      return Integer.parseInt(e.getAttribute("data-id"));
    }
 
    public String getUrlToSend() {
       isElementPresentAndVisible(shareWishlistButton);
       displayDropDown(shareWishlistButton, shareWishlistPanel, 5);
-      String url = shareURLInput.getAttribute("defaultValue");
-      return url;
+      return shareURLInput.getAttribute("defaultValue");
    }
 
    public String defaultWishlistName() {
-      wait.until((WebDriver d) -> defaultWishlist.getText());
+      wait.until((WebDriver d) -> defaultWishlist.getTagName());
       return defaultWishlist.getText();
    }
 
@@ -163,7 +146,7 @@ public class WishlistsPageHelper extends HelperBase {
       return hotels;
    }
 
-   public Hotel webToHotel(WebElement item) {
+   private Hotel webToHotel(WebElement item) {
       return new Hotel().withID(item.findElement(By.cssSelector("div")).getAttribute("data-id")).
               withName(item.findElement(By.cssSelector("h1 a")).getText());
       //Для тестового задания опустил считывание всех данных об отеле

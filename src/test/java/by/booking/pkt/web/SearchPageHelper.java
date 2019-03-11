@@ -5,6 +5,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class SearchPageHelper extends HelperBase {
@@ -13,37 +14,37 @@ public class SearchPageHelper extends HelperBase {
    }
 
    @FindBy(id = "ss")
-   public WebElement placeInput;
+   private WebElement placeInput;
 
    @FindBy(css = "[data-id=currency_selector]")
-   public WebElement currencySelectButton;
+   private WebElement currencySelectButton;
 
    @FindBy(css = "button[data-sb-id=main][type=submit]")
-   public WebElement searchButton;
+   private WebElement searchButton;
 
    @FindBy(css = "#current_currency_foldout")
-   public WebElement currencyPanel;
+   private WebElement currencyPanel;
 
    @FindBy(css = "[name=selected_currency]")
-   public WebElement selectedCurrency;
+   private WebElement selectedCurrency;
 
    @FindBy(css = "div.xp__dates.xp__group")
-   public WebElement initCalendar;
+   private WebElement initCalendar;
 
    @FindBy(css = "div.bui-calendar")
-   public WebElement calendarPanel;
+   private WebElement calendarPanel;
 
    @FindBy(css = "div.bui-calendar td[data-date^='20']")
-   public WebElement firstDate;
+   private WebElement firstDate;
 
    @FindBy(css = "div[data-bui-ref=calendar-next]")
-   public WebElement nextMonth;
+   private WebElement nextMonth;
 
    @FindBy(css = "label#xp__guests__toggle")
-   public WebElement initGuestsPanel;
+   private WebElement initGuestsPanel;
 
    @FindBy(css = "div.xp__guests__inputs")
-   public WebElement guestsPanel;
+   private WebElement guestsPanel;
 
    public void search(TestData testData) {
       setCurrency(testData.currency()).
@@ -69,7 +70,9 @@ public class SearchPageHelper extends HelperBase {
    private SearchPageHelper setCurrency(String currency) {
       if (!selectedCurrency.getAttribute("value").equals(currency)) {
          displayDropDown(currencySelectButton, currencyPanel, 5);
-         webDriver.findElement(By.cssSelector("a[data-currency=" + currency + "]")).click();
+         By currencyLocator = By.cssSelector("a[data-currency=" + currency + "]");
+         wait.until(ExpectedConditions.visibilityOfElementLocated(currencyLocator));
+         webDriver.findElement(currencyLocator).click();
       }
       return this;
    }

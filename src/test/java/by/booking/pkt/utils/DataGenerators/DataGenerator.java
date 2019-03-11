@@ -18,24 +18,24 @@ import java.util.List;
 public class DataGenerator {
 
    @Parameter(names = "-pl", description = "Place to travel (ex.: New_York)")
-   public String place;
+   private String place;
 
    @Parameter(names = "-c", description = "Count of test data")
-   public int count;
+   private int count;
 
    @Parameter(names = "-fn", description = "Data file name (ex.: data-for-search)")
-   public String fileName;
+   private String fileName;
 
    @Parameter(names = "-ff", description = "Data file format (xml, json)")
-   public String fileFormat;
+   private String fileFormat;
 
-   @Parameter(names = "-target", description = "For what do you need these data: " +
+   @Parameter(names = "-target", description = "For what do you need data: " +
            "\n       'search': for testing of search page" +
            "\n       'wishlist': for testing of wishlists page" +
            "\n       'hotel': for testing of hotel page")
-   public String whatTest;
+   private String whatTest;
 
-   public final String filePath = "src/test/resources/";
+   private final String filePath = "src/test/resources/";
 
    public static void main(String[] args) throws IOException {
       DataGenerator generator = new DataGenerator();
@@ -52,25 +52,24 @@ public class DataGenerator {
    private void run() throws IOException {
       String file = filePath + fileName + "." + fileFormat;
       if (count > 5) {
-         throw new ExceptionInInitializerError("Error: Count more than 5!");
+         throw new ExceptionInInitializerError("Error: Count greater than 5!");
       }
-       if (fileFormat.equals("xml"))
-         saveAsXML(whatTest, new File(file));
-      else if (fileFormat.equals("json"))
-         saveAsJSON(whatTest, new File(file));
-      else
-         System.out.println("Unvalid file format: " + fileFormat);
+      switch (fileFormat) {
+         case "xml":
+            saveAsXML(whatTest, new File(file));
+            break;
+         case "json":
+            saveAsJSON(whatTest, new File(file));
+            break;
+         default:
+            System.out.printf("Invalid file format: %s%n", fileFormat);
+            break;
+      }
    }
 
    private void saveAsJSON(String whatTest, File file) throws IOException {
       Gson gson = new GsonBuilder().setPrettyPrinting().create();
-      List<TestData> testData = new ArrayList<TestData>();
-      if (whatTest.equals("search"))
-         testData = generateSearchData(count);
-      else if (whatTest.equals("hotel"))
-         testData = generateHotelData(count);
-      else if (whatTest.equals("wishlist"))
-         testData = generateWishlists(count);
+      List<TestData> testData = getTestData(whatTest);
       String jsonString = gson.toJson(testData);
       try (Writer writer = new FileWriter(file)) {
          writer.write(jsonString);
@@ -78,7 +77,7 @@ public class DataGenerator {
    }
 
    private void saveAsXML(String whatTest, File file) throws IOException {
-      List<TestData> testData = generateSearchData(count);
+      List<TestData> testData = getTestData(whatTest);
       XStream xStream = new XStream();
       xStream.processAnnotations(TestData.class);
       String xmlString = xStream.toXML(testData);
@@ -87,14 +86,30 @@ public class DataGenerator {
       }
    }
 
+   private List<TestData> getTestData(String whatTest) {
+      List<TestData> testData = new ArrayList<>();
+      switch (whatTest) {
+         case "search":
+            testData = generateSearchData(count);
+            break;
+         case "hotel":
+            testData = generateHotelData(count);
+            break;
+         case "wishlist":
+            testData = generateWishlists(count);
+            break;
+      }
+      return testData;
+   }
+
    private List<TestData> generateSearchData(int count) {
-      List<TestData> testData = new ArrayList<TestData>();
+      List<TestData> testData = new ArrayList<>();
       for (int i = 1; i <= count; i++) {
          testData.add(new TestData().
                  withCurrency("RUB").
                  withPlace(place.replaceAll("_", " ")).
-                 withInDate("2019-03-0" + (i + 4)).
-                 withOutDate("2019-04-0" + i).
+                 withInDate(String.format("2019-03-0%d", i + 4)).
+                 withOutDate(String.format("2019-04-0%d", i)).
                  withRooms(2).
                  withAdults(i).
                  withChildren(i - 1).
@@ -106,24 +121,24 @@ public class DataGenerator {
    }
 
    private List<TestData> generateHotelData(int count) {
-      List<TestData> testData = new ArrayList<TestData>();
+      List<TestData> testData = new ArrayList<>();
       for (int i = 1; i <= count; i++) {
          testData.add(new TestData().
                  withPlace(place.replaceAll("_", " ")).
                  withCurrency("RUB").
-                 withInDate("2019-03-0" + (i + 4)).
-                 withOutDate("2019-04-0" + i).
-                 withWishlist("to " + place + " " + i));
+                 withInDate(String.format("2019-03-0%d", i + 4)).
+                 withOutDate(String.format("2019-04-0%d", i)).
+                 withWishlist(String.format("to %s %d", place, i)));
       }
       return testData;
    }
 
    private List<TestData> generateWishlists(int count) {
-      List<TestData> testData = new ArrayList<TestData>();
+      List<TestData> testData = new ArrayList<>();
       for (int i = 1; i <= count; i++) {
          testData.add(new TestData().
                  withPlace(place.replaceAll("_", " ")).
-                 withWishlist("to " + place + " " + i));
+                 withWishlist(String.format("to %s %d", place, i)));
       }
       return testData;
    }
