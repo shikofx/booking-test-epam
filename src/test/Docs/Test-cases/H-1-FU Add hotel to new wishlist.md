@@ -4,7 +4,7 @@
       B
 ####Req. ID:
       
-####Modul: 
+####Module: 
       Hotel page
 ####Description
       Add current hotel to new wish list for current profile  

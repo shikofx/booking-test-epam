@@ -1,6 +1,7 @@
 package by.booking.pkt.tests;
 
 import by.booking.pkt.application.ApplicationManager;
+import by.booking.pkt.application.ApplicationProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.ITestResult;
@@ -14,10 +15,9 @@ import java.util.Arrays;
 
 public class TestBase {
 
-   protected static final ApplicationManager app =
-           new ApplicationManager();
+   static final ApplicationManager app = new ApplicationManager();
 
-   public static Logger logger = LoggerFactory.getLogger(TestBase.class);
+   private static Logger logger = LoggerFactory.getLogger(TestBase.class);
 
    @BeforeSuite(alwaysRun = true)
    public void setUp() throws Exception {
@@ -35,10 +35,10 @@ public class TestBase {
       logger.info("START:     test " + m.getName()
               + " with parameters {" + Arrays.asList(p) + '}'
               + " from " + m.getDeclaringClass());
-      app.windowsNavigation().goTo(app.appProperties().getMaimPageURL());
+      app.windowsNavigation().goTo(ApplicationProperties.getMainPageURL());
    }
 
-   @AfterMethod(enabled = true)
+   @AfterMethod()
    public void finishTest(ITestResult result, Method m) {
       app.account().logout();
       app.windowsNavigation().clearBrowserData();

@@ -62,14 +62,14 @@
          <version>1.4.4</version>
       </dependency>
 
-      <!--XML files libruary-->
+      <!--XML files library-->
       <dependency>
          <groupId>com.thoughtworks.xstream</groupId>
          <artifactId>xstream</artifactId>
          <version>1.4.11.1</version>
       </dependency>
 
-      <!--JSON files libruary-->
+      <!--JSON files library-->
       <dependency>
          <groupId>com.google.code.gson</groupId>
          <artifactId>gson</artifactId>
@@ -275,7 +275,7 @@
       <!-- environments -->
       <!--booking-default-->
       <profile>
-         <id>accomodations</id>
+         <id>accommodations</id>
          <properties>
             <site.url>https://booking.com/</site.url>
          </properties>
@@ -297,7 +297,7 @@
       <profile>
          <id>nogrid</id>
          <properties>
-            <grid.url></grid.url>
+            <grid.url/>
          </properties>
          <activation>
             <activeByDefault>true</activeByDefault>

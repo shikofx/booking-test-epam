@@ -7,7 +7,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
-import org.openqa.selenium.opera.OperaDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.remote.BrowserType;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -26,13 +25,12 @@ public class ApplicationProperties {
 
    private static String platform;
    private static Capabilities browserCapabilities;
-   private static String browserCapabilitiesFileName;
    private static String mainPageUrl;
    private static String gridHubUrl;
    private static String username;
    private static String password;
 
-   public static String getMaimPageURL() {
+   public static String getMainPageURL() {
       return mainPageUrl;
    }
 
@@ -45,20 +43,20 @@ public class ApplicationProperties {
       return password;
    }
 
-   public ApplicationProperties initProperties() throws IOException {
-      mainPageUrl = loadProperty("site.url", CURRENT_PROPERTIES, DEBUG_PROPERTIES);
-      gridHubUrl = loadProperty("grid.url", CURRENT_PROPERTIES, DEBUG_PROPERTIES);
-      username = loadProperty("account.username", CURRENT_PROPERTIES, DEBUG_PROPERTIES);
-      password = loadProperty("account.password", CURRENT_PROPERTIES, DEBUG_PROPERTIES);
-      platform = loadProperty("platform.name", CURRENT_PROPERTIES, DEBUG_PROPERTIES);
-      browserCapabilitiesFileName = loadProperty("browserCapabilities", CURRENT_PROPERTIES, DEBUG_PROPERTIES);
+   ApplicationProperties initProperties() throws IOException {
+      mainPageUrl = loadProperty("site.url");
+      gridHubUrl = loadProperty("grid.url");
+      username = loadProperty("account.username");
+      password = loadProperty("account.password");
+      platform = loadProperty("platform.name");
+      String browserCapabilitiesFileName = loadProperty("browserCapabilities");
       browserCapabilities = loadCapabilities(browserCapabilitiesFileName);
       return this;
    }
 
-   private String loadProperty(String name, String source, String debugSource) throws IOException {
+   private String loadProperty(String name) throws IOException {
       Properties properties = new Properties();
-      String fromResource = System.getProperty(source, debugSource);
+      String fromResource = System.getProperty(ApplicationProperties.CURRENT_PROPERTIES, ApplicationProperties.DEBUG_PROPERTIES);
       properties.load(getClass().getResourceAsStream(fromResource));
       return properties.getProperty(name);
    }
@@ -80,7 +78,7 @@ public class ApplicationProperties {
       return capabilities;
    }
 
-   public WebDriver getDriver() throws MalformedURLException {
+   WebDriver getDriver() throws MalformedURLException {
       if (gridHubUrl != null && !gridHubUrl.equals("")) {
          DesiredCapabilities remoteCapabilities = new DesiredCapabilities();
          remoteCapabilities.setBrowserName(browserCapabilities.getBrowserName());
@@ -88,20 +86,19 @@ public class ApplicationProperties {
          return new RemoteWebDriver(new URL(gridHubUrl), remoteCapabilities);
       } else {
          String browser = browserCapabilities.getBrowserName();
-         if (browser.equals(BrowserType.CHROME)) {
-            return new ChromeDriver();
-         } else if (browser.equals(BrowserType.FIREFOX)) {
-            return new FirefoxDriver();
-         } else if (browser.equals(BrowserType.IE)) {
-            return new InternetExplorerDriver();
-         } else if (browser.equals(BrowserType.OPERA)) {
-            return new OperaDriver();
-         } else if (browser.equals(BrowserType.SAFARI)) {
-            return new SafariDriver();
-         } else if (browser.equals(BrowserType.PHANTOMJS)) {
-            return new PhantomJSDriver();
-         } else if (browser.equals(BrowserType.HTMLUNIT)) {
-            return new HtmlUnitDriver();
+         switch (browser) {
+            case BrowserType.CHROME:
+               return new ChromeDriver();
+            case BrowserType.FIREFOX:
+               return new FirefoxDriver();
+            case BrowserType.IE:
+               return new InternetExplorerDriver();
+            case BrowserType.SAFARI:
+               return new SafariDriver();
+            case BrowserType.PHANTOMJS:
+               return new PhantomJSDriver();
+            case BrowserType.HTMLUNIT:
+               return new HtmlUnitDriver();
          }
       }
       return null;

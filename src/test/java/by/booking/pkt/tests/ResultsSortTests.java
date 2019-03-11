@@ -13,7 +13,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ResultsSortTests extends TestBase {
 
-   @Test(enabled = true, groups = {"positive", "independent"},
+   @Test(groups = {"positive", "independent"},
            dataProviderClass = FileDataProvider.class, dataProvider = "testDataFromJSON")
    @DataSourceFileAnnotation("src/test/resources/data-for-search-positive.json")
    public void sortByDistance(TestData testData) {
@@ -25,7 +25,7 @@ public class ResultsSortTests extends TestBase {
      assertThat(hotelListSortChecker, is("sorted"));
    }
 
-   @Test(enabled = true, groups = {"positive", "smoke", "independent"},
+   @Test(groups = {"positive", "smoke", "independent"},
            dataProviderClass = FileDataProvider.class, dataProvider = "testDataFromJSON")
    @DataSourceFileAnnotation("src/test/resources/data-for-search-positive.json")
    public void sortByPrice(TestData testData) {

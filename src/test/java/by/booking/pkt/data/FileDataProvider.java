@@ -20,7 +20,7 @@ public class FileDataProvider {
 
    @DataProvider
    public static Iterator<Object[]> testDataFromJSON(Method m) throws IOException {
-      List<TestData> testData = new ArrayList<TestData>();
+      List<TestData> testData;
       if (m.isAnnotationPresent(DataSourceFileAnnotation.class)) {
          DataSourceFileAnnotation dataSource = m.getAnnotation(DataSourceFileAnnotation.class);
          Gson gson = new Gson();
@@ -36,7 +36,7 @@ public class FileDataProvider {
 
    @DataProvider
    public static Iterator<Object[]> testDataFromXML(Method m) throws IOException {
-      List<TestData> testData = new ArrayList<TestData>();
+      List<TestData> testData;
       if (m.isAnnotationPresent(DataSourceFileAnnotation.class)) {
          DataSourceFileAnnotation dataSource = m.getAnnotation(DataSourceFileAnnotation.class);
          XStream xStream = new XStream();
@@ -52,7 +52,7 @@ public class FileDataProvider {
 
    @DataProvider
    public static Iterator<Object[]> testDataFromCSV(Method m) throws IOException {
-      List<Object[]> testData = new ArrayList<Object[]>();
+      List<Object[]> testData = new ArrayList<>();
       if (m.isAnnotationPresent(DataSourceFileAnnotation.class)) {
          DataSourceFileAnnotation dataSource = m.getAnnotation(DataSourceFileAnnotation.class);
          try (BufferedReader reader = new BufferedReader(new FileReader(new File(dataSource.value())))) {

@@ -107,7 +107,7 @@ public class AccountHelper extends HelperBase {
             displayDropDown(signInButton, profileMenu, 5);
             return loginAsLink;
          }
-      } catch (NullPointerException e) {
+      } catch (NullPointerException ignored) {
       }
       return signInButton;
    }

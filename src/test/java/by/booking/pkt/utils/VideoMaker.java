@@ -4,7 +4,6 @@ import ch.qos.logback.classic.BasicConfigurator;
 import ch.qos.logback.classic.LoggerContext;
 import com.xuggle.mediatool.IMediaWriter;
 import com.xuggle.mediatool.ToolFactory;
-//import org.apache.log4j.BasicConfigurator;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -12,11 +11,13 @@ import java.io.File;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+//import org.apache.log4j.BasicConfigurator;
+
 public class VideoMaker {
 
 
   private static final long FRAME_RATE = 25;
-  private static final Dimension SCREEEN_BOUNDS = Toolkit.getDefaultToolkit()
+   private static final Dimension SCREEN_BOUNDS = Toolkit.getDefaultToolkit()
           .getScreenSize();
 
   private File outputFile;
@@ -27,15 +28,15 @@ public class VideoMaker {
 
   }
 
-  public VideoMaker(File outputFile) {
+   VideoMaker(File outputFile) {
 //    BasicConfigurator.configure();
      BasicConfigurator basicConfigurator = new BasicConfigurator();
      basicConfigurator.configure(new LoggerContext());
     this.outputFile = outputFile;
   }
 
-  public static BufferedImage convertToType(BufferedImage sourceImage, int targetType) {
-    BufferedImage image = null;
+   private static BufferedImage convertToType(BufferedImage sourceImage, int targetType) {
+      BufferedImage image;
 
     if (sourceImage.getType() == targetType) {
       image = sourceImage;
@@ -47,7 +48,7 @@ public class VideoMaker {
     return image;
   }
 
-  public void createVideoFromScreens() {
+   void createVideoFromScreens() {
     IMediaWriter writer = null;
     try {
       if (getOutputFile() == null) {
@@ -59,19 +60,19 @@ public class VideoMaker {
 
       writer = ToolFactory.makeWriter(getOutputFile()
               .getAbsolutePath());
-      writer.addVideoStream(0, 0, SCREEEN_BOUNDS.width,
-              SCREEEN_BOUNDS.height);
+       writer.addVideoStream(0, 0, SCREEN_BOUNDS.width,
+               SCREEN_BOUNDS.height);
 
       long startTime = System.nanoTime();
 
       while (!getPleaseStop()) {
-        BufferedImage screen = getDesktopScreenshot();
+         BufferedImage screen = getDesktopScreenshots();
         BufferedImage bgrScreen = convertToType(screen, BufferedImage.TYPE_3BYTE_BGR);
 
         writer.encodeVideo(0, bgrScreen, System.nanoTime() - startTime, TimeUnit.NANOSECONDS);
 
         try {
-          Thread.currentThread().sleep(1000 / FRAME_RATE);
+           Thread.sleep(1000 / FRAME_RATE);
         } catch (InterruptedException e) {
           // Ignore
         }
@@ -86,18 +87,18 @@ public class VideoMaker {
     }
   }
 
-  private BufferedImage getDesktopScreenshot() {
+   private BufferedImage getDesktopScreenshots() {
     try {
       Robot robot = new Robot();
-      Rectangle captureSize = new Rectangle(SCREEEN_BOUNDS);
+       Rectangle captureSize = new Rectangle(SCREEN_BOUNDS);
       return robot.createScreenCapture(captureSize);
     } catch (AWTException e) {
       throw new RuntimeException(
-              "Error occurred while getting desktop screenshot", e);
+              "Error occurred while getting desktop screenshots", e);
     }
   }
 
-  public File getOutputFile() {
+   private File getOutputFile() {
     return outputFile;
   }
 
@@ -105,15 +106,15 @@ public class VideoMaker {
     this.outputFile = outputFile;
   }
 
-  public boolean getPleaseStop() {
+   private boolean getPleaseStop() {
     return pleaseStop.get();
   }
 
-  public void setPleaseStop(boolean pleaseStop) {
-    this.pleaseStop.set(pleaseStop);
+   void setPleaseStop() {
+      this.pleaseStop.set(true);
   }
 
-  public boolean isStoppedCreation() {
+   boolean isStoppedCreation() {
     return stoppedCreation;
   }
 

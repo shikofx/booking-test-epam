@@ -11,11 +11,11 @@ import java.util.regex.Pattern;
 import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
 public class HelperBase {
-   protected int implicitlyWait;
-   protected WebDriver webDriver;
-   protected WebDriverWait wait;
+   private int implicitlyWait;
+   WebDriver webDriver;
+   WebDriverWait wait;
 
-   public HelperBase(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
+   HelperBase(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
       PageFactory.initElements(webDriver, this);
       this.webDriver = webDriver;
       this.wait = wait;
@@ -31,9 +31,9 @@ public class HelperBase {
       webDriver.navigate().refresh();
    }
 
-   public HelperBase displayDropDown(WebElement whatClick, WebElement whatWait, int secondsToWait) {
+   void displayDropDown(WebElement whatClick, WebElement whatWait, int secondsToWait) {
       wait.until(elementToBeClickable(whatClick));
-      wait.until((WebDriver d) -> whatClick.getTagName());
+//      wait.until((WebDriver d) -> whatClick.getTagName());
       boolean isClickable = whatClick.isDisplayed();
       boolean whatW = isElementPresent(whatWait, 1);
       if (isClickable && !whatW) {
@@ -42,10 +42,9 @@ public class HelperBase {
       } else if (!whatWait.isDisplayed()) {
          whatClick.click();
       }
-      return this;
    }
 
-   protected HelperBase hideDropdown(WebElement whatClick, WebElement whatWait) {
+   void hideDropdown(WebElement whatClick, WebElement whatWait) {
       wait.until((WebDriver d) -> {
          if (whatWait.isDisplayed()) {
             whatClick.click();
@@ -54,10 +53,9 @@ public class HelperBase {
          }
          return false;
       });
-      return this;
    }
 
-   public String textByPattern(String regex, String text) {
+   String textByPattern(String regex, String text) {
       Pattern pattern = Pattern.compile(regex);
       Matcher matcher = pattern.matcher(text);
       String result = null;
@@ -67,7 +65,7 @@ public class HelperBase {
       return result;
    }
 
-   public String textByPatternWithout(String pattern, String withoutRegex, String text) {
+   String textByPatternWithout(String pattern, String withoutRegex, String text) {
       return textByPattern(pattern, text).replaceAll(withoutRegex, "");
    }
 
@@ -80,7 +78,7 @@ public class HelperBase {
       return webDriver.findElements(locator).size() > 0;
    }
 
-   public boolean isElementPresentNoWait(WebElement inElement, By locator) {
+   boolean isElementPresentNoWait(WebElement inElement, By locator) {
       setImplicitlyWait(0);
       boolean isPresent = inElement.findElements(locator).size() > 0;
       setImplicitlyWait(implicitlyWait);
@@ -92,32 +90,30 @@ public class HelperBase {
    }
 
 
-   public boolean isElementPresent(WebElement element, int secondsToWait) {
+   boolean isElementPresent(WebElement element, int secondsToWait) {
       setImplicitlyWait(secondsToWait);
       boolean isPresent = false;
       try {
          element.getTagName();
          isPresent = true;
-      } catch (NullPointerException exeptNull) {
-      } catch (NoSuchElementException exeptNoSuch) {
+      } catch (NullPointerException | NoSuchElementException ignored) {
       }
       setImplicitlyWait(implicitlyWait);
       return isPresent;
    }
 
-   public boolean isElementPresentAndVisible(WebElement e) {
+   void isElementPresentAndVisible(WebElement e) {
       wait.until((WebDriver d) -> e.getTagName());
-      if (isElementPresent(e, 0) && e.isDisplayed()) {
-         return true;
+      if (isElementPresent(e, 0)) {
+         e.isDisplayed();
       }
-      return false;
    }
 
    private void setImplicitlyWait(int secondsToWait) {
       webDriver.manage().timeouts().implicitlyWait(secondsToWait, TimeUnit.SECONDS);
    }
 
-   protected void inputText(WebElement input, String text) {
+   void inputText(WebElement input, String text) {
       wait.until(elementToBeClickable(input));
       input.click();
       input.clear();
@@ -136,7 +132,7 @@ public class HelperBase {
       });
    }
 
-   protected Alert alertAfterClick(WebElement whatClick) {
+   Alert alertAfterClick(WebElement whatClick) {
       wait.until(visibilityOfAllElements(whatClick));
       return wait.until((WebDriver d) -> {
          whatClick.click();

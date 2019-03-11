@@ -7,7 +7,7 @@
     https://github.com/shikofx/epam_test_task.git
    
 ###Environment
-Deafault browser:   GoogleCrome 
+Default browser:   GoogleChrome 
 
 Default OS:         Windows 7
 

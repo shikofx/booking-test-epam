@@ -12,7 +12,7 @@ public class SingleDataProvider {
   public static Object[][] dataFromArray(Method m) throws NoSuchFieldException, IllegalAccessException {
     if (m.isAnnotationPresent(DataSourceSingleAnnotation.class)) {
       if (m.getParameterTypes().length != 1) {
-        throw new Error("Method should have a singl parameter: " + m);
+         throw new Error("Method should have a single parameter: " + m);
       }
       DataSourceSingleAnnotation dataProviderSource =
               m.getAnnotation(DataSourceSingleAnnotation.class);
@@ -38,7 +38,7 @@ public class SingleDataProvider {
   public static Object[][] dataFromList(Method m) throws NoSuchFieldException, IllegalAccessException {
     if (m.isAnnotationPresent(DataSourceSingleAnnotation.class)) {
       if (m.getParameterTypes().length != 1) {
-        throw new Error("Method should have a singl parameter: " + m);
+         throw new Error("Method should have a single parameter: " + m);
       }
       DataSourceSingleAnnotation dataProviderSource =
               m.getAnnotation(DataSourceSingleAnnotation.class);
@@ -56,7 +56,7 @@ public class SingleDataProvider {
       }
       return result;
     } else {
-      throw new Error("There is no @DataSourceSingleAnnotation annitation on nethod " + m);
+       throw new Error("There is no @DataSourceSingleAnnotation annotation on method " + m);
     }
   }
 }

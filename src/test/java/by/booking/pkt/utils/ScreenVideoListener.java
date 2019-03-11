@@ -8,7 +8,7 @@ import java.io.File;
 import java.util.Date;
 
 public class ScreenVideoListener implements IInvokedMethodListener {
-  private VideoMaker screencaster;
+   private VideoMaker screenwriter;
   private Thread videoThread;
   private String videoPath;
   private String fileName;
@@ -20,29 +20,25 @@ public class ScreenVideoListener implements IInvokedMethodListener {
     if (method.isTestMethod()) {
       new File(videoPath).mkdirs();
       File videoFile = new File(fileName);
-      screencaster = new VideoMaker(videoFile);
-      videoThread = new Thread(new Runnable() {
-        public void run() {
-          screencaster.createVideoFromScreens();
-        }
-      });
+       screenwriter = new VideoMaker(videoFile);
+       videoThread = new Thread(() -> screenwriter.createVideoFromScreens());
       videoThread.start();
     }
   }
 
   public void afterInvocation(IInvokedMethod method, ITestResult testResult) {
-    if (method.isTestMethod() && screencaster != null) {
+     if (method.isTestMethod() && screenwriter != null) {
       try {
         Thread.sleep(2000);
-        screencaster.setPleaseStop(true);
-        while (!screencaster.isStoppedCreation()) {
+         screenwriter.setPleaseStop();
+         while (!screenwriter.isStoppedCreation()) {
           Thread.sleep(500);
         }
         videoThread.join();
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
-      screencaster = null;
+        screenwriter = null;
       videoThread = null;
     }
   }

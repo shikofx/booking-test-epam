@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class  ApplicationManager {
-   protected WebDriver webDriver;
-   protected WebDriverWait wait;
+   private WebDriver webDriver;
+   private WebDriverWait wait;
 
    private AccountHelper accountHelper;
    private PageNavigationHelper pageNavigationHelper;
@@ -34,7 +34,7 @@ public class  ApplicationManager {
       pageNavigationHelper = new PageNavigationHelper(webDriver, wait, implicitlyWait);
       wishlistsPageHelper = new WishlistsPageHelper(webDriver, wait, implicitlyWait);
 
-      windowsNavigation().maximazeWindow();
+      windowsNavigation().maximizeWindow();
    }
 
    public void deinit() {

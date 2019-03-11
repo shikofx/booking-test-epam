@@ -7,7 +7,7 @@ import by.booking.pkt.model.TestData;
 import by.booking.pkt.model.Wishlist;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -15,7 +15,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class HotelTests extends TestBaseWithLogin {
 
-   @Test(enabled = true, groups = {"positive", "hotel"},
+   @Test(groups = {"positive", "hotel"},
            dataProviderClass = FileDataProvider.class, dataProvider = "testDataFromJSON")
    @DataSourceFileAnnotation("src/test/resources/data-for-hotel-positive.json")
    public void addHotelToNewList(TestData testData) {
@@ -27,7 +27,7 @@ public class HotelTests extends TestBaseWithLogin {
       app.windowsNavigation().switchToNew(oldWindows);
       Wishlist createdWishlist = new Wishlist().
               withName(testData.wishlistName()).
-              withHotels(Arrays.asList(hotel));
+              withHotels(Collections.singletonList(hotel));
       app.hotelPage().createWishlist(createdWishlist);
 
       String hotelWindowHandle = app.windowsNavigation().getCurrent();
@@ -52,7 +52,7 @@ public class HotelTests extends TestBaseWithLogin {
               app.wishlistsPage().getWishlistHotels().size(),
               is(1));
 
-      assertThat("The hotel in wishlist do not mutch with added hotel",
+      assertThat("The hotel in wishlist do not match with added hotel",
               app.wishlistsPage().getWishlistHotels().get(0),
               is(hotel));
 

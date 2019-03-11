@@ -62,9 +62,8 @@ public class SearchPageHelper extends HelperBase {
       }
    }
 
-   private SearchPageHelper initSearch() {
+   private void initSearch() {
       searchButton.click();
-      return this;
    }
 
    private SearchPageHelper setCurrency(String currency) {

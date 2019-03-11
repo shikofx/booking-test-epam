@@ -12,10 +12,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class WishlistsTests extends TestBaseWithLogin {
 
-   @Test(enabled = true, groups = {"positive", "smoke"},
+   @Test(groups = {"positive", "smoke"},
            dataProviderClass = FileDataProvider.class, dataProvider = "testDataFromJSON")
    @DataSourceFileAnnotation("src/test/resources/data-for-wishlist-positive.json")
-   public void createWishlist(TestData testData) throws InterruptedException {
+   public void createWishlist(TestData testData) {
       app.account().profileMenu().goToWishlistsPage();
       Wishlist newWishlist = app.wishlistsPage().
               createNewWithName(testData.wishlistName());
@@ -33,10 +33,10 @@ public class WishlistsTests extends TestBaseWithLogin {
       app.wishlistsPage().deleteWishlist(newWishlist);
    }
 
-   @Test(enabled = true, groups = {"positive"},
+   @Test(groups = {"positive"},
            dataProviderClass = FileDataProvider.class, dataProvider = "testDataFromJSON")
    @DataSourceFileAnnotation("src/test/resources/data-for-wishlist-positive.json")
-   public void sendLinkOfWishlist(TestData testData) throws Exception {
+   public void sendLinkOfWishlist(TestData testData) {
       app.account().profileMenu().goToWishlistsPage();
       Wishlist newWishlist = app.wishlistsPage().
               createNewWithName(testData.wishlistName());
@@ -45,8 +45,8 @@ public class WishlistsTests extends TestBaseWithLogin {
       String urlToSend = app.wishlistsPage().getUrlToSend();
       app.windowsNavigation().goTo(urlToSend);
 
-      assertThat("Sended list name do not mutch of required!",
-              app.wishlistsPage().sendedListName(),
+      assertThat("Sent list name do not match of required!",
+              app.wishlistsPage().sentListName(),
               is(newWishlist.getName()));
 
       app.account().profileMenu().goToWishlistsPage();

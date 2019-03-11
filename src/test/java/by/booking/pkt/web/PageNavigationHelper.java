@@ -18,7 +18,7 @@ public class PageNavigationHelper extends HelperBase {
       webDriver.get(url);
    }
 
-   public String getNew(Set<String> oldWindowSet) {
+   private String getNew(Set<String> oldWindowSet) {
       Set<String> newWindowSet = webDriver.getWindowHandles();
       String newWindow = null;
       if (newWindowSet.removeAll(oldWindowSet) && newWindowSet.size() == 1) {
@@ -28,7 +28,7 @@ public class PageNavigationHelper extends HelperBase {
    }
 
 
-   public void maximazeWindow() {
+   public void maximizeWindow() {
       webDriver.manage().window().maximize();
    }
 
@@ -37,11 +37,11 @@ public class PageNavigationHelper extends HelperBase {
    }
 
 
-   public void switchToNew(Set<String> oldWondowSet) {
-      webDriver.switchTo().window(getNew(oldWondowSet));
+   public void switchToNew(Set<String> oldWindowSet) {
+      webDriver.switchTo().window(getNew(oldWindowSet));
    }
 
-   public void closeCurrent() {
+   private void closeCurrent() {
       webDriver.close();
    }
 

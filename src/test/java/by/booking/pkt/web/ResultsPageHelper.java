@@ -15,11 +15,11 @@ import java.util.List;
 
 public class ResultsPageHelper extends HelperBase {
 
-   public static final String REGEX_PRICE = "[,.\\s\\d]+\\d";
-   public static final String REGEX_PRICE_WITHOUT_STRONG = "\\d+\\w+\\d+.*\\n";
-   public static final String REGEX_STARS_COUNT = "\\d";
-   public static final String REGEX_DISTANCE_MEASURE = "\\s.*?\\s";
-   public static final String REGEX_DISTANCE_VALUE = "[\\,\\d]+";
+   private static final String REGEX_PRICE = "[,.\\s\\d]+\\d";
+   private static final String REGEX_PRICE_WITHOUT_STRONG = "\\d+\\w+\\d+.*\\n";
+   private static final String REGEX_STARS_COUNT = "\\d";
+   private static final String REGEX_DISTANCE_MEASURE = "\\s.*?\\s";
+   private static final String REGEX_DISTANCE_VALUE = "[\\,\\d]+";
 
    public ResultsPageHelper(WebDriver webDriver, WebDriverWait wait, int implicitlyWait) {
       super(webDriver, wait, implicitlyWait);
@@ -30,7 +30,7 @@ public class ResultsPageHelper extends HelperBase {
    private WebElement separator;
 
    @FindBy(xpath = "//*/div[contains(@class,'sr_separator')]/preceding-sibling::div[@data-hotelid]")
-   private List<WebElement> allResultsBeforSeparator;
+   private List<WebElement> allResultsBeforeSeparator;
 
    @FindBy(css = "[data-hotelid]")
    private List<WebElement> allResults;
@@ -55,9 +55,8 @@ public class ResultsPageHelper extends HelperBase {
 //    item.findElement(By.cssSelector(".sr-cta-button-row")).click();
 //  }
 
-   public ResultsPageHelper goToHotelPage(Hotel hotel) {
+   public void goToHotelPage(Hotel hotel) {
       hotelToElement(hotel).findElement(By.cssSelector(".sr_cta_button")).click();
-      return this;
    }
 
    private WebElement hotelToElement(Hotel hotel) {
@@ -66,20 +65,19 @@ public class ResultsPageHelper extends HelperBase {
    }
 
 
-   public List<WebElement> getAllResults() {
+   private List<WebElement> getAllResults() {
       if (isElementPresent(separator, 0)) {
-         return allResultsBeforSeparator;
+         return allResultsBeforeSeparator;
       }
       return allResults;
    }
 
    public Hotel getFirstHotel() {
-      Hotel hotel = resultToHotel(firstHotelItem);
-      return hotel;
+      return resultToHotel(firstHotelItem);
    }
 
    public List<Hotel> availableHotels() {
-      List<Hotel> hotels = new ArrayList<Hotel>();
+      List<Hotel> hotels = new ArrayList<>();
       int i = 0;
       for (WebElement e : getOnlyAvailable()) {
          hotels.add(resultToHotel(e));
@@ -88,22 +86,20 @@ public class ResultsPageHelper extends HelperBase {
    }
 
    private Hotel resultToHotel(WebElement item) {
-      Hotel hotel = new Hotel().
+      return new Hotel().
               withID(getID(item)).
               withName(getHotelName(item)).
               withDistance(distanceToDest(item)).
               withStars(getStarsCount(item)).
               withTotalPrice(getTotalPrice(item));
-      return hotel;
    }
 
-   public String getID(WebElement item) {
-      String id = item.getAttribute("data-hotelid");
-      return id;
+   private String getID(WebElement item) {
+      return item.getAttribute("data-hotelid");
 
    }
 
-   public double distanceToDest(WebElement item) {
+   private double distanceToDest(WebElement item) {
       double distance = 0;
       By distanceBy = By.cssSelector("span.distfromdest");
       if (isElementPresentNoWait(item, distanceBy)) {
@@ -118,7 +114,7 @@ public class ResultsPageHelper extends HelperBase {
       return distance;
    }
 
-   public int getStarsCount(WebElement item) {
+   private int getStarsCount(WebElement item) {
       int actualStars = 0;
       By starsBy = By.cssSelector("svg[class*=stars]");
       if (this.isElementPresentNoWait(item, starsBy)) {
@@ -128,7 +124,7 @@ public class ResultsPageHelper extends HelperBase {
       return actualStars;
    }
 
-   public int getTotalPrice(WebElement item) {
+   private int getTotalPrice(WebElement item) {
       By priceInDivBy = By.cssSelector("div.totalPrice");
       By priceInStrongBy = By.cssSelector("strong.price");
       if (isElementPresentNoWait(item, priceInStrongBy)) {
@@ -142,15 +138,14 @@ public class ResultsPageHelper extends HelperBase {
    }
 
 
-   public String getHotelName(WebElement item) {
+   private String getHotelName(WebElement item) {
       By hotelNameBy = By.cssSelector("span.sr-hotel__name");
-      String name = item.findElement(hotelNameBy).getText();
-      return (name);
+      return (item.findElement(hotelNameBy).getText());
    }
 
-   public List<WebElement> getOnlyAvailable() {
+   private List<WebElement> getOnlyAvailable() {
       List<WebElement> allResults = getAllResults();
-      List<WebElement> availableResults = new ArrayList<WebElement>();
+      List<WebElement> availableResults = new ArrayList<>();
       for (WebElement e : allResults) {
          if (!e.getAttribute("className").contains("soldout_property")) {
             availableResults.add(e);
@@ -159,18 +154,16 @@ public class ResultsPageHelper extends HelperBase {
       return availableResults;
    }
 
-   public ResultsPageHelper initSortByPrice() {
+   public void initSortByPrice() {
       initSortByPrice.click();
       refreshPage();
-      return this;
    }
 
 
-   public ResultsPageHelper initSortByDistance() {
+   public void initSortByDistance() {
       displayDropDown(additionalSortsButton, additionalSortsPanel, 5);
       initSortByDistance.findElement(By.cssSelector("a")).click();
       refreshPage();
-      return this;
    }
 
    public String checkSortByDistance(List<Hotel> hotels) {

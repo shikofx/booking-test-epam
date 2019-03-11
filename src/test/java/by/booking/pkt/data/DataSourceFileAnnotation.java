@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation for soutce of file goToWishlist DataProvider dataFromCSV
+ * Annotation for source of file goToWishlist DataProvider dataFromCSV
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

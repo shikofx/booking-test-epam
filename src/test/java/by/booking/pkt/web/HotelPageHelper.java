@@ -34,7 +34,7 @@ public class HotelPageHelper extends HelperBase {
 
    private WebElement newWishlist;
 
-   public HotelPageHelper createWishlist(Wishlist wishlist) {
+   public void createWishlist(Wishlist wishlist) {
       displayDropDown(saveButton, wishlistsPanel, 5);
       final List<Wishlist> oldWishlists = webToWishlits();
       enterWishlistName(wishlist.getName()).submitCreating();
@@ -44,11 +44,10 @@ public class HotelPageHelper extends HelperBase {
       newWishlists.removeAll(oldWishlists);
       Wishlist newWishlist = newWishlists.iterator().next();
       wishlist.withId(newWishlist.getId());
-      return this;
    }
 
    private List<Wishlist> webToWishlits() {
-      List<Wishlist> wishlists = new ArrayList<Wishlist>();
+      List<Wishlist> wishlists = new ArrayList<>();
       for (WebElement e : wishlistsOnPanel) {
          wishlists.add(new Wishlist().
                  withId(getWishlistID(e)).
@@ -57,7 +56,7 @@ public class HotelPageHelper extends HelperBase {
       return wishlists;
    }
 
-   public int getWishlistID(WebElement e) {
+   private int getWishlistID(WebElement e) {
       return Integer.parseInt(e.findElement(By.cssSelector("input")).getAttribute("data-list-id"));
    }
 
@@ -71,30 +70,28 @@ public class HotelPageHelper extends HelperBase {
       return this;
    }
 
-   private HotelPageHelper submitCreating() {
+   private void submitCreating() {
       newListInput.sendKeys(Keys.ENTER);
-      return this;
    }
 
-   public HotelPageHelper goToWishlist(Wishlist wlist) {
-      WebElement wishlistElement = wishlistToWeb(wlist);
+   public void goToWishlist(Wishlist wishlist) {
+      WebElement wishlistElement = wishlistToWeb(wishlist);
       if (wishlistElement.findElement(By.cssSelector("input")).isSelected()) {
          wishlistElement.findElement(By.cssSelector("input~span a")).click();
       }
-      return this;
    }
 
 
-   private void unselectAllElements(List<Wishlist> wlists) {
-      for (Wishlist w : wlists) {
+   private void unselectAllElements(List<Wishlist> wishlists) {
+      for (Wishlist w : wishlists) {
          WebElement e = wishlistToWeb(w);
          if (e.findElement(By.cssSelector("input")).isSelected())
             e.findElement(By.cssSelector("input~span.bui-checkbox__label")).click();
       }
    }
 
-   private WebElement wishlistToWeb(Wishlist wlist) {
-      By wlistBy = By.xpath("//input[@data-list-id='" + wlist.getId() + "']/parent::*");
-      return webDriver.findElement(wlistBy);
+   private WebElement wishlistToWeb(Wishlist wishlist) {
+      By wishlistLocator = By.xpath("//input[@data-list-id='" + wishlist.getId() + "']/parent::*");
+      return webDriver.findElement(wishlistLocator);
    }
 }

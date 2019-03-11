@@ -72,13 +72,12 @@ public class WishlistsPageHelper extends HelperBase {
 
    }
 
-   public WishlistsPageHelper deleteWishlist(Wishlist list) {
+   public void deleteWishlist(Wishlist list) {
       displayDropDown(defaultWishlist, actualWishlistPanel, 5);
       By removeButtonBy = By.cssSelector("span.listmap__remove_list");
       WebElement buttonToRemoveWishlist = wishlistToWeb(list).findElement(removeButtonBy);
       Alert alertDeleteList = alertAfterClick(buttonToRemoveWishlist);
       alertDeleteList.accept();
-      return this;
    }
 
    private WebElement wishlistToWeb(Wishlist wishlist) {
@@ -86,12 +85,11 @@ public class WishlistsPageHelper extends HelperBase {
       return actualWishlistPanel.findElement(wishlistBy);
    }
 
-   public WishlistsPageHelper setAsDefault(Wishlist wishlist) {
+   public void setAsDefault(Wishlist wishlist) {
       displayDropDown(defaultWishlist, actualWishlistPanel, 5);
       WebElement list = wishlistToWeb(wishlist);
       if (!list.getAttribute("class").contains("selected"))
          list.click();
-      return this;
    }
 
    public boolean isSelectAsDefault(Wishlist wishlist) {
@@ -133,7 +131,7 @@ public class WishlistsPageHelper extends HelperBase {
       return defaultWishlist.getText();
    }
 
-   public String sendedListName() {
+   public String sentListName() {
       wait.until((WebDriver d) -> wishlistHeader.getTagName());
       return wishlistHeader.getText();
    }
